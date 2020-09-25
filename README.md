@@ -1,5 +1,5 @@
 <div align="center">
-    <img src='./logo/CatCodeLogo@0,1x.png' onerror="javascript:this.src='https://s1.ax1x.com/2020/09/26/0COagf.png';"/>
+    <img src='https://s1.ax1x.com/2020/09/26/0COagf.png'/>
     <h3>
         - 😺 CatCode 😺 -
     </h3>
