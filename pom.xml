@@ -5,11 +5,11 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>love.forte.simple-robot</groupId>
+    <groupId>love.forte</groupId>
     <artifactId>catcode</artifactId>
     <version>1.0.0-ALPHA.1</version>
 
-    <url></url>
+    <url>https://github.com/ForteScarlet/CatCode</url>
     <description>猫猫码，CQ码的精神延续，一个可爱的通用特殊码。/ Cat code, the spirit of CQ code continues, a cute universal special code.</description>
 
     <properties>

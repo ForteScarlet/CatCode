@@ -1,4 +1,13 @@
-# Cat code
+<div align="center">
+    <img src='./logo/CatCodeLogo@0,1x.png'/>
+    <h3>
+        - 😺 CatCode 😺 -
+    </h3>
+</div>
+
+<hr>
+
+
 
 CQ码的精神延续：猫猫码（Cat code）。
 
