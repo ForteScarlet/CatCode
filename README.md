@@ -1,5 +1,5 @@
 <div align="center">
-    <img src='https://s1.ax1x.com/2020/09/26/0COdv8.png'/>
+    <img src='./logo/CatCodeLogo@0,1x.png'/>
     <h3>
         - 😺 CatCode 😺 -
     </h3>
