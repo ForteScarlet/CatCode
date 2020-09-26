@@ -106,19 +106,67 @@ interface Neko : Map<String, String>, CharSequence {
      */
     override val entries: Set<Map.Entry<String, String>>
 
+    /**
+     * 此码中的所有键。
+     */
     override val keys: Set<String>
 
+    /**
+     * 此码中的所有值。
+     */
     override val values: Collection<String>
 
+    /**
+     * 此码中的键值对参数数量。
+     */
     override val size: Int
 
+    /**
+     * 此码作为字符串时候的长度。
+     *
+     * @see CharSequence.length
+     */
+    override val length: Int
+
+    /**
+     * 是否包含某个键。
+     */
     override fun containsKey(key: String): Boolean
 
+    /**
+     * 是否包含某个值。
+     */
     override fun containsValue(value: String): Boolean
 
+    /**
+     * 是否没有参数。
+     */
     override fun isEmpty(): Boolean
 
+    /**
+     * 获取某个键对应的值。
+     */
     override fun get(key: String): String?
+
+    /**
+     * 要重写toString哦~
+     */
+    override fun toString(): String
+
+    /**
+     * 获取某个键对应的值。如果不存在则返回一个默认值。
+     */
+    @JvmDefault
+    override fun getOrDefault(key: String, defaultValue: String): String = get(key) ?: defaultValue
+
+    /**
+     * foreach entries.
+     */
+    fun forEach(action: (String, String) -> Unit) {
+        entries.forEach {
+            action(it.key, it.value)
+        }
+    }
 
 
     companion object Of {

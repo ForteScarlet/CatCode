@@ -12,7 +12,6 @@
 
 package love.forte.catcode
 
-import java.util.*
 
 
 /**
@@ -20,9 +19,9 @@ import java.util.*
  */
 class Msgs
 @JvmOverloads
-constructor(private val delimiter: CharSequence = " ", private val delegate: () -> MutableList<CharSequence> = { LinkedList() }): MutableList<CharSequence> by delegate() {
+constructor(private val delimiter: CharSequence = " ", private val delegate: () -> MutableList<CharSequence> = { mutableListOf() }): MutableList<CharSequence> by delegate() {
     @JvmOverloads
-    constructor(delimiter: CharSequence = " ", collection: Collection<CharSequence>): this(delimiter){ LinkedList(collection) }
+    constructor(delimiter: CharSequence = " ", collection: Collection<CharSequence>): this(delimiter){ mutableListOf(collection) }
 
 
     /** to string to show messages. delimiter is ' ' */

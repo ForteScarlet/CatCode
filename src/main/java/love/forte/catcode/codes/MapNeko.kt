@@ -15,7 +15,6 @@
 package love.forte.catcode.codes
 
 import love.forte.catcode.*
-import java.util.function.BiConsumer
 
 
 /* ******************************************************
@@ -43,8 +42,8 @@ private val MAP_SPLIT_REGEX = Regex("=")
  */
 open class MapNeko
 protected constructor(open val params: Map<String, String>, override var type: String) :
-        Neko,
-        Map<String, String> by params {
+    Neko,
+    Map<String, String> by params {
     constructor(type: String) : this(emptyMap(), type)
     constructor(type: String, params: Map<String, String>) : this(params.toMap(), type)
     constructor(type: String, vararg params: Pair<String, String>) : this(mapOf(*params), type)
@@ -61,7 +60,6 @@ protected constructor(open val params: Map<String, String>, override var type: S
      */
     override val length: Int
         get() = toString().length
-
 
 
     /**
@@ -84,7 +82,8 @@ protected constructor(open val params: Map<String, String>, override var type: S
      * @param startIndex the start index (inclusive).
      * @param endIndex the end index (exclusive).
      */
-    override fun subSequence(startIndex: Int, endIndex: Int): CharSequence = toString().subSequence(startIndex, endIndex)
+    override fun subSequence(startIndex: Int, endIndex: Int): CharSequence =
+        toString().subSequence(startIndex, endIndex)
 
 
     /**
@@ -130,6 +129,7 @@ protected constructor(open val params: Map<String, String>, override var type: S
     companion object Of {
         /** 参数切割用的正则 */
         private val TEMP_SPLIT_REGEX = Regex(" *, *")
+
         /**
          * 将猫猫码字符串切割为参数列表
          * 返回的键值对为 `type to split`
@@ -176,9 +176,11 @@ protected constructor(open val params: Map<String, String>, override var type: S
         /** 通过map参数获取 */
         @JvmStatic
         fun byMap(type: String, params: Map<String, String>): MapNeko = MapNeko(type, params)
+
         /** 通过键值对获取 */
         @JvmStatic
         fun byPair(type: String, vararg params: Pair<String, String>): MapNeko = MapNeko(type, *params)
+
         /** 通过键值对字符串获取 */
         @JvmStatic
         fun byParamString(type: String, vararg params: String): MapNeko = MapNeko(type, *params)
@@ -211,9 +213,12 @@ protected constructor(open val params: Map<String, String>, override var type: S
         /** 通过map参数获取 */
         @JvmStatic
         fun mutableByMap(type: String, params: Map<String, String>): MutableMapNeko = MutableMapNeko(type, params)
+
         /** 通过键值对获取 */
         @JvmStatic
-        fun mutableByPair(type: String, vararg params: Pair<String, String>): MutableMapNeko = MutableMapNeko(type, *params)
+        fun mutableByPair(type: String, vararg params: Pair<String, String>): MutableMapNeko =
+            MutableMapNeko(type, *params)
+
         /** 通过键值对字符串获取 */
         @JvmStatic
         fun mutableByParamString(type: String, vararg params: String): MutableMapNeko = MutableMapNeko(type, *params)
@@ -237,9 +242,9 @@ protected constructor(open val params: Map<String, String>, override var type: S
 @Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
 class MutableMapNeko
 private constructor(override val params: MutableMap<String, String>, type: String) :
-        MapNeko(params, type),
+    MapNeko(params, type),
     MutableNeko,
-        MutableMap<String, String> by params {
+    MutableMap<String, String> by params {
     constructor(type: String) : this(mutableMapOf(), type)
     constructor(type: String, params: Map<String, String>) : this(params.toMutableMap(), type)
     constructor(type: String, vararg params: Pair<String, String>) : this(mutableMapOf(*params), type)
@@ -265,7 +270,7 @@ private constructor(override val params: MutableMap<String, String>, type: Strin
     override fun toString(): String = CatCodeUtil.toCat(type, map = this)
 
 
-    override fun forEach(action: BiConsumer<in String, in String>) {
-        super<MapNeko>.forEach(action)
-    }
+    // override fun forEach(action: BiConsumer<in String, in String>) {
+    //     super<MapNeko>.forEach(action)
+    // }
 }
