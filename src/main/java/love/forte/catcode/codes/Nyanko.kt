@@ -1,13 +1,13 @@
 /*
- * Copyright (c) 2020. ForteScarlet All rights reserved.
- * Project  parent
- * File     Nyanko.kt
+ * Copyright (c) 2020. ForteScarlet
  *
- * You can contact the author through the following channels:
- * github https://github.com/ForteScarlet
- * gitee  https://gitee.com/ForteScarlet
- * email  ForteScarlet@163.com
- * QQ     1149159218
+ * catCode库相关代码使用 MIT License 开源，请遵守协议相关条款。
+ *
+ * about MIT: https://opensource.org/licenses/MIT
+ *
+ *
+ *
+ *
  */
 
 package love.forte.catcode.codes
@@ -94,7 +94,7 @@ open class Nyanko private constructor(private val code: String) : Neko {
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = this
+    override fun immutable(): Neko = Nyanko(this.code)
 
     /**
      * 得到一个[Map]委托

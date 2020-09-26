@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 2020. ForteScarlet
+ *
+ * catCode库相关代码使用 MIT License 开源，请遵守协议相关条款。
+ *
+ * about MIT: https://opensource.org/licenses/MIT
+ *
+ *
+ *
+ *
+ */
+
 package love.forte.catcode.collection
 
 /**
@@ -69,6 +81,7 @@ public interface NekoMap<K, out V> {
         }
     }
 }
+
 
 /**
  * save as [MutableNekoMap.put], but is operator fun.
@@ -175,14 +188,14 @@ public interface MutableNekoMap<K, V> : NekoMap<K, V> {
     /**
      * 存入多个键值对。
      */
-    fun putAll(from: NekoMap<K, V>) {
+    fun putAll(from: NekoMap<out K, V>) {
         putAll(from.toMap())
     }
 
     /**
      * 存入多个键值对。
      */
-    fun putAll(from: Map<K, V>) {
+    fun putAll(from: Map<out K, V>) {
         from.forEach { (k: K, v: V) ->
             put(k, v)
         }

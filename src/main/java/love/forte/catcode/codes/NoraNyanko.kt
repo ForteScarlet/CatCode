@@ -1,18 +1,19 @@
 /*
- * Copyright (c) 2020. ForteScarlet All rights reserved.
- * Project  parent
- * File     NoraNyanko.kt
+ * Copyright (c) 2020. ForteScarlet
  *
- * You can contact the author through the following channels:
- * github https://github.com/ForteScarlet
- * gitee  https://gitee.com/ForteScarlet
- * email  ForteScarlet@163.com
- * QQ     1149159218
+ * catCode库相关代码使用 MIT License 开源，请遵守协议相关条款。
+ *
+ * about MIT: https://opensource.org/licenses/MIT
+ *
+ *
+ *
+ *
  */
 
 package love.forte.catcode.codes
 
 import love.forte.catcode.*
+import love.forte.catcode.collection.mapDelegation
 
 
 /* ******************************************************
@@ -45,28 +46,32 @@ import love.forte.catcode.*
  *
  *
  */
-open class NoraNyanko private constructor(private val code: String) : Neko {
+public class NoraNyanko private constructor(override val codeType: String, private val code: String) : Neko {
     private val _type: String
     private val _size: Int
 
     private val empty: Boolean
+    private val catParentHead: String
     private val catHead: String
     private val startIndex: Int
     private val endIndex: Int
 
     init {
-        if (!this.code.startsWith(CAT_HEAD) || !this.code.endsWith(CAT_END)) {
+        if(!nekoMatchRegex.matches(code)){
             throw IllegalArgumentException("text \"${this.code}\" is not a cat code text.")
         }
+
+        catParentHead = catHead(codeType)
+
         // get type from string
-        startIndex = CAT_HEAD.length
+        startIndex = catParentHead.length
         endIndex = this.code.lastIndex
         val firstSplitIndex: Int = this.code.indexOf(CAT_PV, startIndex).let {
             if(it < 0) endIndex else it
         }
         // val typeEndIndex = if (firstSplitIndex < 0) _codeText.length else firstSplitIndex
         _type = this.code.substring(startIndex, firstSplitIndex)
-        catHead = CAT_HEAD + _type
+        catHead = catParentHead + _type
         empty = this.code.contains(CAT_PV)
         // 计算 key-value的个数, 即计算CAT_KV的个数
         val kvChar: Char = CAT_KV.first()
@@ -93,7 +98,12 @@ open class NoraNyanko private constructor(private val code: String) : Neko {
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = this
+    override fun immutable(): Neko = NoraNyanko(this.codeType, this.code)
+
+    /**
+     * 转化为[Map]
+     */
+    override fun toMap(): Map<String, String> = this.mapDelegation()
 
     /**
      * 查询猫猫码字符串中是否存在指定的key
@@ -141,14 +151,14 @@ open class NoraNyanko private constructor(private val code: String) : Neko {
 
 
     /**
-     * 缓存上一次的查询结果
-     * 线程不安全的
+     * 缓存上一次的查询结果。
+     * 线程不安全的。
      */
     private var paramBuffer: Pair<String, String>? = null
 
     /**
-     * 获取参数
-     * 得到的值不是反转义的值。如果需要，再转义
+     * 获取参数。
+     * 得到的值不是反转义的值。如果需要，再转义。
      * 参考于[CatCodeUtil.getParam]
      * @see CatCodeUtil.getParam
      */
@@ -326,7 +336,7 @@ open class NoraNyanko private constructor(private val code: String) : Neko {
          * [code]应该是一个猫猫码字符串.
          */
         @JvmStatic
-        fun byCode(code: String): NoraNyanko = NoraNyanko(code.trim())
+        fun byCode(codeType: String, code: String): NoraNyanko = NoraNyanko(codeType, code.trim())
     }
 
 }

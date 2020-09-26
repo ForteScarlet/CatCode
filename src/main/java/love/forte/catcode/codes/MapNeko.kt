@@ -1,13 +1,13 @@
 /*
- * Copyright (c) 2020. ForteScarlet All rights reserved.
- * Project  parent
- * File     MapNeko.kt
+ * Copyright (c) 2020. ForteScarlet
  *
- * You can contact the author through the following channels:
- * github https://github.com/ForteScarlet
- * gitee  https://gitee.com/ForteScarlet
- * email  ForteScarlet@163.com
- * QQ     1149159218
+ * catCode库相关代码使用 MIT License 开源，请遵守协议相关条款。
+ *
+ * about MIT: https://opensource.org/licenses/MIT
+ *
+ *
+ *
+ *
  */
 
 @file:Suppress("unused")
@@ -41,7 +41,7 @@ private val MAP_SPLIT_REGEX = Regex("=")
  * @since 1.8.0
  */
 open class MapNeko
-protected constructor(open val params: Map<String, String>, override var type: String) :
+protected constructor(protected open val params: Map<String, String>, override var type: String) :
     Neko,
     Map<String, String> by params {
     constructor(type: String) : this(emptyMap(), type)
@@ -76,6 +76,11 @@ protected constructor(open val params: Map<String, String>, override var type: S
     override fun get(index: Int): Char = toString()[index]
 
     /**
+     * get value or default.
+     */
+    override fun getOrDefault(key: String, defaultValue: String): String = params.getOrDefault(key, defaultValue)
+
+    /**
      * Returns a new character sequence that is a subsequence of this character sequence,
      * starting at the specified [startIndex] and ending right before the specified [endIndex].
      *
@@ -104,7 +109,12 @@ protected constructor(open val params: Map<String, String>, override var type: S
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = this
+    override fun immutable(): Neko = MapNeko(params, type)
+
+    /**
+     * 获取 [params] 实例。
+     */
+    override fun toMap(): Map<String, String> = params
 
 
     override fun equals(other: Any?): Boolean {
@@ -240,8 +250,8 @@ protected constructor(open val params: Map<String, String>, override var type: S
  * @since 1.8.0
  */
 @Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
-class MutableMapNeko
-private constructor(override val params: MutableMap<String, String>, type: String) :
+public class MutableMapNeko
+private constructor(protected override val params: MutableMap<String, String>, type: String) :
     MapNeko(params, type),
     MutableNeko,
     MutableMap<String, String> by params {
@@ -253,13 +263,11 @@ private constructor(override val params: MutableMap<String, String>, type: Strin
         split[0] to split[1]
     }.toTypedArray()), type)
 
-    // /** internal constructor for kqCode */
-    // internal constructor(neko: Neko) : this(neko.toMutableMap(), neko.type)
-
     /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = this
+    override fun mutable(): MutableNeko = MutableMapNeko(params, type)
+
 
     /**
      * 转化为不可变类型[Neko]
@@ -270,7 +278,10 @@ private constructor(override val params: MutableMap<String, String>, type: Strin
     override fun toString(): String = CatCodeUtil.toCat(type, map = this)
 
 
-    // override fun forEach(action: BiConsumer<in String, in String>) {
-    //     super<MapNeko>.forEach(action)
-    // }
+    /**
+     * params map.
+     */
+    override fun toMap(): MutableMap<String, String> = params
+
+
 }

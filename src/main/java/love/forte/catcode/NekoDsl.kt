@@ -1,18 +1,19 @@
 /*
- * Copyright (c) 2020. ForteScarlet All rights reserved.
- * Project  parent
- * File     NekoDsl.kt
+ * Copyright (c) 2020. ForteScarlet
  *
- * You can contact the author through the following channels:
- * github https://github.com/ForteScarlet
- * gitee  https://gitee.com/ForteScarlet
- * email  ForteScarlet@163.com
- * QQ     1149159218
+ * catCode库相关代码使用 MIT License 开源，请遵守协议相关条款。
+ *
+ * about MIT: https://opensource.org/licenses/MIT
+ *
+ *
+ *
+ *
  */
 
 package love.forte.catcode
 
 import love.forte.catcode.codes.MapNeko
+import love.forte.catcode.collection.set
 
 
 /**
@@ -42,8 +43,10 @@ open class Params {
     }
 
     /** 添加全部 */
-    open fun addTo(neko: Neko): Neko {
-        neko.mutable().putAll(plist)
+    open fun addTo(neko: MutableNeko): MutableNeko {
+        plist.forEach {
+            neko[it.first] = it.second
+        }
         return neko
     }
 
@@ -64,8 +67,7 @@ class Builder {
     /** 添加全部 */
     fun build(): Neko {
         val kqCode = MapNeko.byCode(type)
-        _params.addTo(kqCode)
-        return kqCode
+        return _params.addTo(kqCode.mutable())
     }
 
     override fun toString(): String = "$type:$_params"
@@ -74,30 +76,30 @@ class Builder {
 
 
 /**
- * DSL构建KQCode， 例如
- * ```
- *kqCode("at") {
- *param = "key1" to "1"
- *param = "key2" to "2"
- *param = "key3" to "3"
- *param = "key4" to "4"
- *}
  *
- * 其最终构建结果是[MapKqCode]实例。
- *  ```
+ * 考虑使用 [CodeBuilder]。
+ * DSL将更替为使用 [CodeBuilder]。
+ *
  * @since 1.0-1.11
+ * @see CodeBuilder
+ *
  */
 @NekoDsl
+@Deprecated("see CodeBuilder")
 fun kqCode(type: String, block: Params.() -> Unit): Neko {
     val kqCode = MapNeko(type = type)
-    return Params().apply(block).addTo(kqCode)
+    return Params().apply(block).addTo(kqCode.mutable())
 }
 
 /**
  * DSL构建KQCode的参数列表
  * @since 1.0-1.11
+ *
+ * @see CodeBuilder
+ *
  */
 @NekoDsl
+@Deprecated("see CodeBuilder")
 fun kqCode(block: Builder.() -> Unit) = Builder().apply(block).build()
 
 /**

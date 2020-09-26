@@ -1,13 +1,13 @@
 /*
- * Copyright (c) 2020. ForteScarlet All rights reserved.
- * Project  parent
- * File     Neko.kt
+ * Copyright (c) 2020. ForteScarlet
  *
- * You can contact the author through the following channels:
- * github https://github.com/ForteScarlet
- * gitee  https://gitee.com/ForteScarlet
- * email  ForteScarlet@163.com
- * QQ     1149159218
+ * catCode库相关代码使用 MIT License 开源，请遵守协议相关条款。
+ *
+ * about MIT: https://opensource.org/licenses/MIT
+ *
+ *
+ *
+ *
  */
 
 @file:Suppress("unused")
@@ -91,12 +91,12 @@ interface Neko : NekoMap<String, String>, CharSequence {
     operator fun plus(other: CharSequence): Msgs = Msgs(collection = listOf(this, other))
 
     /**
-     * 转化为可变参的[MutableNeko]
+     * 转化为可变参的[MutableNeko]。应当返回一个新的实例。
      */
     fun mutable(): MutableNeko
 
     /**
-     * 转化为不可变类型[Neko]
+     * 转化为不可变类型[Neko]。应当返回一个新的实例。
      */
     fun immutable(): Neko
 
@@ -207,7 +207,7 @@ public data class EmptyNeko(override val type: String) : Neko {
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = this
+    override fun immutable(): Neko = copy()
 
     override fun toMap(): Map<String, String> = emptyMap()
     override val entries: Set<Map.Entry<String, String>> = emptySet()
@@ -248,7 +248,8 @@ public data class EmptyNoraNeko(override val codeType: String, override val type
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = this
+    override fun immutable(): Neko = copy()
+
     override fun toMap(): Map<String, String> = emptyMap()
     override val entries: Set<Map.Entry<String, String>> = emptySet()
     override val keys: Set<String> = emptySet()
