@@ -7,9 +7,14 @@
 
 <hr>
 
+<div align="center">
+    <h3>
+        猫猫码（Cat code），一个可爱的通用特殊码，CQ码的精神延续。
+    </h3>
+</div>
 
 
-猫猫码（Cat code），一个可爱的通用特殊码，CQ码的精神延续。
+
 
 猫猫码是一个具有特定格式的字符串格式特殊码，规则为`[CAT:xxx,param=value,param=value,...]`的格式，其中：
 
