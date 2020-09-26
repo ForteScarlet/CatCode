@@ -3,7 +3,7 @@
     <h3>
         - 😺 CatCode 😺 -
     </h3>
-    <small>感谢simple-robot开发团队成员制作的猫猫logo</small>
+    <small> &gt; 感谢simple-robot开发团队成员制作的猫猫logo &lt; </small>
 </div>
 
 *****
