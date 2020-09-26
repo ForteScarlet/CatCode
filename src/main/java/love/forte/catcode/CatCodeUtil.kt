@@ -14,9 +14,6 @@
 
 package love.forte.catcode
 
-import love.forte.catcode.codes.MapNeko
-import love.forte.catcode.codes.Nyanko
-
 /*
 & -> &amp;
 [ -> &#91;
@@ -93,6 +90,7 @@ object CatEncoder {
         str.replace("&", "&amp;")
             .replace("[", "&#91;")
             .replace("]", "&#93;")
+            .replace(",", "&#44;")
             .replace("\t", "&#09;")
             .replace("\r", "&#10;")
             .replace("\n", "&#13;")

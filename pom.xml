@@ -10,7 +10,7 @@
     <version>1.0.0-ALPHA.1</version>
 
     <url>https://github.com/ForteScarlet/CatCode</url>
-    <description>猫猫码，CQ码的精神延续，一个可爱的通用特殊码。/ Cat code, the spirit of CQ code continues, a cute universal special code.</description>
+    <description>猫猫码，一个可爱的通用特殊码。/ Cat code, the spirit of CQ code continues, a cute universal special code.</description>
 
     <properties>
         <!-- kt version -->

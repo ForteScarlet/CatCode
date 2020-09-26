@@ -15,8 +15,8 @@
 
 package love.forte.catcode
 
-import love.forte.catcode.codes.Nyanko
 import love.forte.catcode.codes.MapNeko
+import love.forte.catcode.codes.Nyanko
 
 
 public const val CAT_TYPE = "CAT"
@@ -144,7 +144,6 @@ interface MutableNeko : Neko, MutableMap<String, String> {
      */
     override var type: String
 }
-abstract class BaseMutableNeko : MutableNeko
 
 /**
  * 定义一个任意类型的[Neko]实例。
@@ -161,7 +160,6 @@ interface NoraNeko : Neko {
     @JvmDefault
     override val codeType: String
 }
-abstract class BaseNoraNeko : NoraNeko
 
 
 /**
