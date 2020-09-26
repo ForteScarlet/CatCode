@@ -76,3 +76,6 @@
 > 未来计划通过kotlin发布全平台通用库，可通过JVM/JS/Native操作猫猫码。
 > 代码移植为全平台没问题，native测试执行也没啥问题，但是我不知道怎么发布，所以。。再说吧。
 
+
+### LICENSE 
+see [LICENSE](./LICENSE) .
