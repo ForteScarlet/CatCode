@@ -99,6 +99,28 @@ interface Neko : Map<String, String>, CharSequence {
     fun immutable(): Neko
 
 
+    /* ——————  some like map —————— */
+
+    /**
+     * 此码中的所有键值对。
+     */
+    override val entries: Set<Map.Entry<String, String>>
+
+    override val keys: Set<String>
+
+    override val values: Collection<String>
+
+    override val size: Int
+
+    override fun containsKey(key: String): Boolean
+
+    override fun containsValue(value: String): Boolean
+
+    override fun isEmpty(): Boolean
+
+    override fun get(key: String): String?
+
+
     companion object Of {
 
         /**
