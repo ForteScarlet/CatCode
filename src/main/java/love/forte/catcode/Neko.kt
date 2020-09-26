@@ -24,8 +24,12 @@ import love.forte.catcode.collection.NekoMap
 public const val CAT_TYPE = "CAT"
 public const val CAT_HEAD = "[$CAT_TYPE:"
 public const val CAT_END = "]"
-public const val CAT_PV = ","
+/** cat params split. */
+public const val CAT_PS = ","
+/** cat key-value. */
 public const val CAT_KV = "="
+
+
 
 /**
  * cat码匹配正则。

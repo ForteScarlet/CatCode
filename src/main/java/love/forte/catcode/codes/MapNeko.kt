@@ -17,14 +17,9 @@ package love.forte.catcode.codes
 import love.forte.catcode.*
 
 
-/* ******************************************************
- *
- *  kq code by map
- *  基于[Map]作为载体的[KQCode]实例
- *
- *******************************************************/
 
-private val MAP_SPLIT_REGEX = Regex("=")
+
+private val MAP_SPLIT_REGEX = Regex(CAT_KV)
 
 /**
  * 猫猫码封装类, 以[Map]作为参数载体
@@ -48,7 +43,7 @@ protected constructor(protected open val params: Map<String, String>, override v
     constructor(type: String, params: Map<String, String>) : this(params.toMap(), type)
     constructor(type: String, vararg params: Pair<String, String>) : this(mapOf(*params), type)
     constructor(type: String, vararg params: String) : this(mapOf(*params.map {
-        val split = it.split(MAP_SPLIT_REGEX, 2)
+        val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
         split[0] to split[1]
     }.toTypedArray()), type)
 
@@ -259,7 +254,7 @@ private constructor(protected override val params: MutableMap<String, String>, t
     constructor(type: String, params: Map<String, String>) : this(params.toMutableMap(), type)
     constructor(type: String, vararg params: Pair<String, String>) : this(mutableMapOf(*params), type)
     constructor(type: String, vararg params: String) : this(mutableMapOf(*params.map {
-        val split = it.split(MAP_SPLIT_REGEX, 2)
+        val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
         split[0] to split[1]
     }.toTypedArray()), type)
 

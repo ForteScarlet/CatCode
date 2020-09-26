@@ -16,13 +16,6 @@ import love.forte.catcode.*
 import love.forte.catcode.collection.mapDelegation
 
 
-/* ******************************************************
- *
- *  kq code by string split
- *  基于[KQCodeUtils]的字符串操作的[KQCode]实例
- *
- *******************************************************/
-
 /**
  *
  *
@@ -62,13 +55,13 @@ open class Nyanko private constructor(private val code: String) : Neko {
         // get type from string
         startIndex = CAT_HEAD.length
         endIndex = this.code.lastIndex
-        val firstSplitIndex: Int = this.code.indexOf(CAT_PV, startIndex).let {
+        val firstSplitIndex: Int = this.code.indexOf(CAT_PS, startIndex).let {
             if (it < 0) endIndex else it
         }
         // val typeEndIndex = if (firstSplitIndex < 0) _codeText.length else firstSplitIndex
         _type = this.code.substring(startIndex, firstSplitIndex)
         catHead = CAT_HEAD + _type
-        empty = this.code.contains(CAT_PV)
+        empty = this.code.contains(CAT_PS)
         // 计算 key-value的个数, 即计算CAT_KV的个数
         val kvChar: Char = CAT_KV.first()
         _size = this.code.count { it == kvChar }
@@ -107,7 +100,7 @@ open class Nyanko private constructor(private val code: String) : Neko {
     override fun containsKey(key: String): Boolean {
         if (empty) return false
 
-        return codeText.contains("$CAT_PV$key$CAT_KV")
+        return codeText.contains("$CAT_PS$key$CAT_KV")
     }
 
     /**
@@ -118,7 +111,7 @@ open class Nyanko private constructor(private val code: String) : Neko {
         if (empty) return false
 
         val encodeValue: String = CatEncoder.encodeParams(value)
-        return codeText.contains("$CAT_KV$encodeValue$CAT_PV") || codeText.contains("$CAT_KV$encodeValue$CAT_END")
+        return codeText.contains("$CAT_KV$encodeValue$CAT_PS") || codeText.contains("$CAT_KV$encodeValue$CAT_END")
     }
 
     /**
@@ -133,7 +126,7 @@ open class Nyanko private constructor(private val code: String) : Neko {
     override operator fun get(index: Int): Char = codeText[index]
 
     /**
-     * 如果不存在[CAT_PV]，即参数切割符，则说明不存在参数
+     * 如果不存在[CAT_PS]，即参数切割符，则说明不存在参数
      */
     override fun isEmpty(): Boolean = empty
 
@@ -166,13 +159,13 @@ open class Nyanko private constructor(private val code: String) : Neko {
         if (bufferFirst != null && bufferFirst == key) {
             return bufferSecond
         }
-        val paramFind = "$CAT_PV$key$CAT_KV"
+        val paramFind = "$CAT_PS$key$CAT_KV"
         val phi: Int = codeText.indexOf(paramFind, startIndex)
         if (phi < 0) {
             return null
         }
         val startIndex: Int = phi + paramFind.length
-        var pei: Int = codeText.indexOf(CAT_PV, startIndex)
+        var pei: Int = codeText.indexOf(CAT_PS, startIndex)
         if (pei < 0 || pei > endIndex) {
             pei = endIndex
         }

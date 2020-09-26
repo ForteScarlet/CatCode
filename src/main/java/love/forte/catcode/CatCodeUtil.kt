@@ -1,13 +1,13 @@
 /*
- * Copyright (c) 2020. ForteScarlet All rights reserved.
- * Project  parent
- * File     CatCodeUtil.kt
+ * Copyright (c) 2020. ForteScarlet
  *
- * You can contact the author through the following channels:
- * github https://github.com/ForteScarlet
- * gitee  https://gitee.com/ForteScarlet
- * email  ForteScarlet@163.com
- * QQ     1149159218
+ * catCode库相关代码使用 MIT License 开源，请遵守协议相关条款。
+ *
+ * about MIT: https://opensource.org/licenses/MIT
+ *
+ *
+ *
+ *
  */
 
 @file:Suppress("unused")
@@ -27,7 +27,7 @@ package love.forte.catcode
  */
 
 internal val CAT_KV_SPLIT_ARRAY: Array<String> = arrayOf(CAT_KV)
-internal val CAT_PV_SPLIT_ARRAY: Array<String> = arrayOf(CAT_PV)
+internal val CAT_PS_SPLIT_ARRAY: Array<String> = arrayOf(CAT_PS)
 
 /** Cat Decoder */
 @Suppress("MemberVisibilityCanBePrivate")

@@ -1,13 +1,13 @@
 /*
- * Copyright (c) 2020. ForteScarlet All rights reserved.
- * Project  parent
- * File     CatIterators.kt
+ * Copyright (c) 2020. ForteScarlet
  *
- * You can contact the author through the following channels:
- * github https://github.com/ForteScarlet
- * gitee  https://gitee.com/ForteScarlet
- * email  ForteScarlet@163.com
- * QQ     1149159218
+ * catCode库相关代码使用 MIT License 开源，请遵守协议相关条款。
+ *
+ * about MIT: https://opensource.org/licenses/MIT
+ *
+ *
+ *
+ *
  */
 
 package love.forte.catcode
@@ -99,7 +99,7 @@ internal class CatParamKeyIterator(code: String): BaseCatIterator<String>(code) 
 
 
     override fun nextIndex(): Int {
-        return code.indexOf(CAT_PV, if (index == 0) 0 else index + 1)
+        return code.indexOf(CAT_PS, if (index == 0) 0 else index + 1)
     }
 
     /**
@@ -148,7 +148,7 @@ internal class CatParamValueIterator(code: String): BaseCatIterator<String>(code
         // 下一个逗号所在处
         index = nextIndex()
         // 下一个逗号或结尾符所在处
-        var nextSplit = code.indexOf(CAT_PV, index)
+        var nextSplit = code.indexOf(CAT_PS, index)
         if(nextSplit < 0){
             nextSplit = code.lastIndex
         }
@@ -169,7 +169,7 @@ internal class CatParamPairIterator(code: String): BaseCatIterator<Pair<String, 
 
 
     override fun nextIndex(): Int {
-        return code.indexOf(CAT_PV, if(index == 0) 0 else index + 1)
+        return code.indexOf(CAT_PS, if(index == 0) 0 else index + 1)
     }
 
 
@@ -182,7 +182,7 @@ internal class CatParamPairIterator(code: String): BaseCatIterator<Pair<String, 
         // 下一个逗号所在处
         index = nextIndex()
         // 下下一个逗号或结尾符所在处
-        var nextSplit = code.indexOf(CAT_PV, index + 1)
+        var nextSplit = code.indexOf(CAT_PS, index + 1)
         if(nextSplit < 0){
             nextSplit = code.lastIndex
         }
@@ -197,7 +197,7 @@ internal class CatParamPairIterator(code: String): BaseCatIterator<Pair<String, 
 internal class CatParamEntryIterator(code: String): BaseCatIterator<Map.Entry<String, String>>(code) {
 
     override fun nextIndex(): Int {
-        return code.indexOf(CAT_PV, if(index == 0) 0 else index + 1)
+        return code.indexOf(CAT_PS, if(index == 0) 0 else index + 1)
     }
 
     /**
@@ -217,7 +217,7 @@ internal class CatParamEntryIterator(code: String): BaseCatIterator<Map.Entry<St
         // 下一个逗号所在处
         index = nextIndex()
         // 下下一个逗号或结尾符所在处
-        var nextSplit = code.indexOf(CAT_PV, index + 1)
+        var nextSplit = code.indexOf(CAT_PS, index + 1)
         if(nextSplit < 0){
             nextSplit = code.lastIndex
         }

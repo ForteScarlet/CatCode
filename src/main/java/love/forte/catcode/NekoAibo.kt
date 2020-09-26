@@ -1,13 +1,13 @@
 /*
- * Copyright (c) 2020. ForteScarlet All rights reserved.
- * Project  parent
- * File     NekoAibo.kt
+ * Copyright (c) 2020. ForteScarlet
  *
- * You can contact the author through the following channels:
- * github https://github.com/ForteScarlet
- * gitee  https://gitee.com/ForteScarlet
- * email  ForteScarlet@163.com
- * QQ     1149159218
+ * catCode库相关代码使用 MIT License 开源，请遵守协议相关条款。
+ *
+ * about MIT: https://opensource.org/licenses/MIT
+ *
+ *
+ *
+ *
  */
 
 package love.forte.catcode
@@ -69,7 +69,7 @@ internal constructor(protected val codeType: String) {
     fun toCat(type: String, encode: Boolean = true, vararg pair: Pair<String, Any>): String {
         val pre = "$catCodeHead$type"
         return if (pair.isNotEmpty()) {
-            pair.joinToString(CAT_PV, "$pre$CAT_PV", CAT_END) {
+            pair.joinToString(CAT_PS, "$pre$CAT_PS", CAT_END) {
                 "${it.first}$CAT_KV${
                     if (encode) CatEncoder.encodeParams(it.second.toString()) else it.second
                 }"
@@ -88,8 +88,8 @@ internal constructor(protected val codeType: String) {
         val pre = "$catCodeHead$type"
         return if (map.isNotEmpty()) {
             map.entries.joinToString(
-                CAT_PV,
-                "$pre$CAT_PV",
+                CAT_PS,
+                "$pre$CAT_PS",
                 CAT_END
             ) {
                 "${it.key}$CAT_KV${
@@ -118,7 +118,7 @@ internal constructor(protected val codeType: String) {
                 }.toTypedArray())
             } else {
                 // 不需要转义, 直接进行字符串拼接
-                "$catCodeHead$type$CAT_PV${params.joinToString(CAT_PV)}$CAT_END"
+                "$catCodeHead$type$CAT_PS${params.joinToString(CAT_PS)}$CAT_END"
             }
         } else {
             "$catCodeHead$type$CAT_END"
@@ -340,7 +340,7 @@ internal constructor(protected val codeType: String) {
     fun getParam(text: String, paramKey: String, type: String = "", index: Int = 0): String? {
         val catHead = catCodeHead + type
         val catEnd = CAT_END
-        val catSpl = CAT_PV
+        val catSpl = CAT_PS
 
         var from = -1
         var end = -1
