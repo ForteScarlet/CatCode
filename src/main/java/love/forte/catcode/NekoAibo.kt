@@ -141,7 +141,7 @@ internal constructor(protected val codeType: String) {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
-            MapNeko(type, params.asSequence().map { it.key to it.value.toString() }.toMap())
+            MapNeko.byMap(type, params.asSequence().map { it.key to it.value.toString() }.toMap())
         }
     }
 
@@ -155,7 +155,7 @@ internal constructor(protected val codeType: String) {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
-            MapNeko(type, params.asSequence().map { it.first to it.second.toString() }.toMap())
+            MapNeko.byMap(type, params.asSequence().map { it.first to it.second.toString() }.toMap())
         }
     }
 
@@ -280,7 +280,6 @@ internal constructor(protected val codeType: String) {
      * @param index 第几个索引位的猫猫码，默认为0，即第一个
      * @since 1.1-1.11
      */
-//    @JvmOverloads
     fun getCat(text: String, index: Int = 0): String? = getCat(text = text, type = "", index = index)
 
 

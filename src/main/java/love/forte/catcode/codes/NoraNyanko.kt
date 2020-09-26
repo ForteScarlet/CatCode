@@ -37,28 +37,35 @@ import love.forte.catcode.collection.mapDelegation
  *
  *
  */
-public class NoraNyanko private constructor(override val codeType: String, private val code: String) : Neko {
+public class NoraNyanko private constructor(private val code: String) : NoraNeko {
     private val _type: String
     private val _size: Int
 
     private val empty: Boolean
+    override val codeType: String
     private val catParentHead: String
     private val catHead: String
     private val startIndex: Int
     private val endIndex: Int
 
     init {
-        if(!nekoMatchRegex.matches(code)){
+        if (!nekoMatchRegex.matches(code)) {
             throw IllegalArgumentException("text \"${this.code}\" is not a cat code text.")
         }
 
+        // [CAT:
+
+        // val codeTypeStart: Int = code.indexOf("[")
+        val codeTypeEnd: Int = code.indexOf(":")
+
+        codeType = code.substring(1, codeTypeEnd)
         catParentHead = catHead(codeType)
 
         // get type from string
         startIndex = catParentHead.length
         endIndex = this.code.lastIndex
         val firstSplitIndex: Int = this.code.indexOf(CAT_PS, startIndex).let {
-            if(it < 0) endIndex else it
+            if (it < 0) endIndex else it
         }
         // val typeEndIndex = if (firstSplitIndex < 0) _codeText.length else firstSplitIndex
         _type = this.code.substring(startIndex, firstSplitIndex)
@@ -89,7 +96,7 @@ public class NoraNyanko private constructor(override val codeType: String, priva
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = NoraNyanko(this.codeType, this.code)
+    override fun immutable(): Neko = NoraNyanko(this.code)
 
     /**
      * 转化为[Map]
@@ -156,7 +163,7 @@ public class NoraNyanko private constructor(override val codeType: String, priva
     private fun getParam(key: String): String? {
         val bufferFirst = paramBuffer?.first
         val bufferSecond = paramBuffer?.second
-        if(bufferFirst != null && bufferFirst == key){
+        if (bufferFirst != null && bufferFirst == key) {
             return bufferSecond
         }
         val paramFind = "$CAT_PS$key$CAT_KV"
@@ -181,13 +188,13 @@ public class NoraNyanko private constructor(override val codeType: String, priva
      * Returns a read-only [Set] of all key/value pairs in this map.
      */
     override val entries: Set<Map.Entry<String, String>>
-        get() = FastKqEntrySet()
+        get() = FastNoraNyankoEntrySet()
 
 
     /**
      * [NoraNyanko] 的 set内联类
      */
-    private inner class FastKqEntrySet : Set<Map.Entry<String, String>> {
+    private inner class FastNoraNyankoEntrySet : Set<Map.Entry<String, String>> {
         /** 键值对的长度 */
         override val size: Int get() = _size
 
@@ -229,13 +236,13 @@ public class NoraNyanko private constructor(override val codeType: String, priva
      * Returns a read-only [Set] of all keys in this map.
      */
     override val keys: Set<String>
-        get() = FastKqKeySet()
+        get() = FastNoraNyankoKeySet()
 
 
     /**
      * [keys]的实现内部类
      */
-    private inner class FastKqKeySet : Set<String> {
+    private inner class FastNoraNyankoKeySet : Set<String> {
         override val size: Int get() = _size
 
         /**
@@ -272,14 +279,14 @@ public class NoraNyanko private constructor(override val codeType: String, priva
      * Returns a read-only [Collection] of all values in this map. Note that this collection may contain duplicate values.
      */
     override val values: Collection<String>
-        get() = FastKqValues()
+        get() = FastNoraNyankoValues()
 
 
     /**
      * [values]的实现。
      * 不是任何[List]
      */
-    private inner class FastKqValues : Collection<String> {
+    private inner class FastNoraNyankoValues : Collection<String> {
         /**
          * Returns the size of the collection.
          */
@@ -320,6 +327,29 @@ public class NoraNyanko private constructor(override val codeType: String, priva
         }
     }
 
+    override fun hashCode(): Int = this.code.hashCode()
+
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is Neko) return false
+
+        return if (other is NoraNyanko) {
+            this.code == other.code
+        } else {
+            val sameType: Boolean = this.codeType == other.codeType && this.type == other.type
+            if (!sameType) {
+                false
+            } else {
+                keys.forEach {
+                    val thisValue: String? = this[it]
+                    val otherValue: String? = other[it]
+                    if (thisValue != otherValue) return false
+                }
+                true
+            }
+        }
+    }
+
 
     companion object Of {
         /**
@@ -327,7 +357,7 @@ public class NoraNyanko private constructor(override val codeType: String, priva
          * [code]应该是一个猫猫码字符串.
          */
         @JvmStatic
-        fun byCode(codeType: String, code: String): NoraNyanko = NoraNyanko(codeType, code.trim())
+        fun byCode(code: String): NoraNyanko = NoraNyanko(code.trim())
     }
 
 }

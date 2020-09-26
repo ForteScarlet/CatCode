@@ -68,7 +68,9 @@ open class Nyanko private constructor(private val code: String) : Neko {
     }
 
     private val codeText: String = this.code
+
     override fun toString(): String = this.code
+
     override val length: Int = this.code.length
     override val size: Int = _size
     override val type: String = _type
@@ -181,13 +183,13 @@ open class Nyanko private constructor(private val code: String) : Neko {
      * Returns a read-only [Set] of all key/value pairs in this map.
      */
     override val entries: Set<Map.Entry<String, String>>
-        get() = FastKqEntrySet()
+        get() = FastNyankoEntrySet()
 
 
     /**
      * [Nyanko] 的 set内联类
      */
-    private inner class FastKqEntrySet : Set<Map.Entry<String, String>> {
+    private inner class FastNyankoEntrySet : Set<Map.Entry<String, String>> {
         /** 键值对的长度 */
         override val size: Int get() = _size
 
@@ -222,6 +224,8 @@ open class Nyanko private constructor(private val code: String) : Neko {
          * 键值对迭代器
          */
         override fun iterator(): Iterator<Map.Entry<String, String>> = CatParamEntryIterator(this@Nyanko.code)
+
+        override fun toString(): String = "Nyanko.entries(${this@Nyanko})"
     }
 
 
@@ -229,13 +233,13 @@ open class Nyanko private constructor(private val code: String) : Neko {
      * Returns a read-only [Set] of all keys in this map.
      */
     override val keys: Set<String>
-        get() = FastKqKeySet()
+        get() = FastNyankoKeySet()
 
 
     /**
      * [keys]的实现内部类
      */
-    private inner class FastKqKeySet : Set<String> {
+    private inner class FastNyankoKeySet : Set<String> {
         override val size: Int get() = _size
 
         /**
@@ -272,14 +276,14 @@ open class Nyanko private constructor(private val code: String) : Neko {
      * Returns a read-only [Collection] of all values in this map. Note that this collection may contain duplicate values.
      */
     override val values: Collection<String>
-        get() = FastKqValues()
+        get() = FastNyankoValues()
 
 
     /**
      * [values]的实现。
      * 不是任何[List]
      */
-    private inner class FastKqValues : Collection<String> {
+    private inner class FastNyankoValues : Collection<String> {
         /**
          * Returns the size of the collection.
          */
@@ -317,6 +321,29 @@ open class Nyanko private constructor(private val code: String) : Neko {
          */
         override fun iterator(): Iterator<String> {
             return CatParamValueIterator(this@Nyanko.code)
+        }
+    }
+
+    override fun hashCode(): Int = this.code.hashCode()
+
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is Neko) return false
+
+        return if (other is Nyanko) {
+            this.code == other.code
+        } else {
+            val sameType: Boolean = this.codeType == other.codeType && this.type == other.type
+            if(!sameType) {
+                false
+            } else {
+                keys.forEach {
+                    val thisValue: String? = this[it]
+                    val otherValue: String? = other[it]
+                    if(thisValue != otherValue) return false
+                }
+                true
+            }
         }
     }
 

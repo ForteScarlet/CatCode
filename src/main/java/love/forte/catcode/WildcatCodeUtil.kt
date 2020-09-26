@@ -1,20 +1,20 @@
 /*
- * Copyright (c) 2020. ForteScarlet All rights reserved.
- * Project  parent
- * File     WildcatCodeUtil.kt
+ * Copyright (c) 2020. ForteScarlet
  *
- * You can contact the author through the following channels:
- * github https://github.com/ForteScarlet
- * gitee  https://gitee.com/ForteScarlet
- * email  ForteScarlet@163.com
- * QQ     1149159218
+ * catCode库相关代码使用 MIT License 开源，请遵守协议相关条款。
+ *
+ * about MIT: https://opensource.org/licenses/MIT
+ *
+ *
+ *
+ *
  */
 
 
 package love.forte.catcode
 
-import love.forte.catcode.codes.MapNeko
-import love.forte.catcode.codes.Nyanko
+import love.forte.catcode.codes.MapNoraNeko
+import love.forte.catcode.codes.NoraNyanko
 
 
 /**
@@ -30,47 +30,46 @@ import love.forte.catcode.codes.Nyanko
  *
  */
 @Suppress("unused", "DeprecatedCallableAddReplaceWith")
-public class WildcatCodeUtil(codeType: String) : NekoAibo(codeType) {
+public class WildcatCodeUtil
+private constructor(codeType: String) : NekoAibo(codeType) {
 
     companion object {
         @JvmStatic
         fun getInstance(codeType: String): WildcatCodeUtil = WildcatCodeUtil(codeType)
     }
 
+
+
     /**
      *  获取一个String为载体的[模板][CodeTemplate]
      *  @see StringTemplate
      */
-    @Deprecated("TODO...")
     override val stringTemplate: CodeTemplate<String>
-        get() = StringTemplate
+        get() = TODO("not implement yet")
 
     /**
      *  获取[Neko]为载体的[模板][CodeTemplate]
      *  @see NekoTemplate
      */
-    @Deprecated("TODO...")
     override val nekoTemplate: CodeTemplate<Neko>
-        get() = NekoTemplate
+        get() = TODO("not implement yet")
 
     /**
      * 构建一个String为载体类型的[构建器][CodeBuilder]
      */
-    @Deprecated("TODO...")
-    override fun getStringCodeBuilder(type: String): CodeBuilder<String> = CodeBuilder.stringCodeBuilder(type)
+    override fun getStringCodeBuilder(type: String): CodeBuilder<String> = TODO("not implement yet")
 
     /**
      * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]
      */
-    @Deprecated("TODO...")
-    override fun getNekoBuilder(type: String): CodeBuilder<Neko> = CodeBuilder.nekoBuilder(type)
+    override fun getNekoBuilder(type: String): CodeBuilder<Neko> = TODO("not implement yet")
 
 
     /**
      * 获取无参数的[Neko]
      * @param type 猫猫码的类型
      */
-    override fun toNeko(type: String): Neko = EmptyNoraNeko(codeType, type)
+    override fun toNeko(type: String): NoraNeko = EmptyNoraNeko(codeType, type)
 
     /**
      * 根据[Map]类型参数转化为[Neko]实例
@@ -78,11 +77,11 @@ public class WildcatCodeUtil(codeType: String) : NekoAibo(codeType) {
      * @param type 猫猫码的类型
      * @param params 参数列表
      */
-    override fun toNeko(type: String, params: Map<String, *>): Neko {
+    override fun toNeko(type: String, params: Map<String, *>): NoraNeko {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
-            MapNeko(type, params.asSequence().map { it.key to it.value.toString() }.toMap())
+            MapNoraNeko.byMap(codeType, type, params.asSequence().map { it.key to it.value.toString() }.toMap())
         }
     }
 
@@ -92,11 +91,11 @@ public class WildcatCodeUtil(codeType: String) : NekoAibo(codeType) {
      * @param type 猫猫码的类型
      * @param params 参数列表
      */
-    override fun toNeko(type: String, vararg params: Pair<String, *>): Neko {
+    override fun toNeko(type: String, vararg params: Pair<String, *>): NoraNeko {
         return if (params.isEmpty()) {
-            EmptyNeko(type)
+            toNeko(type)
         } else {
-            MapNeko(type, params.asSequence().map { it.first to it.second.toString() }.toMap())
+            MapNoraNeko.byMap(codeType, type, params.asSequence().map { it.first to it.second.toString() }.toMap())
         }
     }
 
@@ -106,18 +105,17 @@ public class WildcatCodeUtil(codeType: String) : NekoAibo(codeType) {
      * @param type 猫猫码的类型
      * @param paramText 参数列表, 例如："qq=123"
      */
-    override fun toNeko(type: String, encode: Boolean, vararg paramText: String): Neko {
+    override fun toNeko(type: String, encode: Boolean, vararg paramText: String): NoraNeko {
         return if (paramText.isEmpty()) {
-            EmptyNeko(type)
+            toNeko(type)
         } else {
             if (encode) {
-                Nyanko.byCode(toCat(type, encode, *paramText))
+                NoraNyanko.byCode(toCat(type, encode, *paramText))
             } else {
-                MapNeko.byParamString(type, *paramText)
+                MapNoraNeko.byParamString(codeType, type, *paramText)
             }
         }
     }
-
 
 
     /**
