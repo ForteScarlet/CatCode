@@ -17,6 +17,8 @@ package love.forte.catcode
 
 import love.forte.catcode.codes.MapNeko
 import love.forte.catcode.codes.Nyanko
+import love.forte.catcode.collection.MutableNekoMap
+import love.forte.catcode.collection.NekoMap
 
 
 public const val CAT_TYPE = "CAT"
@@ -66,7 +68,7 @@ public fun catHead(codeType: String): String = "[$codeType:"
  *
  * @since 1.8.0
  */
-interface Neko : Map<String, String>, CharSequence {
+interface Neko : NekoMap<String, String>, CharSequence {
 
     @JvmDefault
     val codeType: String
@@ -97,76 +99,6 @@ interface Neko : Map<String, String>, CharSequence {
      * 转化为不可变类型[Neko]
      */
     fun immutable(): Neko
-
-
-    /* ——————  some like map —————— */
-
-    /**
-     * 此码中的所有键值对。
-     */
-    override val entries: Set<Map.Entry<String, String>>
-
-    /**
-     * 此码中的所有键。
-     */
-    override val keys: Set<String>
-
-    /**
-     * 此码中的所有值。
-     */
-    override val values: Collection<String>
-
-    /**
-     * 此码中的键值对参数数量。
-     */
-    override val size: Int
-
-    /**
-     * 此码作为字符串时候的长度。
-     *
-     * @see CharSequence.length
-     */
-    override val length: Int
-
-    /**
-     * 是否包含某个键。
-     */
-    override fun containsKey(key: String): Boolean
-
-    /**
-     * 是否包含某个值。
-     */
-    override fun containsValue(value: String): Boolean
-
-    /**
-     * 是否没有参数。
-     */
-    override fun isEmpty(): Boolean
-
-    /**
-     * 获取某个键对应的值。
-     */
-    override fun get(key: String): String?
-
-    /**
-     * 要重写toString哦~
-     */
-    override fun toString(): String
-
-    /**
-     * 获取某个键对应的值。如果不存在则返回一个默认值。
-     */
-    @JvmDefault
-    override fun getOrDefault(key: String, defaultValue: String): String = get(key) ?: defaultValue
-
-    /**
-     * foreach entries.
-     */
-    fun forEach(action: (String, String) -> Unit) {
-        entries.forEach {
-            action(it.key, it.value)
-        }
-    }
 
 
     companion object Of {
@@ -208,7 +140,7 @@ interface Neko : Map<String, String>, CharSequence {
  * 定义一个可变的[Neko]标准接口。
  * - `MutableNeko`实例应当实现[MutableMap]接口，使其可以作为一个 **可变** Map使用。
  */
-interface MutableNeko : Neko, MutableMap<String, String> {
+interface MutableNeko : Neko, MutableNekoMap<String, String> {
     /**
      * type 也是可变类型
      */
@@ -276,6 +208,8 @@ public data class EmptyNeko(override val type: String) : Neko {
      * 转化为不可变类型[Neko]
      */
     override fun immutable(): Neko = this
+
+    override fun toMap(): Map<String, String> = emptyMap()
     override val entries: Set<Map.Entry<String, String>> = emptySet()
     override val keys: Set<String> = emptySet()
     override val size: Int = 0
@@ -315,6 +249,7 @@ public data class EmptyNoraNeko(override val codeType: String, override val type
      * 转化为不可变类型[Neko]
      */
     override fun immutable(): Neko = this
+    override fun toMap(): Map<String, String> = emptyMap()
     override val entries: Set<Map.Entry<String, String>> = emptySet()
     override val keys: Set<String> = emptySet()
     override val size: Int = 0

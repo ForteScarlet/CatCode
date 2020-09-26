@@ -3,16 +3,23 @@
     <h3>
         - 😺 CatCode 😺 -
     </h3>
+    <span>
+        <a href="https://github.com/ForteScarlet/CatCode">github</a>
+    </span> 
+    &nbsp;&nbsp; | &nbsp;&nbsp;
+    <span>
+        <a href="https://gitee.com/ForteScarlet/CatCode">gitee</a>
+    </span> <br />
     <small> &gt; 感谢simple-robot开发团队成员制作的猫猫logo &lt; </small>
 </div>
-
 *****
 
 <div align="center">
     <h3>
         猫猫码（Cat code），一个可爱的通用特殊码，CQ码的精神延续。
     </h3>
-</div>
+</div>   
+
 
 
 
@@ -56,6 +63,7 @@
 任何符合规则：`[TYPE:type,param=value,param=value,...]`的特殊码均可以视为猫猫码，尽管`TYPE`并不是`CAT`。
 
 这类其他类型的“猫猫码”称为`WildcatCode(野良猫码)`, 可以通过`WildcatCodeUtil`工具来实现对应的解析, 通过`NoraNeko`实例类型作为封装。
+
 
 
 

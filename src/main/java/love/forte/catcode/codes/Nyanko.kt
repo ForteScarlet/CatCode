@@ -13,6 +13,7 @@
 package love.forte.catcode.codes
 
 import love.forte.catcode.*
+import love.forte.catcode.collection.mapDelegation
 
 
 /* ******************************************************
@@ -62,7 +63,7 @@ open class Nyanko private constructor(private val code: String) : Neko {
         startIndex = CAT_HEAD.length
         endIndex = this.code.lastIndex
         val firstSplitIndex: Int = this.code.indexOf(CAT_PV, startIndex).let {
-            if(it < 0) endIndex else it
+            if (it < 0) endIndex else it
         }
         // val typeEndIndex = if (firstSplitIndex < 0) _codeText.length else firstSplitIndex
         _type = this.code.substring(startIndex, firstSplitIndex)
@@ -96,10 +97,16 @@ open class Nyanko private constructor(private val code: String) : Neko {
     override fun immutable(): Neko = this
 
     /**
+     * 得到一个[Map]委托
+     */
+    override fun toMap(): Map<String, String> = this.mapDelegation()
+
+    /**
      * 查询猫猫码字符串中是否存在指定的key
      */
     override fun containsKey(key: String): Boolean {
         if (empty) return false
+
         return codeText.contains("$CAT_PV$key$CAT_KV")
     }
 
@@ -109,6 +116,7 @@ open class Nyanko private constructor(private val code: String) : Neko {
      */
     override fun containsValue(value: String): Boolean {
         if (empty) return false
+
         val encodeValue: String = CatEncoder.encodeParams(value)
         return codeText.contains("$CAT_KV$encodeValue$CAT_PV") || codeText.contains("$CAT_KV$encodeValue$CAT_END")
     }
@@ -155,7 +163,7 @@ open class Nyanko private constructor(private val code: String) : Neko {
     private fun getParam(key: String): String? {
         val bufferFirst = paramBuffer?.first
         val bufferSecond = paramBuffer?.second
-        if(bufferFirst != null && bufferFirst == key){
+        if (bufferFirst != null && bufferFirst == key) {
             return bufferSecond
         }
         val paramFind = "$CAT_PV$key$CAT_KV"
