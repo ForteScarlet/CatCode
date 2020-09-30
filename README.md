@@ -67,6 +67,51 @@
 
 
 
+## 应用
+
+猫猫码将会被作为[simpler-robot](https://github.com/ForteScarlet/simpler-robot)框架 (即[simple-robot](https://github.com/ForteScarlet/simple-robot-core)的2.x版本) 的送信特殊码格式使用。
+
+当然，如果你觉得它很可爱，也欢迎使用~
+
+
+## 使用方式
+
+#### 1. 通过Builder构建CatCode
+
+```java
+        // get util instance.
+        final CatCodeUtil catUtil = CatCodeUtil.INSTANCE;
+
+        // 构建一个猫猫码 - string
+        // 例如构建一个字符串类型的: [CAT:at,code=123456,name=forte,age=12]
+        // 1. StringCodeBuilder
+        final CodeBuilder<String> stringBuilder = catUtil.getStringCodeBuilder("at");
+        String catCode1 = stringBuilder
+                .key("code").value(123456)
+                .key("name").value("forte")
+                .key("age").value(12)
+                .build();
+
+        System.out.println(catCode1);
+
+        // 构建一个猫猫码 - Neko
+        // 例如构建一个Neko类型的: [CAT:image,file=1.jpg,dis=true]
+        // 2. NekoBuilder
+        final CodeBuilder<Neko> nekoBuilder = catUtil.getNekoBuilder("image");
+        Neko catCode2 = nekoBuilder
+                .key("file").value("1.jpg")
+                .key("dis").value(true)
+                .build();
+
+        System.out.println(catCode2);
+```
+
+#### 2. 待续...
+
+
+
+
+
 
 
 > Neko : ねこ(猫)，意为“猫”。
