@@ -17,7 +17,7 @@ import love.forte.catcode.CodeBuilder;
 import love.forte.catcode.Neko;
 
 /**
- * test 1
+ * Readme test 1 for create a cat code by Builder.
  *
  * @author <a href="https://github.com/ForteScarlet"> ForteScarlet </a>
  */
