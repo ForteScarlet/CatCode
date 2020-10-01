@@ -4,11 +4,11 @@
         - 😺 CatCode 😺 -
     </h3>
     <span>
-        <a href="https://github.com/ForteScarlet/CatCode">github</a>
+        <a href="https://github.com/ForteScarlet/CatCode" target="_blank">github</a>
     </span> 
     &nbsp;&nbsp; | &nbsp;&nbsp;
     <span>
-        <a href="https://gitee.com/ForteScarlet/CatCode">gitee</a>
+        <a href="https://gitee.com/ForteScarlet/CatCode" target="_blank">gitee</a>
     </span> <br />
     <small> &gt; 感谢simple-robot开发团队成员制作的猫猫logo &lt; </small>
 </div>
