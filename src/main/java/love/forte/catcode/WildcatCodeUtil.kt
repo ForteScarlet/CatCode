@@ -53,14 +53,14 @@ private constructor(codeType: String) : NekoAibo(codeType) {
 
 
     /**
-     * 构建一个String为载体类型的[构建器][CodeBuilder]
+     * 构建一个String为载体类型的[构建器][CodeBuilder]。默认开启转义。
      */
-    override fun getStringCodeBuilder(type: String): CodeBuilder<String> = TODO("not implement yet")
+    override fun getStringCodeBuilder(type: String, encode: Boolean): CodeBuilder<String> = WildcatStringCodeBuilder(codeType, type, encode)
 
     /**
-     * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]
+     * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]。默认开启转义。
      */
-    override fun getNekoBuilder(type: String): CodeBuilder<Neko> = TODO("not implement yet")
+    override fun getNekoBuilder(type: String, encode: Boolean): CodeBuilder<Neko> = NoraNekoBuilder(codeType, type)
 
 
     /**

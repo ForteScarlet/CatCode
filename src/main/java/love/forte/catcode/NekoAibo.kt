@@ -43,13 +43,13 @@ internal constructor(protected val codeType: String) {
     /**
      * 构建一个String为载体类型的[构建器][CodeBuilder]
      */
-    abstract fun getStringCodeBuilder(type: String): CodeBuilder<String>
+    abstract fun getStringCodeBuilder(type: String, encode: Boolean = true): CodeBuilder<String>
 
 
     /**
      * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]
      */
-    abstract fun getNekoBuilder(type: String): CodeBuilder<Neko>
+    abstract fun getNekoBuilder(type: String, encode: Boolean = true): CodeBuilder<Neko>
 
 
     /**

@@ -92,6 +92,7 @@ constructor(override val type: String, private val encode: Boolean = true) : Cod
     private val builderKey: StringCodeBuilderKey = StringCodeBuilderKey()
 
     /** 当前等待设置的key值 */
+    @Volatile
     private var key: String? = null
 
     /**
@@ -140,7 +141,7 @@ constructor(override val type: String, private val encode: Boolean = true) : Cod
 //**************************************
 
 /**
- * 以[Neko]为载体的[CodeBuilder]实现类, 需要在构建实例的时候指定[类型][type]
+ * 以[Neko]为载体的[CodeBuilder]实现类, 需要在构建实例的时候指定[类型][type]。
  *
  * 通过[哈希表][MutableMap]来进行[Neko]的构建, 且不是线程安全的。
  */
@@ -152,8 +153,8 @@ public class NekoBuilder(override val type: String) : CodeBuilder<Neko> {
     /** 当前等待设置的key值 */
     private var key: String? = null
 
-    /** [KQCodeBuilderKey]实例 */
-    private val builderKey: KQCodeBuilderKey = KQCodeBuilderKey()
+    /** [NekoBuilderKey]实例 */
+    private val builderKey: NekoBuilderKey = NekoBuilderKey()
 
     /**
      * 指定一个code的key, 并通过这个key设置一个value.
@@ -172,7 +173,7 @@ public class NekoBuilder(override val type: String) : CodeBuilder<Neko> {
     /**
      * 以[Neko]作为载体的[CodeBuilder.CodeBuilderKey]实现类
      */
-    private inner class KQCodeBuilderKey : CodeBuilder.CodeBuilderKey<Neko> {
+    private inner class NekoBuilderKey : CodeBuilderKey<Neko> {
         /**
          * 为当前Key设置一个value值并返回.
          */
