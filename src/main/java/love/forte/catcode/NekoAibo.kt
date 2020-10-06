@@ -66,12 +66,15 @@ internal constructor(protected val codeType: String) {
      * @since 1.0-1.11
      */
     @JvmOverloads
-    fun toCat(type: String, encode: Boolean = true, vararg pair: Pair<String, Any>): String {
+    fun toCat(type: String, encode: Boolean = true, vararg pair: Pair<String, *>): String {
         val pre = "$catCodeHead$type"
         return if (pair.isNotEmpty()) {
-            pair.joinToString(CAT_PS, "$pre$CAT_PS", CAT_END) {
+            pair.asSequence().filter {
+                val v: Any? = it.second
+                v != null && if (v is CharSequence) v.isNotBlank() else true
+            }.joinToString(CAT_PS, "$pre$CAT_PS", CAT_END) {
                 "${it.first}$CAT_KV${
-                    if (encode) CatEncoder.encodeParams(it.second.toString()) else it.second
+                    if (encode) it.second.toString().enCatParam() else it.second
                 }"
             }
         } else {
@@ -88,15 +91,15 @@ internal constructor(protected val codeType: String) {
         val pre = "$catCodeHead$type"
         return if (map.isNotEmpty()) {
             map.asSequence().filter {
-                val v = it.value
-                v != null && if(v is CharSequence) v.isNotBlank() else true
+                val v: Any? = it.value
+                v != null && if (v is CharSequence) v.isNotBlank() else true
             }.joinToString(
                 CAT_PS,
                 "$pre$CAT_PS",
                 CAT_END
             ) {
                 "${it.key}$CAT_KV${
-                    if (encode) CatEncoder.encodeParams(it.value.toString()) else it.value
+                    if (encode) it.value.toString().enCatParam() else it.value
                 }"
             }
         } else {
@@ -126,7 +129,7 @@ internal constructor(protected val codeType: String) {
                 params
                     .filter { !it.endsWith(CAT_KV) }
                     .takeIf { it.isNotEmpty() }
-                        // if not empty,
+                    // if not empty,
                     ?.let { "$catCodeHead$type$CAT_PS${it.joinToString(CAT_PS)}$CAT_END" }
                     ?: "$catCodeHead$type$CAT_END"
             }
@@ -151,7 +154,7 @@ internal constructor(protected val codeType: String) {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
-            MapNeko.byMap(type, params.asSequence().map { it.key to it.value.toString() }.toMap())
+            MapNeko.byMap(type, params)
         }
     }
 
@@ -165,7 +168,7 @@ internal constructor(protected val codeType: String) {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
-            MapNeko.byMap(type, params.asSequence().map { it.first to it.second.toString() }.toMap())
+            MapNeko.byPair(type, *params)
         }
     }
 
@@ -173,18 +176,14 @@ internal constructor(protected val codeType: String) {
     /**
      * 根据参数转化为[Neko]实例
      * @param type 猫猫码的类型
-     * @param paramText 参数列表, 例如："qq=123"
+     * @param paramText 参数列表, 例如："code=123"
      */
     @JvmOverloads
     open fun toNeko(type: String, encode: Boolean = false, vararg paramText: String): Neko {
         return if (paramText.isEmpty()) {
             toNeko(type)
         } else {
-            if (encode) {
-                Nyanko.byCode(toCat(type, encode, *paramText))
-            } else {
-                MapNeko.byParamString(type, *paramText)
-            }
+            Nyanko.byCode(toCat(type, encode, *paramText))
         }
     }
 

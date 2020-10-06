@@ -17,8 +17,6 @@ package love.forte.catcode.codes
 import love.forte.catcode.*
 
 
-
-
 private val MAP_SPLIT_REGEX = Regex(CAT_KV)
 
 /**
@@ -167,7 +165,7 @@ protected constructor(protected open val params: Map<String, String>, override v
                     // 参数解码
                     val map = split.subList(1, split.size).map {
                         val sp = it.split(Regex("="), 2)
-                        sp[0] to CatDecoder.decodeParams(sp[1])
+                        sp[0] to sp[1].deCatParam()
                     }.toMap()
                     MapNeko(map, type)
                 } else {
@@ -180,11 +178,17 @@ protected constructor(protected open val params: Map<String, String>, override v
 
         /** 通过map参数获取 */
         @JvmStatic
-        fun byMap(type: String, params: Map<String, String>): MapNeko = MapNeko(type, params)
+        fun byMap(type: String, params: Map<String, *>): MapNeko =
+            MapNeko(type, params.mapNotNull {
+                if (it.value == null) null else it.key to it.value.toString()
+            }.toMap())
 
         /** 通过键值对获取 */
         @JvmStatic
-        fun byPair(type: String, vararg params: Pair<String, String>): MapNeko = MapNeko(type, *params)
+        fun byPair(type: String, vararg params: Pair<String, *>): MapNeko =
+            MapNeko(type, params.mapNotNull {
+                if (it.second == null) null else it.first to it.second.toString()
+            }.toMap())
 
         /** 通过键值对字符串获取 */
         @JvmStatic

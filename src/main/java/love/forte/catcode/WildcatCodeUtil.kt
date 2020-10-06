@@ -39,20 +39,18 @@ private constructor(codeType: String) : NekoAibo(codeType) {
     }
 
 
-
     /**
      *  获取一个String为载体的[模板][CodeTemplate]
      *  @see StringTemplate
      */
-    override val stringTemplate: CodeTemplate<String>
-        get() = TODO("not implement yet")
+    override val stringTemplate: WildcatTemplate<String> = WildcatStringTemplate.getInstance(codeType)
 
     /**
      *  获取[Neko]为载体的[模板][CodeTemplate]
      *  @see NekoTemplate
      */
-    override val nekoTemplate: CodeTemplate<Neko>
-        get() = TODO("not implement yet")
+    override val nekoTemplate: WildcatTemplate<Neko> = NoraNekoTemplate.getInstance(codeType)
+
 
     /**
      * 构建一个String为载体类型的[构建器][CodeBuilder]

@@ -63,7 +63,7 @@ interface CodeTemplate<T> {
      * @param destruct 闪图
      */
     fun image(file: String, destruct: Boolean): T
-    @JvmDefault fun image(id: String): T = image(id, false)
+    @JvmDefault fun image(file: String): T = image(file, false)
 
 
     /**
@@ -74,7 +74,7 @@ interface CodeTemplate<T> {
      * 举例：[CAT:record,file=1.silk，magic=true]（发送data\record\1.silk，并标记为变声）
      */
     fun record(file: String, magic: Boolean): T
-    @JvmDefault fun record(id: String): T = record(id, false)
+    @JvmDefault fun record(file: String): T = record(file, false)
 
 
 
@@ -145,15 +145,15 @@ interface CodeTemplate<T> {
     @JvmDefault fun share(url: String, title: String): T = share(url, title, null, null)
 
 
-    /**
-     * 地点
-     * [CAT:location,lat={1},lon={2},title={3},content={4}]
-     * {1} 纬度
-     * {2} 经度
-     * {3} 分享地点的名称
-     * {4} 分享地点的具体地址
-     */
-    fun location(lat: String, lon: String, title: String, content: String): T
+    // /**
+    //  * 地点
+    //  * [CAT:location,lat={1},lon={2},title={3},content={4}]
+    //  * {1} 纬度
+    //  * {2} 经度
+    //  * {3} 分享地点的名称
+    //  * {4} 分享地点的具体地址
+    //  */
+    // fun location(lat: String, lon: String, title: String, content: String): T
 
 
 }
@@ -344,16 +344,16 @@ object StringTemplate: CodeTemplate<String> {
         }
     }
 
-    /**
-     * 地点
-     * [CAT:location,lat={1},lon={2},title={3},content={4}]
-     * {1} 纬度
-     * {2} 经度
-     * {3} 分享地点的名称
-     * {4} 分享地点的具体地址
-     */
-    override fun location(lat: String, lon: String, title: String, content: String): String =
-        "[CAT:location,lat=$lat,lon=$lon,title=$title,content=$content]"
+    // /**
+    //  * 地点
+    //  * [CAT:location,lat={1},lon={2},title={3},content={4}]
+    //  * {1} 纬度
+    //  * {2} 经度
+    //  * {3} 分享地点的名称
+    //  * {4} 分享地点的具体地址
+    //  */
+    // override fun location(lat: String, lon: String, title: String, content: String): String =
+    //     "[CAT:location,lat=$lat,lon=$lon,title=$title,content=$content]"
 }
 
 
@@ -511,16 +511,16 @@ object NekoTemplate: CodeTemplate<Neko> {
     override fun share(url: String, title: String, content: String?, image: String?): Neko =
         Nyanko.byCode(StringTemplate.share(url, title, content, image))
 
-    /**
-     * 地点
-     * [CAT:location,lat={1},lon={2},title={3},content={4}]
-     * {1} 纬度
-     * {2} 经度
-     * {3} 分享地点的名称
-     * {4} 分享地点的具体地址
-     */
-    override fun location(lat: String, lon: String, title: String, content: String): Neko =
-        Nyanko.byCode(StringTemplate.location(lat, lon, title, content))
+    // /**
+    //  * 地点
+    //  * [CAT:location,lat={1},lon={2},title={3},content={4}]
+    //  * {1} 纬度
+    //  * {2} 经度
+    //  * {3} 分享地点的名称
+    //  * {4} 分享地点的具体地址
+    //  */
+    // override fun location(lat: String, lon: String, title: String, content: String): Neko =
+    //     Nyanko.byCode(StringTemplate.location(lat, lon, title, content))
 
 
 
