@@ -133,12 +133,12 @@ public object CatCodeUtil : NekoAibo("CAT") {
     /**
      * 构建一个String为载体类型的[构建器][CodeBuilder]
      */
-    override fun getStringCodeBuilder(type: String): CodeBuilder<String> = CodeBuilder.stringCodeBuilder(type)
+    override fun getStringCodeBuilder(type: String): CodeBuilder<String> = StringCodeBuilder(type)
 
     /**
      * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]
      */
-    override fun getNekoBuilder(type: String): CodeBuilder<Neko> = CodeBuilder.nekoBuilder(type)
+    override fun getNekoBuilder(type: String): CodeBuilder<Neko> = NekoBuilder(type)
 
 }
 

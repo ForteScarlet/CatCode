@@ -12,5 +12,9 @@
 
 package love.forte.catcode
 
-
-
+/**
+ * 野猫码构建器。
+ */
+public interface WildcatCodeBuilder<T> : CodeBuilder<T> {
+    val codeType: String
+}

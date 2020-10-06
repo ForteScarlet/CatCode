@@ -25,6 +25,9 @@ import love.forte.catcode.codes.MapNeko
  * [builder][CodeBuilder].[key(String)][key].[value(Any?)][CodeBuilderKey.value].[build][CodeBuilder.build]
  * 的形式快速构造一个猫猫码实例并作为指定载体返回。
  *
+ * @see StringCodeBuilder 以字符串为载体的builder。
+ * @see NekoBuilder 以[Neko]作为载体的builder。
+ *
  * @author ForteScarlet <ForteScarlet@163.com>
  * @since 1.8.0
  **/
@@ -62,23 +65,6 @@ public interface CodeBuilder<T> {
          * 为当前Key设置一个空的value值并返回.
          */
         fun emptyValue(): CodeBuilder<T>
-    }
-
-    /**
-     * 提供两个已经实现的模板的
-     */
-    companion object {
-        /**
-         * 获取一个以字符串为猫猫码载体的[构建器][CodeBuilder]实例, 需要提供[类型][type]参数
-         */
-        @JvmStatic
-        fun stringCodeBuilder(type: String): CodeBuilder<String> = StringCodeBuilder(type)
-
-        /**
-         * 获取一个以[Neko]为猫猫码载体的[构建器][CodeBuilder]实例, 需要提供[类型][type]参数
-         */
-        @JvmStatic
-        fun nekoBuilder(type: String): CodeBuilder<Neko> = NekoBuilder(type)
     }
 
 }

@@ -24,13 +24,7 @@ public interface WildcatTemplate<T> : CodeTemplate<T>
 /**
  * 野良猫的 [CodeTemplate] 模板实现，以字符串为载体。
  */
-public class WildcatStringTemplate
-private constructor(codeType: String) : WildcatTemplate<String> {
-
-    companion object {
-        @JvmStatic
-        fun getInstance(codeType: String): WildcatStringTemplate = WildcatStringTemplate(codeType)
-    }
+public class WildcatStringTemplate(codeType: String) : WildcatTemplate<String> {
 
     private val utilInstance: WildcatCodeUtil = WildcatCodeUtil.getInstance(codeType)
 
@@ -230,16 +224,9 @@ private constructor(codeType: String) : WildcatTemplate<String> {
 /**
  * 野良猫码以 [Neko] 作为载体的 [CodeTemplate] 实现。
  */
-public class NoraNekoTemplate
-    private constructor(codeType: String) : WildcatTemplate<Neko> {
+public class NoraNekoTemplate(codeType: String) : WildcatTemplate<Neko> {
 
-    companion object INS {
-        /** 根据一个野猫码类型构建一个实例。 */
-        @JvmStatic
-        fun getInstance(codeType: String) = NoraNekoTemplate(codeType)
-    }
-
-    private val wildcatStringTemplate: WildcatStringTemplate = WildcatStringTemplate.getInstance(codeType)
+    private val wildcatStringTemplate: WildcatStringTemplate = WildcatStringTemplate(codeType)
 
     /**
      * at别人
