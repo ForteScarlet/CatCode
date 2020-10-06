@@ -61,20 +61,20 @@ internal constructor(protected val codeType: String) {
 
     /**
      * 将参数转化为猫猫码字符串.
-     * 如果[encode] == true, 则会对[pair]的值进行[转义][CatEncoder.encodeParams]
+     * 如果[encode] == true, 则会对[catKv]的值进行[转义][CatEncoder.encodeParams]
      *
      * @since 1.0-1.11
      */
     @JvmOverloads
-    fun toCat(type: String, encode: Boolean = true, vararg pair: Pair<String, *>): String {
+    fun toCat(type: String, encode: Boolean = true, vararg catKv: CatKV<String, *>): String {
         val pre = "$catCodeHead$type"
-        return if (pair.isNotEmpty()) {
-            pair.asSequence().filter {
-                val v: Any? = it.second
+        return if (catKv.isNotEmpty()) {
+            catKv.asSequence().filter {
+                val v: Any? = it.key
                 v != null && if (v is CharSequence) v.isNotBlank() else true
             }.joinToString(CAT_PS, "$pre$CAT_PS", CAT_END) {
-                "${it.first}$CAT_KV${
-                    if (encode) it.second.toString().enCatParam() else it.second
+                "${it.key}$CAT_KV${
+                    if (encode) it.value.toString().enCatParam() else it.value
                 }"
             }
         } else {
@@ -122,7 +122,7 @@ internal constructor(protected val codeType: String) {
                     val split: List<String> = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
                     val k: String = split[0]
                     val v: String = split[1]
-                    if (v.isNotBlank()) k to v else null
+                    if (v.isNotBlank()) k cTo v else null
                 }.toTypedArray())
             } else {
                 // 不需要转义, 直接进行字符串拼接
@@ -164,11 +164,11 @@ internal constructor(protected val codeType: String) {
      * @param type 猫猫码的类型
      * @param params 参数列表
      */
-    open fun toNeko(type: String, vararg params: Pair<String, *>): Neko {
+    open fun toNeko(type: String, vararg params: CatKV<String, *>): Neko {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
-            MapNeko.byPair(type, *params)
+            MapNeko.byKV(type, *params)
         }
     }
 
@@ -342,10 +342,15 @@ internal constructor(protected val codeType: String) {
      * 如果文本为null、找不到对应索引的猫猫码、找不到此key，返回null；如果找到了key但是无参数，返回空字符串
      *
      * 默认情况下获取第一个猫猫码的参数
-     * @since 1.1-1.11
+     *
+     * @param text 正文
+     * @param type 猫猫码小类型。默认为任意类型。
+     * @param paramKey 参数的key
+     * @param index 第几个CAT码。默认为第一个。
+     *
      */
     @JvmOverloads
-    fun getParam(text: String, paramKey: String, type: String = "", index: Int = 0): String? {
+    fun getParam(text: String, type: String = "", paramKey: String, index: Int = 0): String? {
         val catHead = catCodeHead + type
         val catEnd = CAT_END
         val catSpl = CAT_PS
@@ -418,7 +423,7 @@ internal constructor(protected val codeType: String) {
      * @param code 猫猫码字符串
      * @since 1.8.0
      */
-    fun getCatPairIter(code: String): Iterator<Pair<String, String>> = CatParamPairIterator(code)
+    fun getCatKVIter(code: String): Iterator<CatKV<String, String>> = CatParamKVIterator(code)
 
 
     /**
@@ -472,8 +477,8 @@ internal constructor(protected val codeType: String) {
      * @since 1.2-1.12
      */
     private fun removeCode(
-        type: String,
         text: String,
+        type: String,
         trim: Boolean = true,
         ignoreEmpty: Boolean = true,
         delimiter: CharSequence = ""
@@ -578,7 +583,7 @@ internal constructor(protected val codeType: String) {
         ignoreEmpty: Boolean = true,
         delimiter: CharSequence = ""
     ): String {
-        return removeCode("", text, trim, ignoreEmpty, delimiter)
+        return removeCode(text = text, type = "", trim, ignoreEmpty, delimiter)
     }
 
     /**
@@ -592,13 +597,142 @@ internal constructor(protected val codeType: String) {
      */
     @JvmOverloads
     fun removeByType(
-        type: String,
         text: String,
+        type: String,
         trim: Boolean = true,
         ignoreEmpty: Boolean = true,
         delimiter: CharSequence = ""
     ): String {
-        return removeCode(type, text, trim, ignoreEmpty, delimiter)
+        return removeCode(text, type, trim, ignoreEmpty, delimiter)
+    }
+
+
+    /**
+     * 判断某个文本中是否包含了指定条件的猫猫码。
+     * @param type 猫猫码小类型，例如at, 或者空字符串。
+     * @param text 正文文本。
+     * @param params 要匹配的参数列表。只会用于匹配，不会进行转义等操作。
+     */
+    private fun containsFromText(
+        text: String,
+        type: String,
+        vararg params: String
+    ): Boolean {
+        val head = catCodeHead + type
+        val end = CAT_END
+        return when {
+            // 文本为空
+            text.isEmpty() -> false
+            // 不需要匹配参数
+            params.isEmpty() -> text.contains(head)
+            // 需要匹配参数
+            else -> {
+                // 头
+                var startIndex = text.indexOf(head)
+                // find
+                while (startIndex >= 0) {
+                    // 尾
+                    val endIndex: Int = text.indexOf(end, startIndex + 1)
+                    // sub text.
+                    val subText: String = text.substring(startIndex, endIndex)
+
+                    var allFound = true
+
+                    // 寻找其中的参数
+                    for (param in params) {
+                        if (!subText.contains(param)) {
+                            allFound = false
+                            break
+                        }
+                    }
+
+                    // 全部都能匹配，则说明存在，return true.
+                    if (allFound) return true
+
+                    // 本轮没有找到，找下一轮
+                    startIndex = text.indexOf(head, startIndex + 1)
+                }
+                false
+            }
+        }
+    }
+
+    /**
+     * 判断某个文本中是否包含了指定条件的猫猫码。其中 [params] 参数代表了键值对，因此必须是2的倍数。
+     * 例如 ` contains("at", text, true, "code", "123456") ` 则代表匹配at类型的猫猫码，其中有一个参数为"code=123456"。
+     *
+     * 默认会对参数进行转义。
+     *
+     * @see contains
+     */
+    fun contains(
+        text: String,
+        type: String,
+        vararg params: String
+    ): Boolean = contains(text, type, true, *params)
+
+
+    /**
+     * 判断某个文本中是否包含了指定条件的猫猫码。其中 [params] 参数代表了键值对，因此必须是2的倍数。
+     * 例如 ` contains("at", text, true, "code", "123456") ` 则代表匹配at类型的猫猫码，其中有一个参数为"code=123456"。
+     * @param type 猫猫码小类型，例如at, 或者空字符串。
+     * @param text 正文文本。
+     * @param params 要匹配的参数列表。由于是键值对，因此必须是2的倍数。
+     */
+    @JvmOverloads
+    fun contains(
+        text: String,
+        type: String = "",
+        encode: Boolean = true,
+        vararg params: String = emptyArray()
+    ): Boolean {
+        val paramArray: Array<String> = if (params.isNotEmpty()) {
+            if (params.size % 2 != 0) {
+                throw IllegalArgumentException("params.size % 2 != 0, params must be key-value type, but size: ${params.size}")
+            } else {
+                Array(params.size / 2) { i ->
+                    val index = i * 2
+                    val k: String = params[index]
+                    val v: String = with(params[index + 1]) {
+                        if (encode) this.enCatParam()
+                        else this
+                    }
+                    "$k$CAT_KV$v"
+                }
+            }
+        } else emptyArray()
+
+        // contains
+        return containsFromText(text = text, type = type, *paramArray)
+    }
+
+
+    /**
+     * 判断某个文本中是否包含了指定条件的猫猫码。其中 [params] 参数代表了键值对，因此必须是2的倍数。
+     * 例如 ` contains("at", text, true, "code", "123456") ` 则代表匹配at类型的猫猫码，其中有一个参数为"code=123456"。
+     * @param type 猫猫码小类型，例如at, 或者空字符串。
+     * @param text 正文文本。
+     * @param params 要匹配的参数列表。
+     */
+    fun contains(
+        text: String,
+        type: String = "",
+        encode: Boolean = true,
+        vararg params: CatKV<String, String> = emptyArray()
+    ): Boolean {
+        val paramArray: Array<String> = if (params.isNotEmpty()) {
+            Array(params.size) { i ->
+                val k: String = params[i].key
+                val v: String = if (encode) params[i].value.enCatParam()
+                else params[i].value
+
+                "$k$CAT_KV$v"
+            }
+
+        } else emptyArray()
+
+        // contains.
+        return containsFromText(text, type, *paramArray)
     }
 
 

@@ -185,9 +185,9 @@ protected constructor(protected open val params: Map<String, String>, override v
 
         /** 通过键值对获取 */
         @JvmStatic
-        fun byPair(type: String, vararg params: Pair<String, *>): MapNeko =
+        fun byKV(type: String, vararg params: CatKV<String, *>): MapNeko =
             MapNeko(type, params.mapNotNull {
-                if (it.second == null) null else it.first to it.second.toString()
+                if (it.value == null) null else it.key to it.value.toString()
             }.toMap())
 
         /** 通过键值对字符串获取 */
