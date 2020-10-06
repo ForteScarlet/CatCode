@@ -87,7 +87,10 @@ internal constructor(protected val codeType: String) {
     fun toCat(type: String, encode: Boolean = true, map: Map<String, *>): String {
         val pre = "$catCodeHead$type"
         return if (map.isNotEmpty()) {
-            map.entries.joinToString(
+            map.asSequence().filter {
+                val v = it.value
+                v != null && if(v is CharSequence) v.isNotBlank() else true
+            }.joinToString(
                 CAT_PS,
                 "$pre$CAT_PS",
                 CAT_END
@@ -112,13 +115,20 @@ internal constructor(protected val codeType: String) {
         // 如果参数为空
         return if (params.isNotEmpty()) {
             if (encode) {
-                toCat(type, encode, *params.map {
+                toCat(type, encode, *params.mapNotNull {
                     val split: List<String> = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
-                    split[0] to split[1]
+                    val k: String = split[0]
+                    val v: String = split[1]
+                    if (v.isNotBlank()) k to v else null
                 }.toTypedArray())
             } else {
                 // 不需要转义, 直接进行字符串拼接
-                "$catCodeHead$type$CAT_PS${params.joinToString(CAT_PS)}$CAT_END"
+                params
+                    .filter { !it.endsWith(CAT_KV) }
+                    .takeIf { it.isNotEmpty() }
+                        // if not empty,
+                    ?.let { "$catCodeHead$type$CAT_PS${it.joinToString(CAT_PS)}$CAT_END" }
+                    ?: "$catCodeHead$type$CAT_END"
             }
         } else {
             "$catCodeHead$type$CAT_END"

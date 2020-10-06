@@ -65,6 +65,11 @@ object CatDecoder {
 
 }
 
+
+public fun String.deCatParam(): String = CatDecoder.decodeParams(this)
+public fun String.deCatText(): String = CatDecoder.decodeText(this)
+
+
 /** Cat Encoder */
 @Suppress("MemberVisibilityCanBePrivate")
 object CatEncoder {
@@ -99,6 +104,9 @@ object CatEncoder {
     fun encodeParamsOrNull(str: String?): String? = str?.let { encodeParams(it) }
 
 }
+
+public fun String.enCatParam(): String = CatEncoder.encodeParams(this)
+public fun String.enCatText(): String = CatEncoder.encodeText(this)
 
 
 /**

@@ -15,6 +15,7 @@ package love.forte.test;
 import love.forte.catcode.CatCodeUtil;
 import love.forte.catcode.CodeBuilder;
 import love.forte.catcode.Neko;
+import love.forte.catcode.WildcatCodeUtil;
 
 /**
  * Readme test 1 for create a cat code by Builder.
@@ -27,27 +28,16 @@ public class ReadmeTest1 {
         // get util instance.
         final CatCodeUtil catUtil = CatCodeUtil.INSTANCE;
 
-        // 构建一个猫猫码 - string
-        // 例如构建一个字符串类型的: [CAT:at,code=123456,name=forte,age=12]
-        // 1. StringCodeBuilder
-        final CodeBuilder<String> stringBuilder = catUtil.getStringCodeBuilder("at");
-        String catCode1 = stringBuilder
-                .key("code").value(123456)
-                .key("name").value("forte")
-                .key("age").value(12)
-                .build();
+        String code = catUtil.toCat("at", false, "qq=");
 
-        System.out.println(catCode1);
+        System.out.println(code);
 
-        // 构建一个猫猫码 - Neko
-        // 例如构建一个Neko类型的: [CAT:image,file=1.jpg,dis=true]
-        // 2. NekoBuilder
-        final CodeBuilder<Neko> nekoBuilder = catUtil.getNekoBuilder("image");
-        Neko catCode2 = nekoBuilder
-                .key("file").value("1.jpg")
-                .key("dis").value(true)
-                .build();
+        // get util instance.
+        final WildcatCodeUtil cqUtil = WildcatCodeUtil.getInstance("cq");
 
-        System.out.println(catCode2);
+        String cqcode = cqUtil.toCat("at", false, "qq=");
+
+        System.out.println(cqcode);
+
     }
 }
