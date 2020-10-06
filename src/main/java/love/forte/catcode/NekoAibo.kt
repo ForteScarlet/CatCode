@@ -61,15 +61,15 @@ internal constructor(protected val codeType: String) {
 
     /**
      * 将参数转化为猫猫码字符串.
-     * 如果[encode] == true, 则会对[catKv]的值进行[转义][CatEncoder.encodeParams]
+     * 如果[encode] == true, 则会对[kv]的值进行[转义][CatEncoder.encodeParams]
      *
      * @since 1.0-1.11
      */
     @JvmOverloads
-    fun toCat(type: String, encode: Boolean = true, vararg catKv: CatKV<String, *>): String {
+    fun toCat(type: String, encode: Boolean = true, vararg kv: CatKV<String, *>): String {
         val pre = "$catCodeHead$type"
-        return if (catKv.isNotEmpty()) {
-            catKv.asSequence().filter {
+        return if (kv.isNotEmpty()) {
+            kv.asSequence().filter {
                 val v: Any? = it.key
                 v != null && if (v is CharSequence) v.isNotBlank() else true
             }.joinToString(CAT_PS, "$pre$CAT_PS", CAT_END) {

@@ -147,7 +147,7 @@ open class Nyanko private constructor(private val code: String) : Neko {
      * 缓存上一次的查询结果
      * 线程不安全的
      */
-    private var paramBuffer: Pair<String, String>? = null
+    private var paramBuffer: CatKV<String, String>? = null
 
     /**
      * 获取参数
@@ -156,8 +156,8 @@ open class Nyanko private constructor(private val code: String) : Neko {
      * @see CatCodeUtil.getParam
      */
     private fun getParam(key: String): String? {
-        val bufferFirst = paramBuffer?.first
-        val bufferSecond = paramBuffer?.second
+        val bufferFirst = paramBuffer?.key
+        val bufferSecond = paramBuffer?.value
         if (bufferFirst != null && bufferFirst == key) {
             return bufferSecond
         }
@@ -175,7 +175,7 @@ open class Nyanko private constructor(private val code: String) : Neko {
             return null
         }
         val subParam = codeText.substring(startIndex, pei)
-        paramBuffer = key to subParam
+        paramBuffer = key cTo subParam
         return subParam
     }
 

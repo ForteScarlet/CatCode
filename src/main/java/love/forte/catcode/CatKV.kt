@@ -42,3 +42,8 @@ public fun <K, V> CatKV<K, V>.toPair() = Pair(this.key, this.value)
  * [Pair] to [CatKV].
  */
 public fun <K, V> Pair<K, V>.toKV() = CatKV(this.first, this.second)
+
+/**
+ * CatKV array to pair array.
+ */
+public fun <K, V> Array<out CatKV<K, V>>.toPair() = Array(this.size) { i -> this[i].toPair()}

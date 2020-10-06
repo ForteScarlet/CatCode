@@ -310,14 +310,14 @@ object StringTemplate: CodeTemplate<String> {
         return if(content != null && image != null){
             "[CAT:music,type=custom,url=$url,audio=$audio,title=$title,content=$content,image=$image]"
         }else{
-            val list: MutableList<Pair<String, Any>> = mutableListOf("type" to "custom", "url" to url, "audio" to audio, "title" to title)
+            val list: MutableList<CatKV<String, Any>> = mutableListOf("type" cTo "custom", "url" cTo url, "audio" cTo audio, "title" cTo title)
             content?.run {
-                list.add("content" to this)
+                list.add("content" cTo this)
             }
             image?.run {
-                list.add("image" to this)
+                list.add("image" cTo this)
             }
-            utils.toCat("music", pair = list.toTypedArray())
+            utils.toCat("music", kv = list.toTypedArray())
         }
     }
 
@@ -333,14 +333,14 @@ object StringTemplate: CodeTemplate<String> {
         return if(content != null && image != null){
             "[CAT:share,url=$url,title=$title,content=$content,image=$image]"
         }else{
-            val list: MutableList<Pair<String, Any>> = mutableListOf("url" to url, "title" to title)
+            val list: MutableList<CatKV<String, Any>> = mutableListOf("url" cTo url, "title" cTo title)
             content?.run {
-                list.add("content" to this)
+                list.add("content" cTo this)
             }
             image?.run {
-                list.add("image" to this)
+                list.add("image" cTo this)
             }
-            utils.toCat("share", pair = list.toTypedArray())
+            utils.toCat("share", kv = list.toTypedArray())
         }
     }
 

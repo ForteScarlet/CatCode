@@ -195,39 +195,8 @@ internal class CatParamKVIterator(code: String): BaseCatIterator<CatKV<String, S
 
 
 /**
- * 一串儿猫猫码字符串中的键值对迭代器
- * 得到的值会进行反转义。
- * @since 1.8.0
+ * Entry iterator.
  */
-internal class CatParamPairIterator(code: String): BaseCatIterator<Pair<String, String>>(code) {
-
-
-    override fun nextIndex(): Int {
-        return code.indexOf(CAT_PS, if(index == 0) 0 else index + 1)
-    }
-
-
-    /**
-     * Returns the next element in the iteration.
-     */
-    override fun next(): Pair<String, String> {
-        if(!hasNext()) throw NoSuchElementException()
-
-        // 下一个逗号所在处
-        index = nextIndex()
-        // 下下一个逗号或结尾符所在处
-        var nextSplit = code.indexOf(CAT_PS, index + 1)
-        if(nextSplit < 0){
-            nextSplit = code.lastIndex
-        }
-        val substr = code.substring(index + 1, nextSplit)
-        val keyValue = substr.split(CAT_KV)
-        return keyValue[0] to CatDecoder.decodeParams(keyValue[1])
-    }
-
-}
-
-
 internal class CatParamEntryIterator(code: String): BaseCatIterator<Map.Entry<String, String>>(code) {
 
     override fun nextIndex(): Int {

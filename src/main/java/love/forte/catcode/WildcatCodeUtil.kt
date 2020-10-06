@@ -87,13 +87,13 @@ private constructor(codeType: String) : NekoAibo(codeType) {
     /**
      * 根据参数转化为[Neko]实例
      * @param type 猫猫码的类型
-     * @param params 参数列表
+     * @param kv 参数列表
      */
-    override fun toNeko(type: String, vararg params: Pair<String, *>): NoraNeko {
-        return if (params.isEmpty()) {
+    override fun toNeko(type: String, vararg kv: CatKV<String, *>): NoraNeko {
+        return if (kv.isEmpty()) {
             toNeko(type)
         } else {
-            MapNoraNeko.byMap(codeType, type, params.asSequence().map { it.first to it.second.toString() }.toMap())
+            MapNoraNeko.byMap(codeType, type, kv.asSequence().map { it.key to it.value.toString() }.toMap())
         }
     }
 

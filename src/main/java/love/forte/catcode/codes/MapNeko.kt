@@ -39,7 +39,7 @@ protected constructor(protected open val params: Map<String, String>, override v
     Map<String, String> by params {
     constructor(type: String) : this(emptyMap(), type)
     constructor(type: String, params: Map<String, String>) : this(params.toMap(), type)
-    constructor(type: String, vararg params: Pair<String, String>) : this(mapOf(*params), type)
+    constructor(type: String, vararg params: CatKV<String, String>) : this(mapOf(*params.toPair()), type)
     constructor(type: String, vararg params: String) : this(mapOf(*params.map {
         val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
         split[0] to split[1]
@@ -138,7 +138,7 @@ protected constructor(protected open val params: Map<String, String>, override v
          * 返回的键值对为 `type to split`
          */
         @Suppress("NOTHING_TO_INLINE")
-        private inline fun splitCode(code: String): Pair<String, List<String>> {
+        private inline fun splitCode(code: String): CatKV<String, List<String>> {
             var tempText = code.trim()
             // 不是[CAT:开头，或者不是]结尾都不行
             if (!tempText.startsWith(CAT_HEAD) || !tempText.endsWith(CAT_END)) {
@@ -149,7 +149,7 @@ protected constructor(protected open val params: Map<String, String>, override v
 
             val split = tempText.split(TEMP_SPLIT_REGEX)
             val type = split[0]
-            return type to split
+            return type cTo split
         }
 
         /**
@@ -225,7 +225,7 @@ protected constructor(protected open val params: Map<String, String>, override v
 
         /** 通过键值对获取 */
         @JvmStatic
-        fun mutableByPair(type: String, vararg params: Pair<String, String>): MutableMapNeko =
+        fun mutableByKV(type: String, vararg params: CatKV<String, String>): MutableMapNeko =
             MutableMapNeko(type, *params)
 
         /** 通过键值对字符串获取 */
@@ -256,7 +256,7 @@ private constructor(protected override val params: MutableMap<String, String>, t
     MutableMap<String, String> by params {
     constructor(type: String) : this(mutableMapOf(), type)
     constructor(type: String, params: Map<String, String>) : this(params.toMutableMap(), type)
-    constructor(type: String, vararg params: Pair<String, String>) : this(mutableMapOf(*params), type)
+    constructor(type: String, vararg params: CatKV<String, String>) : this(mutableMapOf(*params.toPair()), type)
     constructor(type: String, vararg params: String) : this(mutableMapOf(*params.map {
         val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
         split[0] to split[1]

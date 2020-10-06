@@ -41,7 +41,7 @@ protected constructor(override val codeType: String, protected open val params: 
     Map<String, String> by params {
     constructor(codeType: String, type: String) : this(codeType, emptyMap(), type)
     constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType, params.toMap(), type)
-    constructor(codeType: String, type: String, vararg params: Pair<String, String>) : this(codeType, mapOf(*params), type)
+    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType, mapOf(*params.toPair()), type)
     constructor(codeType: String, type: String, vararg params: String) : this(codeType, mapOf(*params.map {
         val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
         split[0] to split[1]
@@ -140,7 +140,7 @@ protected constructor(override val codeType: String, protected open val params: 
          * 返回的键值对为 `type to split`
          */
         @Suppress("NOTHING_TO_INLINE")
-        private inline fun splitCode(code: String): Pair<String, List<String>> {
+        private inline fun splitCode(code: String): CatKV<String, List<String>> {
             var tempText = code.trim()
             // 不是[CAT:开头，或者不是]结尾都不行
             if (!tempText.startsWith(CAT_HEAD) || !tempText.endsWith(CAT_END)) {
@@ -151,7 +151,7 @@ protected constructor(override val codeType: String, protected open val params: 
 
             val split = tempText.split(TEMP_SPLIT_REGEX)
             val type = split[0]
-            return type to split
+            return type cTo split
         }
 
         /**
@@ -185,7 +185,7 @@ protected constructor(override val codeType: String, protected open val params: 
 
         /** 通过键值对获取 */
         @JvmStatic
-        fun byPair(codeType: String, type: String, vararg params: Pair<String, String>): MapNoraNeko =
+        fun byKV(codeType: String, type: String, vararg params: CatKV<String, String>): MapNoraNeko =
             MapNoraNeko(codeType, type, *params)
 
         /** 通过键值对字符串获取 */
@@ -225,7 +225,7 @@ protected constructor(override val codeType: String, protected open val params: 
 
         /** 通过键值对获取 */
         @JvmStatic
-        fun mutableByPair(codeType: String, type: String, vararg params: Pair<String, String>): MutableMapNoraNeko =
+        fun mutableByKV(codeType: String, type: String, vararg params: CatKV<String, String>): MutableMapNoraNeko =
             MutableMapNoraNeko(codeType, type, *params)
 
         /** 通过键值对字符串获取 */
@@ -257,7 +257,7 @@ private constructor(codeType: String, protected override val params: MutableMap<
     MutableMap<String, String> by params {
     constructor(codeType: String, type: String) : this(codeType, mutableMapOf(), type)
     constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType, params.toMutableMap(), type)
-    constructor(codeType: String, type: String, vararg params: Pair<String, String>) : this(codeType, mutableMapOf(*params), type)
+    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType, mutableMapOf(*params.toPair()), type)
     constructor(codeType: String, type: String, vararg params: String) : this(codeType, mutableMapOf(*params.map {
         val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
         split[0] to split[1]
