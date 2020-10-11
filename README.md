@@ -73,7 +73,7 @@
 
 ## 应用
 
-猫猫码将会被作为[simpler-robot](https://github.com/ForteScarlet/simpler-robot)框架 (即[simple-robot](https://github.com/ForteScarlet/simple-robot-core)的2.x版本) 的送信特殊码格式使用。
+猫猫码将会被作为[simpler-robot](https://github.com/ForteScarlet/simpler-robot)框架 (即[simple-robot](https://github.com/ForteScarlet/simple-robot-core)的2.x版本) 的送信特殊码使用，以取代曾经的CQ码。
 
 当然，如果你觉得它很可爱，也欢迎使用~
 
