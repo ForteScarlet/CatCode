@@ -1,5 +1,5 @@
 <div align="center">
-    <img src='./logo/CatCodeLogo@0,1x.png'/>
+    <img src="./logo/CatCodeLogo@0,1x.png"/>
     <h3>
         - 😺 CatCode 😺 -
     </h3>
@@ -10,7 +10,11 @@
     <span>
         <a href="https://gitee.com/ForteScarlet/CatCode" target="_blank">gitee</a>
     </span> <br />
-    <small> &gt; 感谢simple-robot开发团队成员制作的猫猫logo &lt; </small>
+    <small> &gt; 感谢simple-robot开发团队成员制作的猫猫logo &lt; </small> <br />
+    <a href="https://repo1.maven.org/maven2/love/forte/catcode" target="_blank" >
+        <img src="https://img.shields.io/maven-central/v/love.forte/catcode" />
+    </a>
+
 </div>
 
 *****
@@ -75,6 +79,19 @@
 
 
 ## 使用方式
+
+### Maven
+
+※ 版本参考上面的版本号小图标。
+
+```xml
+<dependency>
+    <groupId>love.forte</groupId>
+    <artifactId>catcode</artifactId>
+    <version>${version}</version>
+</dependency>
+```
+
 
 #### 1. 通过Builder构建CatCode
 
