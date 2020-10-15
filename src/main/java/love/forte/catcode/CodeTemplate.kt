@@ -35,7 +35,8 @@ interface CodeTemplate<T> {
     fun at(code: String): T
 
     /**
-     * at所有人
+     * at所有人。
+     * at所有人即为at类型cat码中存在参数 `all=true`
      */
     fun atAll(): T
 
@@ -173,7 +174,7 @@ object StringTemplate: CodeTemplate<String> {
     @JvmStatic
     val instance get() = this
     private val utils: CatCodeUtil = CatCodeUtil
-    private const val AT_ALL: String = "[CAT:at,code=all]"
+    private const val AT_ALL: String = "[CAT:at,all=true]"
     /**
      * at别人. code后面为账号
      */

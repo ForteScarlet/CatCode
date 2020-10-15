@@ -20,9 +20,9 @@ import love.forte.catcode.codes.Nyanko
 
 /**
  * at all
- * `[CAT:at,code=all]`
+ * `[CAT:at,all=true]`
  */
-object NekoAtAll : Neko by Nyanko.byCode("${CAT_HEAD}at,code=all$CAT_END")
+object NekoAtAll : Neko by Nyanko.byCode("${CAT_HEAD}at,all=true$CAT_END")
 
 /**
  * rps 猜拳

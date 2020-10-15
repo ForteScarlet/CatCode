@@ -72,7 +72,7 @@ public fun catHead(codeType: String): String = "[$codeType:"
  *
  * @since 1.8.0
  */
-interface Neko : NekoMap<String, String>, CharSequence {
+public interface Neko : NekoMap<String, String>, CharSequence {
 
     @JvmDefault
     val codeType: String

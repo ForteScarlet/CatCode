@@ -37,7 +37,7 @@ public class WildcatStringTemplate(codeType: String) : WildcatTemplate<String> {
     override fun at(code: Long): String =
         utilInstance.toCat("at", false, "code=$code")
 
-    private val atAll: String by lazy(LazyThreadSafetyMode.PUBLICATION) { utilInstance.toCat("at", false, "code=all") }
+    private val atAll: String by lazy(LazyThreadSafetyMode.PUBLICATION) { utilInstance.toCat("at", false, "all=true") }
 
     /**
      * at所有人
