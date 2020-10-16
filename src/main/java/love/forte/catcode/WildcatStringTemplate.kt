@@ -75,10 +75,10 @@ public class WildcatStringTemplate(codeType: String) : WildcatTemplate<String> {
     /**
      * image
      * @param file id
-     * @param destruct 闪图
+     * @param flash 闪图
      */
-    override fun image(file: String, destruct: Boolean): String =
-        utilInstance.toCat("image", false, "file=${file.enCatParam()}", "destruct=$destruct")
+    override fun image(file: String, flash: Boolean): String =
+        utilInstance.toCat("image", false, "file=${file.enCatParam()}", "flash=$flash")
 
     override fun image(file: String): String =
         utilInstance.toCat("image", false, "file=${file.enCatParam()}")
@@ -262,10 +262,10 @@ public class NoraNekoTemplate(codeType: String) : WildcatTemplate<Neko> {
     /**
      * image
      * @param file id
-     * @param destruct 闪图
+     * @param flash 闪图
      */
-    override fun image(file: String, destruct: Boolean): Neko =
-        NoraNyanko.byCode(wildcatStringTemplate.image(file, destruct))
+    override fun image(file: String, flash: Boolean): Neko =
+        NoraNyanko.byCode(wildcatStringTemplate.image(file, flash))
 
     override fun image(file: String): Neko =
         NoraNyanko.byCode(wildcatStringTemplate.image(file))

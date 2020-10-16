@@ -60,10 +60,10 @@ interface CodeTemplate<T> {
 
     /**
      * image
-     * @param file id
-     * @param destruct 闪图
+     * @param file 一般代表图片的路径，或者链接。
+     * @param flash 闪图
      */
-    fun image(file: String, destruct: Boolean): T
+    fun image(file: String, flash: Boolean): T
     @JvmDefault fun image(file: String): T = image(file, false)
 
 
@@ -102,7 +102,7 @@ interface CodeTemplate<T> {
     @JvmDefault fun dice(type: Int) = dice(type.toString())
 
     /**
-     * 戳一戳（原窗口抖动，仅支持好友消息使用）
+     * 窗口抖动
      */
     fun shake(): T
 
@@ -203,9 +203,9 @@ object StringTemplate: CodeTemplate<String> {
     /**
      * image
      * @param file file/url/id
-     * @param destruct true=闪图
+     * @param flash true=闪图
      */
-    override fun image(file: String, destruct: Boolean): String = "[CAT:image,file=$file,destruct=$destruct]"
+    override fun image(file: String, flash: Boolean): String = "[CAT:image,file=$file,flash=$flash]"
 
 
 
@@ -402,10 +402,10 @@ object NekoTemplate: CodeTemplate<Neko> {
     /**
      * image
      * @param file id
-     * @param destruct true=闪图
+     * @param flash true=闪图
      */
-    override fun image(file: String, destruct: Boolean): Neko =
-        Nyanko.byCode(StringTemplate.image(file, destruct))
+    override fun image(file: String, flash: Boolean): Neko =
+        Nyanko.byCode(StringTemplate.image(file, flash))
 
 
     /**
