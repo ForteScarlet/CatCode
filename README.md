@@ -10,7 +10,7 @@
     <span>
         <a href="https://gitee.com/ForteScarlet/CatCode" target="_blank">gitee</a>
     </span> <br />
-    <small> &gt; 感谢simple-robot开发团队成员制作的猫猫logo &lt; </small> <br />
+    <small> &gt; 感谢<a href="https://github.com/ForteScarlet/simpler-robot" target="_blank">simple-robot</a> 开发团队成员制作的猫猫logo &lt; </small> <br />
     <a href="https://repo1.maven.org/maven2/love/forte/catcode/" target="_blank" >
         <img src="https://img.shields.io/maven-central/v/love.forte/catcode" />
     </a>
