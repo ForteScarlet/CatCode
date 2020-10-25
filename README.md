@@ -198,7 +198,11 @@ share类型是一种十分常见的类型，但是它不一定能够被所有平
         System.out.println(catCode2);
 ```
 
-#### 2. 待续...
+#### 2. 直接获取部分无参模板
+```java
+// NekoObjects中的可获取值均为部分无参数常量，例如at全体。
+final Neko alAll = NekoObjects.getNekoAtAll();
+```
 
 
 
