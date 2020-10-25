@@ -4,3 +4,4 @@
 
 ## alpha.2
 - 修复objects常量模板的`toString`异常问题。
+- 追加常量模板类 `NekoObjects` 。
