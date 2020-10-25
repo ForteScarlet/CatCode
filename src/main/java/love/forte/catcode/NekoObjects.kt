@@ -1,15 +1,15 @@
 /*
- * Copyright (c) 2020. ForteScarlet All rights reserved.
- * Project  parent
- * File     NekoObjects.kt
+ * Copyright (c) 2020. ForteScarlet
  *
- * You can contact the author through the following channels:
- * github https://github.com/ForteScarlet
- * gitee  https://gitee.com/ForteScarlet
- * email  ForteScarlet@163.com
- * QQ     1149159218
+ * catCode库相关代码使用 MIT License 开源，请遵守协议相关条款。
+ *
+ * about MIT: https://opensource.org/licenses/MIT
+ *
+ *
+ *
+ *
  */
-
+@file:JvmName("NekoObjects")
 package love.forte.catcode
 
 import love.forte.catcode.codes.Nyanko
@@ -22,14 +22,14 @@ import love.forte.catcode.codes.Nyanko
  * at all
  * `[CAT:at,all=true]`
  */
-object NekoAtAll : Neko by Nyanko.byCode("${CAT_HEAD}at,all=true$CAT_END")
+val NekoAtAll : Neko = Nyanko.byCode("${CAT_HEAD}at,all=true$CAT_END")
 
 /**
  * rps 猜拳
  * 发送用的猜拳
  * `[CAT:rps]`
  */
-object NekoRps : Neko by EmptyNeko("rps")
+val NekoRps : Neko = EmptyNeko("rps")
 
 
 /**
@@ -37,14 +37,14 @@ object NekoRps : Neko by EmptyNeko("rps")
  * 发送用的骰子
  * `[CAT:dice]`
  */
-object NekoDice : Neko by EmptyNeko("dice")
+val NekoDice : Neko = EmptyNeko("dice")
 
 
 /**
  * 窗口抖动，戳一戳
  * `[CAT:shake]`
  */
-object NekoShake : Neko by EmptyNeko("shake")
+val NekoShake : Neko = EmptyNeko("shake")
 
 
 
