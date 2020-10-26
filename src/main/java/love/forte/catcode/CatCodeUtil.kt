@@ -11,7 +11,7 @@
  */
 
 @file:Suppress("unused")
-
+@file:JvmName("Cats")
 package love.forte.catcode
 
 /*

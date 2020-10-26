@@ -11,7 +11,8 @@
  */
 
 @file:Suppress("unused")
-
+@file:JvmName("NekoCodes")
+@file:JvmMultifileClass
 package love.forte.catcode.codes
 
 import love.forte.catcode.*
