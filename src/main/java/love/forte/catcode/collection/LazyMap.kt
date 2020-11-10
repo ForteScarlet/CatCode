@@ -1,9 +1,23 @@
+/*
+ * Copyright (c) 2020. ForteScarlet All rights reserved.
+ * Project  parent
+ * File     LazyMap.kt
+ *
+ * You can contact the author through the following channels:
+ * github https://github.com/ForteScarlet
+ * gitee  https://gitee.com/ForteScarlet
+ * email  ForteScarlet@163.com
+ * QQ     1149159218
+ */
+
 @file:JvmName("LazyMaps")
-package love.forte.test
+
+package love.forte.catcode.collection
 
 
 private data class SimpleEntry<K, V>(override val key: K, override val value: V) : Map.Entry<K, V>
-private data class SimpleMutableEntry<K, V>(override val key: K, override var value: V) : MutableMap.MutableEntry<K, V> {
+private data class SimpleMutableEntry<K, V>(override val key: K, override var value: V) :
+    MutableMap.MutableEntry<K, V> {
     override fun setValue(newValue: V): V = value.apply { value = newValue }
 }
 
@@ -15,12 +29,13 @@ private data class NoNeedInitializeLazy<T>(override val value: T) : Lazy<T> {
     override fun isInitialized(): Boolean = true
 }
 
-public fun <T> lazyValue(value: T) : Lazy<T> = NoNeedInitializeLazy(value)
+public fun <T> lazyValue(value: T): Lazy<T> = NoNeedInitializeLazy(value)
 
 
-
-public class LazyMap<K, V>(
-    private val map: Map<K, Lazy<V>>,
+public class LazyMap<K, V>
+@JvmOverloads
+constructor(
+    private val map: Map<K, Lazy<V>> = mutableMapOf(),
 ) : Map<K, V> {
     @Suppress("UNCHECKED_CAST")
     override val entries: Set<Map.Entry<K, V>>
@@ -50,11 +65,11 @@ public class LazyMap<K, V>(
 }
 
 
-
-
-public class MutableLazyMap<K, V>(
+public class MutableLazyMap<K, V>
+@JvmOverloads
+constructor(
     private val mode: LazyThreadSafetyMode = LazyThreadSafetyMode.PUBLICATION,
-    private val map: MutableMap<K, Lazy<V>>,
+    private val map: MutableMap<K, Lazy<V>> = mutableMapOf(),
 ) : MutableMap<K, V> {
 
     override val size: Int
@@ -79,7 +94,6 @@ public class MutableLazyMap<K, V>(
         get() = map.values.asSequence().map { it.value }.toMutableList()
 
 
-
     override fun clear() {
         map.clear()
     }
@@ -96,7 +110,6 @@ public class MutableLazyMap<K, V>(
     override fun putAll(from: Map<out K, V>) {
         map.putAll(from.mapValues { lazyValue(it.value) })
     }
-
 
 
     override fun remove(key: K): V? = map.remove(key)?.value
