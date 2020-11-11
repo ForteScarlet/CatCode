@@ -186,6 +186,14 @@ protected constructor(private val params: LazyMap<String, String>, override var 
                 if (it.value == null) null else it.key to it.value.toString()
             }.toMap())
 
+        /**
+         * by lazy map.
+         * @return LazyMapNeko
+         */
+        fun byLazyMap(type: String, params: LazyMap<String, String>): LazyMapNeko =
+            LazyMapNeko(params.copy(), type)
+
+
         /** 通过键值对获取 */
         @JvmStatic
         fun byKV(type: String, vararg params: CatKV<String, *>): MapNeko =

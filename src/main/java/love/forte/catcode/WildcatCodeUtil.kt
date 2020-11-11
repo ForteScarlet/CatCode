@@ -60,7 +60,7 @@ private constructor(codeType: String) : NekoAibo(codeType) {
     /**
      * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]。默认开启转义。
      */
-    override fun getNekoBuilder(type: String, encode: Boolean): CodeBuilder<Neko> = NoraNekoBuilder(codeType, type)
+    override fun getNekoBuilder(type: String, encode: Boolean, lazy: Boolean): CodeBuilder<Neko> = if (lazy) TODO() else NoraNekoBuilder(codeType, type)
 
 
     /**

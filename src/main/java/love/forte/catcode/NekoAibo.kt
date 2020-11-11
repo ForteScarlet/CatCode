@@ -48,8 +48,10 @@ internal constructor(protected val codeType: String) {
 
     /**
      * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]
+     * @param encode 时候对value参数进行转义。
+     * @param lazy 构建结果是否为 lazy neko。
      */
-    abstract fun getNekoBuilder(type: String, encode: Boolean = true): CodeBuilder<Neko>
+    abstract fun getNekoBuilder(type: String, encode: Boolean = true, lazy: Boolean = false): CodeBuilder<Neko>
 
 
     /**

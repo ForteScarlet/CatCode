@@ -15,7 +15,6 @@ package love.forte.catcode.collection
 
 
 
-
 /**
  * lazy map, 可以通过一个 `Map<K, Lazy<V>>` 实例进行实例化，
  * 其内部的value是懒加载的。
@@ -55,6 +54,7 @@ constructor(
 
     override fun isEmpty(): Boolean = map.isEmpty()
 
+    fun copy(): LazyMap<K, V> = LazyMap(map)
 }
 
 
@@ -82,7 +82,7 @@ public fun <K, V> Map<K, V>.toMutableLazyMap(): MutableLazyMap<K, V> {
  * @property map Map<K, Lazy<V>> map instance.
  * @constructor
  */
-public class MutableLazyMap<K, V>
+public data class MutableLazyMap<K, V>
 @JvmOverloads
 constructor(
     internal val map: MutableMap<K, Lazy<V>> = mutableMapOf(),
@@ -135,6 +135,9 @@ constructor(
 
 
     override fun remove(key: K): V? = map.remove(key)?.value
+
+
+    fun copy(): MutableLazyMap<K, V> = MutableLazyMap(map, mode)
 }
 
 

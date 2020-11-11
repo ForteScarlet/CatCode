@@ -13,6 +13,7 @@
 package love.forte.catcode
 
 import love.forte.catcode.codes.MapNeko
+import love.forte.catcode.collection.MutableLazyMap
 
 /**
  * 野猫码构建器。
@@ -36,6 +37,29 @@ public interface WildcatCodeBuilder<T> : CodeBuilder<T> {
         override fun emptyValue(): WildcatCodeBuilder<K>
     }
 
+}
+
+/**
+ * 支持懒加载的 [WildcatCodeBuilder].
+ * @param T
+ */
+public interface LazyWildcatCodeBuilder<T> : WildcatCodeBuilder<T>, LazyCodeBuilder<T> {
+
+    /**
+     * 指定一个code的key, 并通过这个key设置一个value.
+     */
+    override fun key(key: String): LazyWildcatCodeBuilderKey<T>
+
+
+    /**
+     * 懒加载codeBuilderKey
+     * @param T
+     */
+    interface LazyWildcatCodeBuilderKey<T> : WildcatCodeBuilder.WildcatCodeBuilderKey<T>,
+        LazyCodeBuilder.LazyCodeBuilderKey<T> {
+        override fun value(value: Any?): LazyWildcatCodeBuilder<T>
+        override fun value(value: () -> Any?): LazyWildcatCodeBuilder<T>
+    }
 }
 
 
@@ -153,4 +177,71 @@ public class NoraNekoBuilder(override val codeType: String, override val type: S
         override fun emptyValue(): WildcatCodeBuilder<Neko> = value("")
     }
 
+
+}
+
+
+/**
+ * 以[Neko]为载体的[CodeBuilder]实现类, 需要在构建实例的时候指定[类型][type]。
+ *
+ * 通过[哈希表][MutableMap]来进行[Neko]的构建, 且不是线程安全的。
+ */
+public class LazyNoraNekoBuilder(override val codeType: String, override val type: String) :
+    LazyWildcatCodeBuilder<Neko> {
+
+    /** 当前参数map */
+    private val params: MutableLazyMap<String, String> = MutableLazyMap()
+
+    /** 当前等待设置的key值 */
+    private var key: String? = null
+
+    /** [NoraNekoBuilderKey]实例 */
+    private val builderKey: LazyNoraNekoBuilderKey = LazyNoraNekoBuilderKey()
+
+    /**
+     * 指定一个code的key, 并通过这个key设置一个value.
+     */
+    override fun key(key: String): LazyWildcatCodeBuilder.LazyWildcatCodeBuilderKey<Neko> {
+        return builderKey.also { this.key = key }
+    }
+
+    /**
+     * 构建一个猫猫码, 并以其载体实例[T]返回.
+     */
+    override fun build(): Neko {
+        return MapNeko.byMap(type, params.toMap())
+    }
+
+    /**
+     * 以[Neko]作为载体的[CodeBuilder.CodeBuilderKey]实现类
+     */
+    private inner class LazyNoraNekoBuilderKey : LazyWildcatCodeBuilder.LazyWildcatCodeBuilderKey<Neko> {
+        /**
+         * 为当前Key设置一个value值并返回.
+         */
+        override fun value(value: Any?): LazyWildcatCodeBuilder<Neko> {
+            return key?.let { k ->
+                params[k] = value?.toString() ?: ""
+                this@LazyNoraNekoBuilder
+            }?.also { this@LazyNoraNekoBuilder.key = null }
+                ?: throw NullPointerException("The 'key' has not been specified.")
+        }
+
+        /**
+         * 为当前Key设置一个value值并返回.
+         */
+        override fun value(value: () -> Any?): LazyWildcatCodeBuilder<Neko> {
+            return key?.let { k ->
+                @Suppress("ReplacePutWithAssignment")
+                params.put(k, initializer = { value()?.toString() ?: "" })
+                this@LazyNoraNekoBuilder
+            }?.also { this@LazyNoraNekoBuilder.key = null }
+                ?: throw NullPointerException("The 'key' has not been specified.")
+        }
+
+        /**
+         * 为当前Key设置一个空的value值并返回.
+         */
+        override fun emptyValue(): WildcatCodeBuilder<Neko> = value("")
+    }
 }

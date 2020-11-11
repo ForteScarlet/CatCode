@@ -15,7 +15,10 @@
 package love.forte.catcode
 
 import love.forte.catcode.CodeBuilder.CodeBuilderKey
+import love.forte.catcode.codes.LazyMapNeko
 import love.forte.catcode.codes.MapNeko
+import love.forte.catcode.collection.MutableLazyMap
+import love.forte.catcode.collection.asLazyMap
 
 /**
  *
@@ -69,6 +72,28 @@ public interface CodeBuilder<T> {
 
 }
 
+/**
+ * 懒加载CodeBuilder。
+ * @param T
+ */
+public interface LazyCodeBuilder<T> : CodeBuilder<T> {
+
+    /**
+     * 指定一个code的key, 并通过这个key设置一个value.
+     */
+    override fun key(key: String): LazyCodeBuilderKey<T>
+
+
+    /**
+     * 懒加载codeBuilderKey
+     * @param T
+     */
+    interface LazyCodeBuilderKey<T> : CodeBuilderKey<T> {
+        fun value(value: () -> Any?): LazyCodeBuilder<T>
+    }
+}
+
+
 
 //**************************************
 //*          string builder
@@ -98,7 +123,7 @@ constructor(override val type: String, private val encode: Boolean = true) : Cod
     /**
      * 指定一个code的key, 并通过这个key设置一个value.
      */
-    override fun key(key: String): CodeBuilder.CodeBuilderKey<String> {
+    override fun key(key: String): CodeBuilderKey<String> {
         return builderKey.also { this.key = key }
     }
 
@@ -112,7 +137,7 @@ constructor(override val type: String, private val encode: Boolean = true) : Cod
      * [StringCodeBuilder]中[CodeBuilder.CodeBuilderKey]的实现类。
      * 此类在[StringCodeBuilder]中只会存在一个实例，因此 **线程不安全**。
      */
-    private inner class StringCodeBuilderKey : CodeBuilder.CodeBuilderKey<String> {
+    private inner class StringCodeBuilderKey : CodeBuilderKey<String> {
         /**
          * 为当前Key设置一个value值并返回.
          */
@@ -137,7 +162,7 @@ constructor(override val type: String, private val encode: Boolean = true) : Cod
 
 
 //**************************************
-//*         KQCode Builder
+//*         Neko Builder
 //**************************************
 
 /**
@@ -159,7 +184,7 @@ public class NekoBuilder(override val type: String) : CodeBuilder<Neko> {
     /**
      * 指定一个code的key, 并通过这个key设置一个value.
      */
-    override fun key(key: String): CodeBuilder.CodeBuilderKey<Neko> {
+    override fun key(key: String): CodeBuilderKey<Neko> {
         return builderKey.also { this.key = key }
     }
 
@@ -189,6 +214,76 @@ public class NekoBuilder(override val type: String) : CodeBuilder<Neko> {
          * 为当前Key设置一个空的value值并返回.
          */
         override fun emptyValue(): CodeBuilder<Neko> = value("")
+    }
+
+}
+
+
+
+/**
+ * 以[Neko]为载体的[LazyCodeBuilder]实现类, 需要在构建实例的时候指定[类型][type]。
+ *
+ * 通过[懒加载哈希表][MutableLazyMap]来进行[Neko]的构建, 且不是线程安全的。
+ */
+public class LazyNekoBuilder(
+    override val type: String,
+    mode: LazyThreadSafetyMode = LazyThreadSafetyMode.PUBLICATION
+) : LazyCodeBuilder<Neko> {
+
+    /** 当前参数map */
+    private val params: MutableLazyMap<String, String> = MutableLazyMap(mode = mode)
+
+    /** 当前等待设置的key值 */
+    private var key: String? = null
+
+    /** [LazyNekoBuilderKey]实例 */
+    private val builderKey: LazyNekoBuilderKey = LazyNekoBuilderKey()
+
+    /**
+     * 指定一个code的key, 并通过这个key设置一个value.
+     */
+    override fun key(key: String): LazyCodeBuilder.LazyCodeBuilderKey<Neko> {
+        return builderKey.also { this.key = key }
+    }
+
+    /**
+     * 构建一个猫猫码, 并以其载体实例[T]返回.
+     */
+    override fun build(): Neko {
+        return LazyMapNeko.byLazyMap(type, params.asLazyMap())
+    }
+
+    /**
+     * 以[Neko]作为载体的[CodeBuilder.CodeBuilderKey]实现类
+     */
+    private inner class LazyNekoBuilderKey : LazyCodeBuilder.LazyCodeBuilderKey<Neko> {
+        /**
+         * 为当前Key设置一个value值并返回.
+         */
+        override fun value(value: Any?): LazyCodeBuilder<Neko> {
+            return key?.let { k ->
+                params[k] = value?.toString() ?: ""
+                this@LazyNekoBuilder
+            }?.also { this@LazyNekoBuilder.key = null }
+                ?: throw NullPointerException("The 'key' has not been specified.")
+        }
+
+        /**
+         * 为当前Key设置一个value值并返回.
+         */
+        override fun value(value: () -> Any?): LazyCodeBuilder<Neko> {
+            return key?.let { k ->
+                @Suppress("ReplacePutWithAssignment")
+                params.put(k, initializer = { value()?.toString() ?: "" })
+                this@LazyNekoBuilder
+            }?.also { this@LazyNekoBuilder.key = null }
+                ?: throw NullPointerException("The 'key' has not been specified.")
+        }
+
+        /**
+         * 为当前Key设置一个空的value值并返回.
+         */
+        override fun emptyValue(): LazyCodeBuilder<Neko> = value("")
     }
 
 }
