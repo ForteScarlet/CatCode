@@ -11,27 +11,9 @@
  */
 
 @file:JvmName("LazyMaps")
-
 package love.forte.catcode.collection
 
-/** Simple entry implementation. */
-private data class SimpleEntry<K, V>(override val key: K, override val value: V) : Map.Entry<K, V>
-/** Simple mutable entry implementation. */
-private data class SimpleMutableEntry<K, V>(override val key: K, override var value: V) :
-    MutableMap.MutableEntry<K, V> {
-    override fun setValue(newValue: V): V = value.apply { value = newValue }
-}
 
-
-/**
- * 不需要初始化的lazy实例。
- */
-private data class NoNeedInitializeLazy<T>(override val value: T) : Lazy<T> {
-    override fun isInitialized(): Boolean = true
-}
-
-/** 通过一个实例对象构建一个 [Lazy] 实例。 */
-public fun <T> lazyValue(value: T): Lazy<T> = NoNeedInitializeLazy(value)
 
 
 /**
@@ -45,7 +27,7 @@ public fun <T> lazyValue(value: T): Lazy<T> = NoNeedInitializeLazy(value)
 public class LazyMap<K, V>
 @JvmOverloads
 constructor(
-    private val map: Map<K, Lazy<V>> = mutableMapOf(),
+    internal val map: Map<K, Lazy<V>> = mapOf(),
 ) : Map<K, V> {
     @Suppress("UNCHECKED_CAST")
     override val entries: Set<Map.Entry<K, V>>
@@ -72,7 +54,20 @@ constructor(
     override operator fun get(key: K): V? = map[key]?.value
 
     override fun isEmpty(): Boolean = map.isEmpty()
+
 }
+
+
+public fun <K, V> Map<K, V>.toLazyMap(): LazyMap<K, V> {
+    return LazyMap(mapValues { lazyValue(it.value) })
+}
+
+
+public fun <K, V> Map<K, V>.toMutableLazyMap(): MutableLazyMap<K, V> {
+    return MutableLazyMap(mapValues { lazyValue(it.value) }.toMutableMap())
+}
+
+
 
 
 /**
@@ -90,8 +85,8 @@ constructor(
 public class MutableLazyMap<K, V>
 @JvmOverloads
 constructor(
+    internal val map: MutableMap<K, Lazy<V>> = mutableMapOf(),
     private val mode: LazyThreadSafetyMode = LazyThreadSafetyMode.PUBLICATION,
-    private val map: MutableMap<K, Lazy<V>> = mutableMapOf(),
 ) : MutableMap<K, V> {
 
     override val size: Int
@@ -140,6 +135,33 @@ constructor(
 
 
     override fun remove(key: K): V? = map.remove(key)?.value
-
-
 }
+
+
+/**
+ * 将一个 [MutableLazyMap] 作为一个 [LazyMap].
+ * 不会复制其中的什么属性，因此如果原来的 [MutableLazyMap] 发生变动，[LazyMap] 也会变。
+ * @receiver MutableLazyMap<K, V>
+ * @return LazyMap<K, V>
+ */
+public fun <K, V> MutableLazyMap<K, V>.asLazyMap(): LazyMap<K, V> = LazyMap(map)
+
+/**
+ * 将一个 [MutableLazyMap] 作为一个 [LazyMap].
+ *
+ * 会将 [MutableLazyMap.map] 复制一份，原 [MutableLazyMap] 发送变化不会变动结果。
+ *
+ * @receiver MutableLazyMap<K, V>
+ * @return LazyMap<K, V>
+ */
+public fun <K, V> MutableLazyMap<K, V>.toLazyMap(): LazyMap<K, V> = LazyMap(map.toMap())
+
+/**
+ * 将一个 [LazyMap] 转化为一个 [MutableLazyMap].
+ *
+ * 会将 [LazyMap.map] 复制一份。
+ *
+ * @receiver LazyMap<K, V>
+ * @return MutableLazyMap<K, V>
+ */
+public fun <K, V> LazyMap<K, V>.toMutableMap(): MutableLazyMap<K, V> = MutableLazyMap(map.toMutableMap())

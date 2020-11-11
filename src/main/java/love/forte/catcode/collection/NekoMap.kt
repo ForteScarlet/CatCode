@@ -134,13 +134,6 @@ public open class MutableNekoMapDelegation<K, V>(nekoMap: MutableNekoMap<K, V>) 
         get() = mutableNekoMap.keys
     override val values: MutableCollection<V>
         get() = mutableNekoMap.values
-
-    // override val size: Int
-    //     get() = nekoMap.size
-    // override fun containsKey(key: K): Boolean = nekoMap.containsKey(key)
-    // override fun containsValue(value: V): Boolean = nekoMap.containsValue(value)
-    // override fun get(key: K): V? = nekoMap[key]
-    // override fun isEmpty(): Boolean = nekoMap.isEmpty()
     override fun clear() {
         mutableNekoMap.clear()
     }
