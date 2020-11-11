@@ -89,6 +89,7 @@ public interface LazyCodeBuilder<T> : CodeBuilder<T> {
      * @param T
      */
     interface LazyCodeBuilderKey<T> : CodeBuilderKey<T> {
+        override fun value(value: Any?): LazyCodeBuilder<T>
         fun value(value: () -> Any?): LazyCodeBuilder<T>
     }
 }

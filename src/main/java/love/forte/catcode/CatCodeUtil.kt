@@ -138,7 +138,12 @@ public object CatCodeUtil : NekoAibo("CAT") {
     /**
      * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]
      */
-    override fun getNekoBuilder(type: String, encode: Boolean, lazy: Boolean): CodeBuilder<Neko> = if (lazy) LazyNekoBuilder(type) else NekoBuilder(type)
+    override fun getNekoBuilder(type: String, encode: Boolean): CodeBuilder<Neko> = NekoBuilder(type)
+
+    /**
+     * 构建一个[Neko]为载体类型的[懒加载构建器][LazyCodeBuilder]
+     */
+    override fun getLazyNekoBuilder(type: String, encode: Boolean): LazyCodeBuilder<Neko> = LazyNekoBuilder(type)
 
 }
 

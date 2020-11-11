@@ -90,7 +90,9 @@ protected constructor(private val params: LazyMap<String, String>, override var 
      * toString的值记录。因为是不可变类，因此toString是不会变的
      * 在获取的时候才会去实际计算，且仅计算一次。
      */
-    private val _toString: String by lazy { CatCodeUtil.toCat(type, map = this) }
+    private val _toString: String by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        CatCodeUtil.toCat(type, true, toMap())
+    }
 
     /** toString */
     override fun toString(): String = _toString

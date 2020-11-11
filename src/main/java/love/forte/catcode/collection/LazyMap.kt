@@ -30,7 +30,7 @@ constructor(
 ) : Map<K, V> {
     @Suppress("UNCHECKED_CAST")
     override val entries: Set<Map.Entry<K, V>>
-        get() = map.entries.asSequence().map { SimpleEntry(it.key, it.value) as Map.Entry<K, V> }.toSet()
+        get() = map.entries.asSequence().map { SimpleEntry(it.key, it.value.value) }.toSet()
 
     override val keys: Set<K>
         get() = map.keys
@@ -55,6 +55,26 @@ constructor(
     override fun isEmpty(): Boolean = map.isEmpty()
 
     fun copy(): LazyMap<K, V> = LazyMap(map)
+
+
+    override fun toString(): String {
+        return if (isEmpty()) "{}" else {
+            val builder = StringBuilder().append('{')
+
+            var first = true
+
+            map.forEach { (k, v) ->
+                if (!first) {
+                    builder.append(",")
+                } else {
+                    first = false
+                }
+                builder.append(k).append('=').append(v.value)
+            }
+
+            builder.append('}').toString()
+        }
+    }
 }
 
 
