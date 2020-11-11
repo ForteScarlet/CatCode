@@ -14,8 +14,9 @@
 
 package love.forte.catcode.collection
 
-
+/** Simple entry implementation. */
 private data class SimpleEntry<K, V>(override val key: K, override val value: V) : Map.Entry<K, V>
+/** Simple mutable entry implementation. */
 private data class SimpleMutableEntry<K, V>(override val key: K, override var value: V) :
     MutableMap.MutableEntry<K, V> {
     override fun setValue(newValue: V): V = value.apply { value = newValue }
@@ -29,9 +30,18 @@ private data class NoNeedInitializeLazy<T>(override val value: T) : Lazy<T> {
     override fun isInitialized(): Boolean = true
 }
 
+/** 通过一个实例对象构建一个 [Lazy] 实例。 */
 public fun <T> lazyValue(value: T): Lazy<T> = NoNeedInitializeLazy(value)
 
 
+/**
+ * lazy map, 可以通过一个 `Map<K, Lazy<V>>` 实例进行实例化，
+ * 其内部的value是懒加载的。
+ * @param K Key type.
+ * @param V Value type.
+ * @property map Map<K, Lazy<V>> map instance.
+ * @constructor
+ */
 public class LazyMap<K, V>
 @JvmOverloads
 constructor(
@@ -65,6 +75,18 @@ constructor(
 }
 
 
+/**
+ * lazy map, 可以通过一个 `MutableMap<K, Lazy<V>>` 实例进行实例化，
+ * 其内部的value是懒加载的。
+ *
+ * 额外提供了一个 [put] 方法以实现存入可计算的懒加载值。
+ *
+ * @param K Key type.
+ * @param V Value type.
+ * @property mode Lazy的懒加载策略，在 [put] 的时候会使用此策略。默认为 [LazyThreadSafetyMode.PUBLICATION].
+ * @property map Map<K, Lazy<V>> map instance.
+ * @constructor
+ */
 public class MutableLazyMap<K, V>
 @JvmOverloads
 constructor(
@@ -102,7 +124,12 @@ constructor(
         return map.put(key, lazyValue(value))?.value
     }
 
-
+    /**
+     * 添加一个待计算的懒加载值。
+     * @param key Key.
+     * @param initializer 初始化函数.
+     * @return V?
+     */
     fun put(key: K, initializer: () -> V): V? {
         return map.put(key, lazy(mode = mode, initializer = initializer))?.value
     }
