@@ -43,13 +43,13 @@ private constructor(codeType: String) : NekoAibo(codeType) {
      *  获取一个String为载体的[模板][CodeTemplate]
      *  @see StringTemplate
      */
-    override val stringTemplate: WildcatTemplate<String> = WildcatStringTemplate(codeType)
+    override val stringTemplate: WildcatTemplate<String> = WildcatStringTemplate(codeType, this)
 
     /**
      *  获取[Neko]为载体的[模板][CodeTemplate]
      *  @see NekoTemplate
      */
-    override val nekoTemplate: WildcatTemplate<Neko> = NoraNekoTemplate(codeType)
+    override val nekoTemplate: WildcatTemplate<Neko> = NoraNekoTemplate(codeType, stringTemplate)
 
 
     /**
