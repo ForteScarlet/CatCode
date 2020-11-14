@@ -109,7 +109,11 @@ constructor(
             return key?.let { k ->
                 appender.append(CAT_PS).append(k).append(CAT_KV)
                 if (value != null) {
-                    appender.append(CatEncoder.encodeParams(value.toString()))
+                    val valueString = if (encode) {
+                        CatEncoder.encodeParams(value.toString())
+                    } else value.toString()
+
+                    appender.append(valueString)
                 }
                 this@WildcatStringCodeBuilder
             }?.also { this@WildcatStringCodeBuilder.key = null }
