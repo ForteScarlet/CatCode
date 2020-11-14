@@ -7,4 +7,4 @@
 - 追加常量模板类 `NekoObjects` 。
 
 ## alpha.3
-- 追加 `lazy` 相关的neko。（TODO） 
+- 追加 `lazy` 相关的neko。
