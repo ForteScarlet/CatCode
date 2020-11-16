@@ -7,4 +7,4 @@
 - 追加常量模板类 `NekoObjects` 。
 
 ## alpha.3
-- 追加 `lazy` （属性值懒加载）相关的neko。
+- 追加 `lazy` （属性值懒加载）相关的neko，以及对应的builder。（`CatCodeUtil#getLazyNekoBuilder`）
