@@ -22,7 +22,7 @@
 
     <properties>
         <!-- kt version -->
-        <kotlin.version>1.4.10</kotlin.version>
+        <kotlin.version>1.4.20</kotlin.version>
         <!-- dokka version -->
         <dokka.version>1.4.0-rc</dokka.version>
     </properties>
@@ -30,6 +30,11 @@
     <dependencies>
         <!--<editor-fold desc="kotlin">-->
         <!-- kt -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
