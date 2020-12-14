@@ -99,6 +99,12 @@
 </dependency>
 ```
 
+## JS
+未来将会通过kotlin多平台实现
+
+## Native
+未来将会通过kotlin多平台实现
+
 ## 其他语言
 敬请期待...
 
