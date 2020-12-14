@@ -38,10 +38,16 @@
 - 可以没有参数。
 - 区分大小写。
 
+## 应用
 
-猫猫码主要(官方)应用于 [simple-robot框架](https://github.com/ForteScarlet/simpler-robot) 中，作为统一特殊码的表现形式。
+猫猫码将会被作为[simpler-robot](https://github.com/ForteScarlet/simpler-robot)框架 (即[simple-robot](https://github.com/ForteScarlet/simple-robot-core)的2.x版本) 的送信特殊码使用，以取代曾经的CQ码。
 
-当然，理论上来讲，猫猫码可以作为一种单层级数据结构消息的通讯码。
+当然，猫猫码也属于一种消息格式，某种程度上猫猫码也可以表示为类似于`json`等消息类型，但是我不认为他会比json更好用。
+
+但是如果你觉得它很可爱，也欢迎使用~
+
+
+**如果你愿意送给猫猫一颗右上角的星星，猫猫会很开心的喔~**
 
 
 ### **猫猫是严格的。** 
@@ -56,7 +62,7 @@
 - `\t` ->  `&#09;`
 
 
-### **猫猫是精明的。** 
+### **猫猫是慵懒的。** 
 本库提供了丰富地猫猫码解析、封装相关内容。
 
 一切工具类相关的均以`Cat`开头(或包含)，例如`CatDecoder`、`CatCodeUtil`等，
@@ -74,15 +80,7 @@
 
 这类其他类型的“猫猫码”称为`WildcatCode(野良猫码)`, 可以通过`WildcatCodeUtil`工具来实现对应的解析, 通过`NoraNeko`实例类型作为封装。
 
-### **猫猫是懒惰的。**
-`v1.0.0-ALPHA.3`下追加可懒属性加载的 `Neko` 构建方案，来支持可能会需要懒加载的属性值。
 
-
-## 应用
-
-猫猫码将会被作为[simpler-robot](https://github.com/ForteScarlet/simpler-robot)框架 (即[simple-robot](https://github.com/ForteScarlet/simple-robot-core)的2.x版本) 的送信特殊码使用，以取代曾经的CQ码。
-
-当然，如果你觉得它很可爱，也欢迎使用~
 
 
 ## 使用方式
