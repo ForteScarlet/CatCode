@@ -230,6 +230,10 @@ share类型是一种十分常见的类型，但是它不一定能够被所有平
 final Neko alAll = NekoObjects.getNekoAtAll();
 ```
 
+#### 3. 通过工具类获取
+```java
+CatCodeUtil.toCat("at", "qq=123")
+```
 
 
 
