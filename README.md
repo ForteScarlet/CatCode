@@ -192,6 +192,7 @@ share类型是一种十分常见的类型，但是它不一定能够被所有平
 
 ## 构建Cat码
 
+### Java
 
 #### 1. 通过Builder构建CatCode
 
@@ -242,6 +243,7 @@ final Neko alAll = NekoObjects.getNekoAtAll();
 >
 > NoraNeko : のらねこ(野良猫)，意为“野猫”。
 >
+> 
 > 未来计划通过kotlin发布全平台通用库，可通过JVM/JS/Native操作猫猫码。
 > 代码移植为全平台没问题，native测试执行也没啥问题，但是我不知道怎么发布，所以。。再说吧。
 
