@@ -100,15 +100,17 @@
 ```
 
 ## JS
-将会通过kotlin多平台实现，并发布于github release和npm
+将会通过kotlin多平台实现，提供js库，并发布于github release\[、Maven和npm(待议)]。
+
+抢先预览：[CatCode-multiplatform](https://github.com/ForteScarlet/CatCode-multiplatform)
 
 
 ## Native
-将会通过kotlin多平台实现，提供`.h`头文件与对应`.dll`(windows)、`.so`(linux)文件。
+将会通过kotlin多平台实现，提供`.h`头文件与对应的`.dll`(windows)、`.so`(linux)文件。
+
+抢先预览：[CatCode-multiplatform](https://github.com/ForteScarlet/CatCode-multiplatform)
 
 
-## 其他语言
-敬请期待...
 
 > 你可以基于标准CAT码格式自行实现。
 
