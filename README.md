@@ -245,7 +245,7 @@ final Neko alAll = NekoObjects.getNekoAtAll();
 
 #### 3. 通过工具类获取
 ```java
-CatCodeUtil.toCat("at", "qq=123")
+final String at = CatCodeUtil.toCat("at", "qq=123");
 ```
 
 
