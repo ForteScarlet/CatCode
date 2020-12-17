@@ -100,15 +100,23 @@
 ```
 
 ## JS
-未来将会通过kotlin多平台实现
+将会通过kotlin多平台实现，并发布于github release和npm
+
 
 ## Native
-未来将会通过kotlin多平台实现
+将会通过kotlin多平台实现，提供`.h`头文件与对应`.dll`(windows)、`.so`(linux)文件。
+
 
 ## 其他语言
 敬请期待...
 
 > 你可以基于标准CAT码格式自行实现。
+
+
+## 文档
+文档地址：https://www.yuque.com/simpler-robot/catcode
+
+> 文档尚待建设。
 
 
 ## 常用猫猫
@@ -186,6 +194,7 @@ share类型是一种十分常见的类型，但是它不一定能够被所有平
 而这其中，`url`参数是必然存在的。
 
 例如：`[CAT:share,url=www.baidu.com,title=百度一下,content=百度一下你就知道]`
+
 
 
 
