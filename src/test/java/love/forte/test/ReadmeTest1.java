@@ -17,6 +17,8 @@ import love.forte.catcode.CodeBuilder;
 import love.forte.catcode.Neko;
 import love.forte.catcode.WildcatCodeUtil;
 
+import java.util.List;
+
 /**
  * Readme test 1 for create a cat code by Builder.
  *
@@ -24,20 +26,17 @@ import love.forte.catcode.WildcatCodeUtil;
  */
 public class ReadmeTest1 {
     public static void main(String[] args) {
-
         // get util instance.
         final CatCodeUtil catUtil = CatCodeUtil.INSTANCE;
 
-        String code = catUtil.toCat("at", false, "qq=");
+        String at = "添加管理员[CAT:at,code=2473125346]";
 
-        System.out.println(code);
+        List<Neko> nekos = catUtil.getNekoList(at, "at");
 
-        // get util instance.
-        final WildcatCodeUtil cqUtil = WildcatCodeUtil.getInstance("cq");
+        for (Neko neko : nekos) {
+            System.out.println(neko);
+        }
 
-        String cqcode = cqUtil.toCat("at", false, "qq=");
-
-        System.out.println(cqcode);
 
     }
 }

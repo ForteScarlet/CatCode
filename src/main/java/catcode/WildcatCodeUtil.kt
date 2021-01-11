@@ -10,10 +10,11 @@
  *
  */
 
-package love.forte.catcode
 
-import love.forte.catcode.codes.MapNoraNeko
-import love.forte.catcode.codes.NoraNyanko
+package catcode
+
+import catcode.codes.MapNoraNeko
+import catcode.codes.NoraNyanko
 
 
 /**
@@ -29,7 +30,6 @@ import love.forte.catcode.codes.NoraNyanko
  *
  */
 @Suppress("unused", "DeprecatedCallableAddReplaceWith")
-@Deprecated("更换包名, love.forte.catcode -> catcode", ReplaceWith("WildcatCodeUtil", "catcode.WildcatCodeUtil"))
 public class WildcatCodeUtil
 private constructor(codeType: String) : NekoAibo(codeType) {
 

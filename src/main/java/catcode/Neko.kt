@@ -13,12 +13,12 @@
 @file:Suppress("unused")
 @file:JvmName("CatSymbolConstant")
 
-package love.forte.catcode
+package catcode
 
-import love.forte.catcode.codes.MapNeko
-import love.forte.catcode.codes.Nyanko
-import love.forte.catcode.collection.MutableNekoMap
-import love.forte.catcode.collection.NekoMap
+import catcode.codes.MapNeko
+import catcode.codes.Nyanko
+import catcode.collection.MutableNekoMap
+import catcode.collection.NekoMap
 
 
 public const val CAT_TYPE = "CAT"
@@ -72,7 +72,6 @@ public fun catHead(codeType: String): String = "[$codeType:"
  *
  * @since 1.8.0
  */
-@Deprecated("更换包名, love.forte.catcode -> catcode", ReplaceWith("Neko", "catcode.Neko"))
 public interface Neko : NekoMap<String, String>, CharSequence {
 
     @JvmDefault
@@ -187,7 +186,6 @@ interface MutableNoraNeko : MutableNeko {
     @JvmDefault
     override var codeType: String
 }
-
 abstract class BaseMutableNoraNeko : MutableNoraNeko
 
 /**
