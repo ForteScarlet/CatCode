@@ -16,8 +16,11 @@
     <scm>
         <url>https://github.com/ForteScarlet/CatCode</url>
     </scm>
+
     <url>https://github.com/ForteScarlet/CatCode</url>
+
     <description>猫猫码，一个可爱的通用特殊码。/ Cat code, the spirit of CQ code continues, a cute universal special code.
+
     </description>
 
     <properties>
