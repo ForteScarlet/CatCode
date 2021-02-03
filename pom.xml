@@ -9,8 +9,6 @@
     <artifactId>catcode</artifactId>
     <version>1.0.0-BETA.1</version>
 
-    <!-- next ap2 -->
-
     <name>catcode</name>
 
     <scm>
@@ -25,7 +23,7 @@
 
     <properties>
         <!-- kt version -->
-        <kotlin.version>1.4.20</kotlin.version>
+        <kotlin.version>1.4.30-M1</kotlin.version>
         <!-- dokka version -->
         <dokka.version>1.4.0-rc</dokka.version>
     </properties>
