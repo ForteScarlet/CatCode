@@ -11,3 +11,9 @@
 
 ## alpha.4
 - 包路径移动: `love.forte.catcode.*` -> `catcode.*`
+
+
+## BETA.1
+- fix [#3](https://github.com/ForteScarlet/CatCode/issues/3) 参数转义缺少等号转义
+
+
