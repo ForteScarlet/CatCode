@@ -11,6 +11,7 @@
         <a href="https://gitee.com/ForteScarlet/CatCode" target="_blank">gitee</a>
     </span> <br />
     <small> &gt; 感谢 <a href="https://github.com/ForteScarlet/simpler-robot" target="_blank">simple-robot</a> 开发团队成员制作的猫猫logo &lt; </small> <br />
+    &gt; 如果有点击一下⭐的话，猫猫会很开心哦~ &lt; <br />
     <a href="https://repo1.maven.org/maven2/love/forte/catcode/" target="_blank" >
         <img src="https://img.shields.io/maven-central/v/love.forte/catcode" />
     </a>
@@ -100,15 +101,19 @@
 ```
 
 ## JS
-将会通过kotlin多平台实现，并发布于github release和npm
+将会通过kotlin多平台实现，提供js库，并发布于github release\[、Maven和npm(待议)]。
+
+抢先预览：[CatCode-multiplatform](https://github.com/ForteScarlet/CatCode-multiplatform)
 
 
 ## Native
-将会通过kotlin多平台实现，提供`.h`头文件与对应`.dll`(windows)、`.so`(linux)文件。
+将会通过kotlin多平台实现，提供`.h`头文件与对应的`.dll`(windows)、`.so`(linux)文件。
+
+抢先预览：[CatCode-multiplatform](https://github.com/ForteScarlet/CatCode-multiplatform)
 
 
-## 其他语言
-敬请期待...
+<br>
+<br>
 
 > 你可以基于标准CAT码格式自行实现。
 
@@ -241,7 +246,7 @@ final Neko alAll = NekoObjects.getNekoAtAll();
 
 #### 3. 通过工具类获取
 ```java
-CatCodeUtil.toCat("at", "qq=123")
+final String at = CatCodeUtil.toCat("at", "qq=123");
 ```
 
 

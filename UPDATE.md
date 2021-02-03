@@ -8,3 +8,6 @@
 
 ## alpha.3
 - 追加 `lazy` （属性值懒加载）相关的neko，以及对应的builder。（`CatCodeUtil#getLazyNekoBuilder`）
+
+## alpha.4
+- 包路径移动: `love.forte.catcode.*` -> `catcode.*`

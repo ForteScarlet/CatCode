@@ -12,10 +12,7 @@
 
 @file:Suppress("unused")
 @file:JvmName("Cats")
-package love.forte.catcode
-
-import catcode.CatDecoder
-import catcode.CatEncoder
+package catcode
 
 /*
 & -> &amp;
@@ -34,7 +31,6 @@ internal val CAT_PS_SPLIT_ARRAY: Array<String> = arrayOf(CAT_PS)
 
 /** Cat Decoder */
 @Suppress("MemberVisibilityCanBePrivate")
-@Deprecated("更换包名, love.forte.catcode -> catcode", ReplaceWith("CatDecoder", "catcode.CatEncoder"))
 object CatDecoder {
 
     @JvmStatic
@@ -59,7 +55,6 @@ object CatDecoder {
         str .replace("&#91;", "[")
             .replace("&#93;", "]")
             .replace("&#44;", ",")
-            .replace("&#61;", "=")
             .replace("&#09;", "\t")
             .replace("&#10;", "\r")
             .replace("&#13;", "\n")
@@ -71,16 +66,12 @@ object CatDecoder {
 }
 
 
-@Deprecated("更换包名, love.forte.catcode -> catcode", ReplaceWith("CatDecoder.decodeParams(this)", "catcode.CatDecoder"))
 public fun String.deCatParam(): String = CatDecoder.decodeParams(this)
-
-@Deprecated("更换包名, love.forte.catcode -> catcode", ReplaceWith("CatDecoder.decodeText(this)", "catcode.CatDecoder"))
 public fun String.deCatText(): String = CatDecoder.decodeText(this)
 
 
 /** Cat Encoder */
 @Suppress("MemberVisibilityCanBePrivate")
-@Deprecated("更换包名, love.forte.catcode -> catcode")
 object CatEncoder {
 
     @JvmStatic
@@ -104,7 +95,6 @@ object CatEncoder {
         str.replace("&", "&amp;")
             .replace("[", "&#91;")
             .replace("]", "&#93;")
-            .replace("=", "&#61;")
             .replace(",", "&#44;")
             .replace("\t", "&#09;")
             .replace("\r", "&#10;")
@@ -115,17 +105,13 @@ object CatEncoder {
 
 }
 
-@Deprecated("更换包名, love.forte.catcode -> catcode", ReplaceWith("CatEncoder.encodeParams(this)", "catcode.CatEncoder"))
 public fun String.enCatParam(): String = CatEncoder.encodeParams(this)
-
-@Deprecated("更换包名, love.forte.catcode -> catcode", ReplaceWith("CatEncoder.encodeText(this)", "catcode.CatEncoder"))
 public fun String.enCatText(): String = CatEncoder.encodeText(this)
 
 
 /**
  * 猫猫码的操作工具类
  */
-@Deprecated("更换包名, love.forte.catcode -> catcode", ReplaceWith("CatCodeUtil", "catcode.CatCodeUtil"))
 public object CatCodeUtil : NekoAibo("CAT") {
     @JvmStatic
     val instance
