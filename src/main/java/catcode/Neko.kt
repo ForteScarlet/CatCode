@@ -24,11 +24,12 @@ import catcode.collection.NekoMap
 public const val CAT_TYPE = "CAT"
 public const val CAT_HEAD = "[$CAT_TYPE:"
 public const val CAT_END = "]"
+
 /** cat params split. */
 public const val CAT_PS = ","
+
 /** cat key-value. */
 public const val CAT_KV = "="
-
 
 
 /**
@@ -57,6 +58,52 @@ public val nekoMatchRegex: Regex = Regex("\\[(\\w+:\\w+(,((?![\\[\\]]).)+?)*)]")
  * 建议大写。
  */
 public fun catHead(codeType: String): String = "[$codeType:"
+
+/**
+ * 此接口应实现于一个 [Neko] 实现类上，表示其可以修改Cat码类型。
+ *
+ * 此修改最终得到一个新的实例。
+ *
+ */
+public interface CodeTypeSwitchAble<N : Neko> {
+    /**
+     * 表示此 [Neko] 实例能够切换其 [Neko.codeType] 并得到一个对应的转化结果值。
+     */
+    @org.jetbrains.annotations.Contract(pure = true)
+    fun switchCodeType(codeType: String): N
+}
+
+
+/**
+ * 转化一个Neko的codeType。
+ *
+ * 如果方法的目标[Neko]不是一个[CodeTypeSwitchAble]实例，
+ * 那么会通过 [aibo] 参数得到一个对应的构建工具类，并通过此工具复制一个Neko对象。
+ *
+ * 其中，[aibo] 中可传入的参数最好不是随时随地实例化的参数，因为他的实例是完全可控的。
+ */
+public fun Neko.switchCodeType(codeType: String, aibo: (codeType: String) -> NekoAibo): Neko {
+    return if (this is CodeTypeSwitchAble<*>) {
+        // It is, switch codeType.
+        this.switchCodeType(codeType)
+    } else {
+        val util = aibo(codeType)
+
+        if (this.isEmpty()) {
+            // is Empty
+            util.toNeko(type)
+        } else {
+            util.getNekoBuilder(type, true).build {
+                apply {
+                    this@switchCodeType.forEach { k, v ->
+                        key(k) { v }
+                    }
+                }
+            }
+        }
+
+    }
+}
 
 
 /**
@@ -186,6 +233,7 @@ interface MutableNoraNeko : MutableNeko {
     @JvmDefault
     override var codeType: String
 }
+
 abstract class BaseMutableNoraNeko : MutableNoraNeko
 
 /**
@@ -206,7 +254,7 @@ public data class EmptyNeko(override val type: String) : Neko {
     /**
      * 转化为可变参的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MapNeko.mutableByCode(codeText)
+    override fun mutable(): MutableNeko = MapNeko.mutableByCode(codeType, codeText)
 
     /**
      * 转化为不可变类型[Neko]
@@ -247,7 +295,7 @@ public data class EmptyNoraNeko(override val codeType: String, override val type
     /**
      * 转化为可变参的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MapNeko.mutableByCode(codeText)
+    override fun mutable(): MutableNeko = MapNeko.mutableByCode(codeType, codeText)
 
     /**
      * 转化为不可变类型[Neko]

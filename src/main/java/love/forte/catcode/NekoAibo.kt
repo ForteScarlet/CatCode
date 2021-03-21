@@ -23,6 +23,10 @@ import love.forte.catcode.codes.Nyanko
  *
  *
  */
+@Deprecated(
+    "Change package love.forte.catcode -> catcode",
+    ReplaceWith("catcode.NekoAibo")
+)
 public abstract class NekoAibo
 internal constructor(protected val codeType: String) {
 

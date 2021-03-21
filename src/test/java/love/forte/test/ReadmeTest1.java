@@ -12,12 +12,10 @@
 
 package love.forte.test;
 
-import love.forte.catcode.CatCodeUtil;
-import love.forte.catcode.CodeBuilder;
-import love.forte.catcode.Neko;
-import love.forte.catcode.WildcatCodeUtil;
-
-import java.util.List;
+import catcode.CatCodeUtil;
+import catcode.CatSymbolConstant;
+import catcode.Neko;
+import catcode.WildcatCodeUtil;
 
 /**
  * Readme test 1 for create a cat code by Builder.
@@ -27,6 +25,20 @@ import java.util.List;
 public class ReadmeTest1 {
     public static void main(String[] args) {
         // get util instance.
+
+        Neko neko = CatCodeUtil.INSTANCE.toNeko("image", "id=aabbcc214", "type=jpeg");
+
+        System.out.println(neko);
+
+        Neko switchedNeko = CatSymbolConstant.switchCodeType(neko, "CQ", WildcatCodeUtil::getInstance);
+
+        System.out.println(switchedNeko.getClass());
+
+        System.out.println(switchedNeko.toString());
+        System.out.println(switchedNeko.getCodeType());
+
+
+
 
 
 

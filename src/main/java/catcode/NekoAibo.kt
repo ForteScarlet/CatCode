@@ -24,7 +24,7 @@ import catcode.codes.Nyanko
  *
  */
 public abstract class NekoAibo
-internal constructor(protected val codeType: String) {
+internal constructor(val codeType: String) {
 
     protected open val catCodeHead: String = catHead(codeType)
 
@@ -163,7 +163,7 @@ internal constructor(protected val codeType: String) {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
-            MapNeko.byMap(type, params)
+            MapNeko.byMap(codeType, type, params)
         }
     }
 
@@ -177,7 +177,7 @@ internal constructor(protected val codeType: String) {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
-            MapNeko.byKV(type, *params)
+            MapNeko.byKV(codeType, type, *params)
         }
     }
 

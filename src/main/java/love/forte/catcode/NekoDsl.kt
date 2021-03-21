@@ -24,7 +24,10 @@ import love.forte.catcode.collection.set
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.BINARY)
 @DslMarker
-@Deprecated("Use 'catcode.NekoDsl'")
+@Deprecated(
+    "Change package 'love.forte.catcode' -> 'catcode'",
+    ReplaceWith("catcode.NekoDsl")
+)
 annotation class NekoDsl
 
 //

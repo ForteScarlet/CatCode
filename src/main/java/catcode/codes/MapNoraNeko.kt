@@ -91,7 +91,7 @@ protected constructor(override val codeType: String, protected open val params: 
      * toString的值记录。因为是不可变类，因此toString是不会变的
      * 在获取的时候才会去实际计算，且仅计算一次。
      */
-    private val _toString: String by lazy { CatCodeUtil.toCat(type, map = this) }
+    private val _toString: String by lazy { WildcatCodeUtil.getInstance(codeType).toCat(type, map = this) }
 
     /** toString */
     override fun toString(): String = _toString
@@ -276,7 +276,7 @@ private constructor(codeType: String, protected override val params: MutableMap<
     override fun immutable(): Neko = MapNoraNeko(codeType, type, this)
 
     /** toString */
-    override fun toString(): String = CatCodeUtil.toCat(type, map = this)
+    override fun toString(): String = WildcatCodeUtil.getInstance(codeType).toCat(type, map = this)
 
 
     /**

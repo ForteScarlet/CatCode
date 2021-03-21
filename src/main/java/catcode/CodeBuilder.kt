@@ -12,6 +12,7 @@
 
 @file:Suppress("RedundantInnerClassModifier", "RedundantVisibilityModifier")
 @file:JvmName("CodeBuilders")
+
 package catcode
 
 import catcode.CodeBuilder.CodeBuilderKey
@@ -36,6 +37,9 @@ import com.sun.org.apache.bcel.internal.classfile.Code
  * @since 1.8.0
  **/
 public interface CodeBuilder<T> {
+
+    val codeType: String
+        get() = CAT_TYPE
 
     /**
      * type类型
@@ -105,7 +109,6 @@ public fun <T> CodeBuilder<T>.emptyValue(k: String): CodeBuilder<T> {
 }
 
 
-
 //**************************************
 //*          string builder
 //**************************************
@@ -120,7 +123,8 @@ public fun <T> CodeBuilder<T>.emptyValue(k: String): CodeBuilder<T> {
  */
 public class StringCodeBuilder
 @JvmOverloads
-constructor(override val type: String, private val encode: Boolean = true) : CodeBuilder<String> {
+constructor(override val codeType: String, override val type: String, private val encode: Boolean = true) :
+    CodeBuilder<String> {
     /** [StringBuilder] */
     private val appender: StringBuilder = StringBuilder(CAT_HEAD).append(type)
 
@@ -181,7 +185,7 @@ constructor(override val type: String, private val encode: Boolean = true) : Cod
  *
  * 通过[哈希表][MutableMap]来进行[Neko]的构建, 且不是线程安全的。
  */
-public class NekoBuilder(override val type: String) : CodeBuilder<Neko> {
+public class NekoBuilder(override val codeType: String, override val type: String) : CodeBuilder<Neko> {
 
     /** 当前参数map */
     private val params: MutableMap<String, String> = mutableMapOf()
@@ -203,7 +207,7 @@ public class NekoBuilder(override val type: String) : CodeBuilder<Neko> {
      * 构建一个猫猫码, 并以其载体实例[T]返回.
      */
     override fun build(): Neko {
-        return MapNeko.byMap(type, params.toMap())
+        return MapNeko.byMap(codeType, type, params.toMap())
     }
 
     /**
@@ -230,15 +234,15 @@ public class NekoBuilder(override val type: String) : CodeBuilder<Neko> {
 }
 
 
-
 /**
  * 以[Neko]为载体的[LazyCodeBuilder]实现类, 需要在构建实例的时候指定[类型][type]。
  *
  * 通过[懒加载哈希表][MutableLazyMap]来进行[Neko]的构建, 且不是线程安全的。
  */
 public class LazyNekoBuilder(
+    override val codeType: String,
     override val type: String,
-    mode: LazyThreadSafetyMode = LazyThreadSafetyMode.PUBLICATION
+    mode: LazyThreadSafetyMode = LazyThreadSafetyMode.PUBLICATION,
 ) : LazyCodeBuilder<Neko> {
 
     /** 当前参数map */
@@ -261,7 +265,7 @@ public class LazyNekoBuilder(
      * 构建一个猫猫码, 并以其载体实例[T]返回.
      */
     override fun build(): Neko {
-        return LazyMapNeko.byLazyMap(type, params.asLazyMap())
+        return LazyMapNeko.byLazyMap(codeType, type, params.asLazyMap())
     }
 
     /**

@@ -22,7 +22,7 @@ public interface WildcatCodeBuilder<T> : CodeBuilder<T> {
     /**
      * 野猫码的大类型。
      */
-    val codeType: String
+    override val codeType: String
 
     /**
      * catcode param key.
@@ -157,7 +157,7 @@ public class NoraNekoBuilder(override val codeType: String, override val type: S
      * 构建一个猫猫码, 并以其载体实例[T]返回.
      */
     override fun build(): Neko {
-        return MapNeko.byMap(type, params.toMap())
+        return MapNeko.byMap(codeType, type, params.toMap())
     }
 
     /**
@@ -213,7 +213,7 @@ public class LazyNoraNekoBuilder(override val codeType: String, override val typ
      * 构建一个猫猫码, 并以其载体实例[T]返回.
      */
     override fun build(): Neko {
-        return MapNeko.byMap(type, params.toMap())
+        return MapNeko.byMap(codeType, type, params.toMap())
     }
 
     /**

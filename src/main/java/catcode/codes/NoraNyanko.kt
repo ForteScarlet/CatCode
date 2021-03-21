@@ -92,7 +92,7 @@ public class NoraNyanko private constructor(private val code: String) : NoraNeko
     /**
      * 转化为可变参的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MapNeko.mutableByCode(this.toString())
+    override fun mutable(): MutableNeko = MapNeko.mutableByCode(codeType, this.toString())
 
     /**
      * 转化为不可变类型[Neko]

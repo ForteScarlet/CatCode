@@ -13,6 +13,7 @@
 @file:Suppress("unused")
 @file:JvmName("NekoCodes")
 @file:JvmMultifileClass
+
 package catcode.codes
 
 import catcode.*
@@ -35,16 +36,32 @@ private val MAP_SPLIT_REGEX = Regex(CAT_KV)
  * @since 1.8.0
  */
 open class MapNeko
-protected constructor(protected open val params: Map<String, String>, override var type: String) :
+protected constructor(
+    protected open val params: Map<String, String>,
+    override var type: String,
+    override val codeType: String,
+) :
     Neko,
     Map<String, String> by params {
-    constructor(type: String) : this(emptyMap(), type)
-    constructor(type: String, params: Map<String, String>) : this(params.toMap(), type)
-    constructor(type: String, vararg params: CatKV<String, String>) : this(mapOf(*params.toPair()), type)
-    constructor(type: String, vararg params: String) : this(mapOf(*params.map {
+    // constructor(type: String) : this(emptyMap(), type)
+    // constructor(type: String, params: Map<String, String>) : this(params.toMap(), type)
+    // constructor(type: String, vararg params: CatKV<String, String>) : this(mapOf(*params.toPair()), type)
+    // constructor(type: String, vararg params: String) : this(mapOf(*params.map {
+    //     val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
+    //     split[0] to split[1]
+    // }.toTypedArray()), type)
+
+    /////
+
+    constructor(codeType: String, type: String) : this(emptyMap(), type, codeType)
+    constructor(codeType: String, type: String, params: Map<String, String>) : this(params.toMap(), type, codeType)
+    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(mapOf(*params.toPair()),
+        type, codeType)
+
+    constructor(codeType: String, type: String, vararg params: String) : this(mapOf(*params.map {
         val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
         split[0] to split[1]
-    }.toTypedArray()), type)
+    }.toTypedArray()), type, codeType)
 
     // /** internal constructor for mutable kqCode */
     // constructor(mutableKQCode: MutableNeko) : this(mutableKQCode.toMap(), mutableKQCode.type)
@@ -89,7 +106,7 @@ protected constructor(protected open val params: Map<String, String>, override v
      * toString的值记录。因为是不可变类，因此toString是不会变的
      * 在获取的时候才会去实际计算，且仅计算一次。
      */
-    private val _toString: String by lazy { CatCodeUtil.toCat(type, map = this) }
+    private val _toString: String by lazy { WildcatCodeUtil.getInstance(codeType).toCat(type, map = this) }
 
     /** toString */
     override fun toString(): String = _toString
@@ -98,12 +115,12 @@ protected constructor(protected open val params: Map<String, String>, override v
     /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MutableMapNeko(type, this.toMutableMap())
+    override fun mutable(): MutableNeko = MutableMapNeko(codeType, type, this.toMutableMap())
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = MapNeko(params, type)
+    override fun immutable(): Neko = MapNeko(params, type, codeType)
 
     /**
      * 获取 [params] 实例。
@@ -139,10 +156,10 @@ protected constructor(protected open val params: Map<String, String>, override v
          * 返回的键值对为 `type to split`
          */
         @Suppress("NOTHING_TO_INLINE")
-        private inline fun splitCode(code: String): CatKV<String, List<String>> {
+        private inline fun splitCode(code: String, codeType: String): CatKV<String, List<String>> {
             var tempText = code.trim()
             // 不是[CAT:开头，或者不是]结尾都不行
-            if (!tempText.startsWith(CAT_HEAD) || !tempText.endsWith(CAT_END)) {
+            if (!tempText.startsWith(catHead(codeType)) || !tempText.endsWith(CAT_END)) {
                 throw IllegalArgumentException("not starts with '$CAT_HEAD' or not ends with '$CAT_END'")
             }
             // 是[CAT:开头，]结尾，切割并转化
@@ -158,8 +175,8 @@ protected constructor(protected open val params: Map<String, String>, override v
          */
         @JvmStatic
         @JvmOverloads
-        fun byCode(code: String, decode: Boolean = true): MapNeko {
-            val (type, split) = splitCode(code)
+        fun byCode(codeType: String, code: String, decode: Boolean = true): MapNeko {
+            val (type, split) = splitCode(code, codeType)
 
             return if (split.size > 1) {
                 if (decode) {
@@ -168,40 +185,40 @@ protected constructor(protected open val params: Map<String, String>, override v
                         val sp = it.split(Regex("="), 2)
                         sp[0] to sp[1].deCatParam()
                     }.toMap()
-                    MapNeko(map, type)
+                    MapNeko(map, type, codeType)
                 } else {
-                    MapNeko(type, *split.subList(1, split.size).toTypedArray())
+                    MapNeko(codeType, type, *split.subList(1, split.size).toTypedArray())
                 }
             } else {
-                MapNeko(type)
+                MapNeko(codeType, type)
             }
         }
 
         /** 通过map参数获取 */
         @JvmStatic
-        fun byMap(type: String, params: Map<String, *>): MapNeko =
-            MapNeko(type, params.mapNotNull {
+        fun byMap(codeType: String, type: String, params: Map<String, *>): MapNeko =
+            MapNeko(codeType, type, params.mapNotNull {
                 if (it.value == null) null else it.key to it.value.toString()
             }.toMap())
 
         /** 通过键值对获取 */
         @JvmStatic
-        fun byKV(type: String, vararg params: CatKV<String, *>): MapNeko =
-            MapNeko(type, params.mapNotNull {
+        fun byKV(codeType: String, type: String, vararg params: CatKV<String, *>): MapNeko =
+            MapNeko(codeType, type, params.mapNotNull {
                 if (it.value == null) null else it.key to it.value.toString()
             }.toMap())
 
         /** 通过键值对字符串获取 */
         @JvmStatic
-        fun byParamString(type: String, vararg params: String): MapNeko = MapNeko(type, *params)
+        fun byParamString(codeType: String, type: String, vararg params: String): MapNeko = MapNeko(codeType = codeType, type = type, *params)
 
         /**
          * 根据猫猫码字符串获取[MapNeko]实例
          */
         @JvmStatic
         @JvmOverloads
-        fun mutableByCode(code: String, decode: Boolean = true): MutableMapNeko {
-            val (type, split) = splitCode(code)
+        fun mutableByCode(codeType: String, code: String, decode: Boolean = true): MutableMapNeko {
+            val (type, split) = splitCode(code, codeType)
 
             return if (split.size > 1) {
                 if (decode) {
@@ -210,28 +227,30 @@ protected constructor(protected open val params: Map<String, String>, override v
                         val sp = it.split(Regex("="), 2)
                         sp[0] to CatDecoder.decodeParams(sp[1])
                     }.toMap().toMutableMap()
-                    MutableMapNeko(type, map)
+                    MutableMapNeko(codeType, type, map)
                 } else {
-                    MutableMapNeko(type, *split.subList(1, split.size).toTypedArray())
+                    MutableMapNeko(codeType, type, *split.subList(1, split.size).toTypedArray())
                 }
             } else {
-                MutableMapNeko(type)
+                MutableMapNeko(codeType, type)
             }
         }
 
 
         /** 通过map参数获取 */
         @JvmStatic
-        fun mutableByMap(type: String, params: Map<String, String>): MutableMapNeko = MutableMapNeko(type, params)
+        fun mutableByMap(codeType: String, type: String, params: Map<String, String>): MutableMapNeko =
+            MutableMapNeko(codeType, type, params)
 
         /** 通过键值对获取 */
         @JvmStatic
-        fun mutableByKV(type: String, vararg params: CatKV<String, String>): MutableMapNeko =
-            MutableMapNeko(type, *params)
+        fun mutableByKV(codeType: String, type: String, vararg params: CatKV<String, String>): MutableMapNeko =
+            MutableMapNeko(codeType, type, *params)
 
         /** 通过键值对字符串获取 */
         @JvmStatic
-        fun mutableByParamString(type: String, vararg params: String): MutableMapNeko = MutableMapNeko(type, *params)
+        fun mutableByParamString(codeType: String, type: String, vararg params: String): MutableMapNeko =
+            MutableMapNeko(codeType = codeType, type = type, *params)
     }
 
 }
@@ -251,31 +270,45 @@ protected constructor(protected open val params: Map<String, String>, override v
  */
 @Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
 public class MutableMapNeko
-private constructor(protected override val params: MutableMap<String, String>, type: String) :
-    MapNeko(params, type),
+private constructor(
+    protected override val params: MutableMap<String, String>,
+    type: String,
+    codeType: String,
+) :
+    MapNeko(params, type, codeType),
     MutableNeko,
     MutableMap<String, String> by params {
-    constructor(type: String) : this(mutableMapOf(), type)
-    constructor(type: String, params: Map<String, String>) : this(params.toMutableMap(), type)
-    constructor(type: String, vararg params: CatKV<String, String>) : this(mutableMapOf(*params.toPair()), type)
-    constructor(type: String, vararg params: String) : this(mutableMapOf(*params.map {
+    // constructor(type: String) : this(mutableMapOf(), type)
+    // constructor(type: String, params: Map<String, String>) : this(params.toMutableMap(), type)
+    // constructor(type: String, vararg params: CatKV<String, String>) : this(mutableMapOf(*params.toPair()), type)
+    // constructor(type: String, vararg params: String) : this(mutableMapOf(*params.map {
+    //     val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
+    //     split[0] to split[1]
+    // }.toTypedArray()), type)
+
+    /////
+
+    constructor(codeType: String, type: String) : this(mutableMapOf(), type, codeType)
+    constructor(codeType: String, type: String, params: Map<String, String>) : this(params.toMutableMap(), type, codeType)
+    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(mutableMapOf(*params.toPair()), type, codeType)
+    constructor(codeType: String, type: String, vararg params: String) : this(mutableMapOf(*params.map {
         val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
         split[0] to split[1]
-    }.toTypedArray()), type)
+    }.toTypedArray()), type, codeType)
 
     /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MutableMapNeko(params, type)
+    override fun mutable(): MutableNeko = MutableMapNeko(params, type, codeType)
 
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = MapNeko(type, this)
+    override fun immutable(): Neko = MapNeko(codeType, type, this)
 
     /** toString */
-    override fun toString(): String = CatCodeUtil.toCat(type, map = this)
+    override fun toString(): String = WildcatCodeUtil.getInstance(codeType).toCat(type, map = this)
 
 
     /**

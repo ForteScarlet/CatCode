@@ -15,6 +15,7 @@ package catcode
 
 import catcode.codes.MapNoraNeko
 import catcode.codes.NoraNyanko
+import java.util.concurrent.ConcurrentHashMap
 
 
 /**
@@ -32,11 +33,22 @@ import catcode.codes.NoraNyanko
 @Suppress("unused", "DeprecatedCallableAddReplaceWith")
 public class WildcatCodeUtil
 private constructor(codeType: String) : NekoAibo(codeType) {
-
     companion object {
+
+        /** instances cache. */
+        private val instances: MutableMap<String, WildcatCodeUtil> = ConcurrentHashMap(8)
+
         @JvmStatic
-        fun getInstance(codeType: String): WildcatCodeUtil = WildcatCodeUtil(codeType)
+        fun getInstance(codeType: String): WildcatCodeUtil {
+            return instances.computeIfAbsent(codeType) { t ->
+                WildcatCodeUtil(t)
+            }
+        }
+
+
+
     }
+
 
 
     /**
@@ -55,7 +67,8 @@ private constructor(codeType: String) : NekoAibo(codeType) {
     /**
      * 构建一个String为载体类型的[构建器][CodeBuilder]。默认开启转义。
      */
-    override fun getStringCodeBuilder(type: String, encode: Boolean): CodeBuilder<String> = WildcatStringCodeBuilder(codeType, type, encode)
+    override fun getStringCodeBuilder(type: String, encode: Boolean): CodeBuilder<String> =
+        WildcatStringCodeBuilder(codeType, type, encode)
 
     /**
      * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]。默认开启转义。
@@ -65,7 +78,8 @@ private constructor(codeType: String) : NekoAibo(codeType) {
     /**
      * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]。默认开启转义。
      */
-    override fun getLazyNekoBuilder(type: String, encode: Boolean): LazyCodeBuilder<Neko> = LazyNoraNekoBuilder(codeType, type)
+    override fun getLazyNekoBuilder(type: String, encode: Boolean): LazyCodeBuilder<Neko> =
+        LazyNoraNekoBuilder(codeType, type)
 
 
     /**
