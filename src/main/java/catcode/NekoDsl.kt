@@ -19,7 +19,7 @@ package catcode
  * @author ForteScarlet <ForteScarlet@163.com>
  * 2020/8/12
  */
-@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.BINARY)
 @DslMarker
 annotation class NekoDsl

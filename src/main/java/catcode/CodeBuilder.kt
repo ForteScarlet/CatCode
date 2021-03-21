@@ -11,7 +11,7 @@
  */
 
 @file:Suppress("RedundantInnerClassModifier", "RedundantVisibilityModifier")
-
+@file:JvmName("CodeBuilders")
 package catcode
 
 import catcode.CodeBuilder.CodeBuilderKey
@@ -19,6 +19,7 @@ import catcode.codes.LazyMapNeko
 import catcode.codes.MapNeko
 import catcode.collection.MutableLazyMap
 import catcode.collection.asLazyMap
+import com.sun.org.apache.bcel.internal.classfile.Code
 
 /**
  *
@@ -44,7 +45,7 @@ public interface CodeBuilder<T> {
     /**
      * 指定一个code的key, 并通过这个key设置一个value.
      */
-    fun key(key: String): CodeBuilderKey<T>
+    infix fun key(key: String): CodeBuilderKey<T>
 
     /**
      * 构建一个猫猫码, 并以其载体实例[T]返回.
@@ -62,7 +63,7 @@ public interface CodeBuilder<T> {
         /**
          * 为当前Key设置一个value值并返回.
          */
-        fun value(value: Any?): CodeBuilder<T>
+        infix fun value(value: Any?): CodeBuilder<T>
 
         /**
          * 为当前Key设置一个空的value值并返回.
@@ -92,6 +93,15 @@ public interface LazyCodeBuilder<T> : CodeBuilder<T> {
         override fun value(value: Any?): LazyCodeBuilder<T>
         fun value(value: () -> Any?): LazyCodeBuilder<T>
     }
+}
+
+
+public fun <T> CodeBuilder<T>.value(k: String, v: Any?): CodeBuilder<T> {
+    return this key k value v
+}
+
+public fun <T> CodeBuilder<T>.emptyValue(k: String): CodeBuilder<T> {
+    return this.key(k).emptyValue()
 }
 
 

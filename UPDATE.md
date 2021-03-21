@@ -16,4 +16,7 @@
 ## BETA.1
 - fix [#3](https://github.com/ForteScarlet/CatCode/issues/3) 参数转义缺少等号转义
 
+## BETA.2
+- 提供builder的DSL。
+
 
