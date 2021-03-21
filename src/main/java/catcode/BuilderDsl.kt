@@ -3,20 +3,6 @@
 package catcode
 
 
-fun main() {
-    val util = CatCodeUtil
-
-    val code = util.getStringCodeBuilder("5", true).build {
-
-        key("name") {
-            "jack"
-        }
-    }
-
-    println(code)
-
-
-}
 
 public fun <T> CodeBuilder<T>.build(block: CodeBuilderDSL<T>.() -> CodeBuilderDSL<T>): T {
     return CodeBuilderDSL(this).block().builder.build()

@@ -27,15 +27,7 @@ import java.util.List;
 public class ReadmeTest1 {
     public static void main(String[] args) {
         // get util instance.
-        final CatCodeUtil catUtil = CatCodeUtil.INSTANCE;
 
-        String at = "添加管理员[CAT:at,code=2473125346]";
-
-        List<Neko> nekos = catUtil.getNekoList(at, "at");
-
-        for (Neko neko : nekos) {
-            System.out.println(neko);
-        }
 
 
     }
