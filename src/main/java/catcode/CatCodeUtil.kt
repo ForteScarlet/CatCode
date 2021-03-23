@@ -141,7 +141,6 @@ public fun String.enCatText(): String = CatEncoder.encodeText(this)
 @JvmOverloads
 @org.jetbrains.annotations.Contract(pure = true)
 public fun Neko.switchCodeType(codeType: String, aibo: (codeType: String) -> NekoAibo = ::wildcatCodeUtilGetInstanceFunc ): Neko {
-
     return if (this is CodeTypeSwitchAble<*>) {
         // It is, switch codeType.
         this.switchCodeType(codeType)

@@ -10,7 +10,7 @@
  *
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "DuplicatedCode")
 @file:JvmName("NekoCodes")
 @file:JvmMultifileClass
 
@@ -59,7 +59,7 @@ protected constructor(
         type, codeType)
 
     constructor(codeType: String, type: String, vararg params: String) : this(mapOf(*params.map {
-        val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
+        val split = it.split(ignoreCase = false, limit = 2, delimiters = CAT_KV_SPLIT_ARRAY)
         split[0] to split[1]
     }.toTypedArray()), type, codeType)
 
