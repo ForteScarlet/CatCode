@@ -20,6 +20,7 @@ import catcode.codes.MapNoraNeko
 import catcode.codes.Nyanko
 import catcode.collection.MutableNekoMap
 import catcode.collection.NekoMap
+import java.util.regex.Pattern
 
 
 public const val CAT_TYPE = "CAT"
@@ -41,17 +42,24 @@ public const val CAT_KV = "="
  * - 正确的：`[CAT:image,file=abc.jpg]`
  * - 正确的：`[CQ:image,file=abc.jpg]`
  * - 错误的：`[CAT:image,[file=abc.jpg]`
- * - 错误的：`[CQ:image;file=abc.jpg]`
+ * - 匹配正确但逻辑错误的：`[CQ:image;file=abc.jpg]`
  *
  * cat码中：
  * - codeType标准应为`CAT`, 非标准则为大小写字母、数字或下划线。
  * - type标准应为大小写字母、数字或下划线。
  * - codeType与type使用 `:` 分割。
- * - 尽可能不应出现空格。
+ * - 尽可能不出现空格。
  * - 不应出现换行。
  *
  */
+@JvmSynthetic
 public val nekoMatchRegex: Regex = Regex("\\[(\\w+:\\w+(,((?![\\[\\]]).)+?)*)]")
+
+
+/**
+ * java中所使用的 [Pattern] 实例。
+ */
+public val nekoMatchPattern: Pattern get() = nekoMatchRegex.toPattern()
 
 
 /**
@@ -117,8 +125,6 @@ public fun Neko.switchCodeType(codeType: String, aibo: (codeType: String) -> Nek
  *
  * 建议子类通过私有构造+ 静态/伴生对象 方法来获取实例，例如 [MapNeko.byCode] [Nyanko.byCode]
  * 而不是直接通过构造方法。
- *
- * @since 1.8.0
  */
 public interface Neko : NekoMap<String, String>, CharSequence {
 

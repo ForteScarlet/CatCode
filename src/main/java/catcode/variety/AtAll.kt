@@ -9,6 +9,9 @@ import catcode.collection.SimpleEntry
 
 /**
  * 一个 **at全体** 的模板实例接口。
+ *
+ * at全体，优先标准为存在参数 `all=true`, 次级标准为存在参数 `code=all`。
+ *
  */
 public interface AtAll : CatVariety {
 
@@ -41,6 +44,11 @@ public interface AtAll : CatVariety {
             return if (codeType == CAT_TYPE) AtAllObj else AtAllImpl(codeType)
         }
 
+        /**
+         * 得到一个 `codeType` == `cat` 的 [AtAll] 实例。
+         */
+        val instance: AtAll = AtAllObj
+
     }
 }
 
@@ -70,7 +78,6 @@ internal object AtAllObj : AtAll {
     private const val KEY = "all"
     private const val VALUE = "true"
     private const val CODE = "[CAT:at,$KEY=$VALUE]"
-
 
     override val length: Int
         get() = CODE.length
@@ -153,4 +160,16 @@ internal object AtAllObj : AtAll {
      * 获取某个键对应的值。
      */
     override fun get(key: String): String? = key.takeIf { it == KEY }?.let { VALUE }
+
+    override fun toString(): String = CODE
+    override fun hashCode(): Int = CODE.hashCode()
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other !is Neko) return false
+        if (other is AtAll) return true
+        if (other["all"] == "true" || other["code"] == "all") return true
+        return false
+    }
+
+
 }
