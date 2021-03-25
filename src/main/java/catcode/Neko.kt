@@ -139,6 +139,7 @@ public interface Neko : NekoMap<String, String>, CharSequence {
     /**
      * 与其他字符序列拼接为[Msgs]实例
      */
+    @Suppress("DEPRECATION")
     operator fun plus(other: CharSequence): Msgs = Msgs(collection = listOf(this, other))
 
     /**
@@ -167,7 +168,7 @@ public interface Neko : NekoMap<String, String>, CharSequence {
         fun of(code: String): Neko = Nyanko.byCode(code)
 
         /**
-         * 从猫猫码字符串转到KQCode
+         * 从猫猫码字符串转到[Neko]
          *
          * 1.8.0开始默认使用[Nyanko]作为静态工厂方法的[Neko]实例载体。
          * [Nyanko]是以字符串操作为基础的，因此不需要进行额外的转义。
@@ -177,10 +178,11 @@ public interface Neko : NekoMap<String, String>, CharSequence {
          * @param text 猫猫码字符串的正文
          * @param decode 因为这段猫猫码字符串可能已经转义过了，此处是否指定其转化的时候解码一次。默认为true
          */
+        @Suppress("UNUSED_PARAMETER")
         @JvmStatic
-        @Deprecated("just use of(text)", ReplaceWith("FastKQCode(text)", "com.simplerobot.modules.utils.FastKQCode"))
+        @Deprecated("Just use of(code)", ReplaceWith("Neko.of(code)", "com.simplerobot.modules.utils.FastKQCode"))
         fun of(text: String, decode: Boolean = true): Neko {
-            return Nyanko.byCode(text)
+            return of(text)
         }
     }
 
