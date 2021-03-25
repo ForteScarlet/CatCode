@@ -13,11 +13,10 @@
 @file:Suppress("unused")
 @file:JvmName("NekoCodes")
 @file:JvmMultifileClass
+
 package catcode.codes
 
 import catcode.*
-
-
 
 
 private val MAP_SPLIT_REGEX = Regex(CAT_KV)
@@ -37,14 +36,21 @@ private val MAP_SPLIT_REGEX = Regex(CAT_KV)
  * @since 1.8.0
  */
 open class MapNoraNeko
-protected constructor(override val codeType: String, protected open val params: Map<String, String>, override var type: String) :
+protected constructor(
+    override val codeType: String,
+    protected open val params: Map<String, String>,
+    override var type: String,
+) :
     NoraNeko,
     Map<String, String> by params {
     constructor(codeType: String, type: String) : this(codeType, emptyMap(), type)
     constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType, params.toMap(), type)
-    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType, mapOf(*params.toPair()), type)
+    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType,
+        mapOf(*params.toPair()),
+        type)
+
     constructor(codeType: String, type: String, vararg params: String) : this(codeType, mapOf(*params.map {
-        val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
+        val split = it.split(ignoreCase = false, limit = 2, delimiters = CAT_KV_SPLIT_ARRAY)
         split[0] to split[1]
     }.toTypedArray()), type)
 
@@ -141,11 +147,12 @@ protected constructor(override val codeType: String, protected open val params: 
          * 返回的键值对为 `type to split`
          */
         @Suppress("NOTHING_TO_INLINE")
-        private inline fun splitCode(code: String): CatKV<String, List<String>> {
+        private inline fun splitCode(code: String, codeType: String): CatKV<String, List<String>> {
             var tempText = code.trim()
+            val head = catHead(codeType)
             // 不是[CAT:开头，或者不是]结尾都不行
-            if (!tempText.startsWith(CAT_HEAD) || !tempText.endsWith(CAT_END)) {
-                throw IllegalArgumentException("not starts with '$CAT_HEAD' or not ends with '$CAT_END'")
+            if (!tempText.startsWith(head) || !tempText.endsWith(CAT_END)) {
+                throw IllegalArgumentException("Not starts with '$head' or not ends with '$CAT_END'")
             }
             // 是[CAT:开头，]结尾，切割并转化
             tempText = tempText.substring(4, tempText.lastIndex)
@@ -161,7 +168,7 @@ protected constructor(override val codeType: String, protected open val params: 
         @JvmStatic
         @JvmOverloads
         fun byCode(codeType: String, code: String, decode: Boolean = true): MapNoraNeko {
-            val (type, split) = splitCode(code)
+            val (type, split) = splitCode(code, codeType)
 
             return if (split.size > 1) {
                 if (decode) {
@@ -200,7 +207,7 @@ protected constructor(override val codeType: String, protected open val params: 
         @JvmStatic
         @JvmOverloads
         fun mutableByCode(codeType: String, code: String, decode: Boolean = true): MutableMapNoraNeko {
-            val (type, split) = splitCode(code)
+            val (type, split) = splitCode(code, codeType)
 
             return if (split.size > 1) {
                 if (decode) {
@@ -252,15 +259,21 @@ protected constructor(override val codeType: String, protected open val params: 
  */
 @Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
 public class MutableMapNoraNeko
-private constructor(codeType: String, protected override val params: MutableMap<String, String>, type: String) :
+internal constructor(codeType: String, protected override val params: MutableMap<String, String>, type: String) :
     MapNoraNeko(codeType, params, type),
     MutableNeko,
     MutableMap<String, String> by params {
     constructor(codeType: String, type: String) : this(codeType, mutableMapOf(), type)
-    constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType, params.toMutableMap(), type)
-    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType, mutableMapOf(*params.toPair()), type)
+    constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType,
+        params.toMutableMap(),
+        type)
+
+    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType,
+        mutableMapOf(*params.toPair()),
+        type)
+
     constructor(codeType: String, type: String, vararg params: String) : this(codeType, mutableMapOf(*params.map {
-        val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
+        val split = it.split(ignoreCase = false, limit = 2, delimiters = CAT_KV_SPLIT_ARRAY)
         split[0] to split[1]
     }.toTypedArray()), type)
 

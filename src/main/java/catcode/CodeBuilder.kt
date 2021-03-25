@@ -17,9 +17,12 @@ package catcode
 
 import catcode.CodeBuilder.CodeBuilderKey
 import catcode.codes.LazyMapNeko
+import catcode.codes.LazyMapNoraNeko
 import catcode.codes.MapNeko
+import catcode.codes.MapNoraNeko
 import catcode.collection.MutableLazyMap
-import catcode.collection.asLazyMap
+import catcode.collection.mutableLazyMapOf
+import catcode.collection.toLazyMap
 import com.sun.org.apache.bcel.internal.classfile.Code
 
 /**
@@ -123,7 +126,10 @@ public fun <T> CodeBuilder<T>.emptyValue(k: String): CodeBuilder<T> {
  */
 public class StringCodeBuilder
 @JvmOverloads
-constructor(override val codeType: String, override val type: String, private val encode: Boolean = true) :
+constructor(
+    // override val codeType: String,
+    override val type: String,
+    private val encode: Boolean = true) :
     CodeBuilder<String> {
     /** [StringBuilder] */
     private val appender: StringBuilder = StringBuilder(CAT_HEAD).append(type)
@@ -185,7 +191,7 @@ constructor(override val codeType: String, override val type: String, private va
  *
  * 通过[哈希表][MutableMap]来进行[Neko]的构建, 且不是线程安全的。
  */
-public class NekoBuilder(override val codeType: String, override val type: String) : CodeBuilder<Neko> {
+public class NekoBuilder(override val type: String) : CodeBuilder<Neko> {
 
     /** 当前参数map */
     private val params: MutableMap<String, String> = mutableMapOf()
@@ -207,7 +213,7 @@ public class NekoBuilder(override val codeType: String, override val type: Strin
      * 构建一个猫猫码, 并以其载体实例[T]返回.
      */
     override fun build(): Neko {
-        return MapNeko.byMap(codeType, type, params.toMap())
+        return MapNeko.byMap(type, params.toMap())
     }
 
     /**
@@ -240,13 +246,13 @@ public class NekoBuilder(override val codeType: String, override val type: Strin
  * 通过[懒加载哈希表][MutableLazyMap]来进行[Neko]的构建, 且不是线程安全的。
  */
 public class LazyNekoBuilder(
-    override val codeType: String,
+    // override val codeType: String,
     override val type: String,
     mode: LazyThreadSafetyMode = LazyThreadSafetyMode.PUBLICATION,
 ) : LazyCodeBuilder<Neko> {
 
     /** 当前参数map */
-    private val params: MutableLazyMap<String, String> = MutableLazyMap(mode = mode)
+    private val params: MutableLazyMap<String, String> = mutableLazyMapOf(mode = mode)
 
     /** 当前等待设置的key值 */
     private var key: String? = null
@@ -265,7 +271,7 @@ public class LazyNekoBuilder(
      * 构建一个猫猫码, 并以其载体实例[T]返回.
      */
     override fun build(): Neko {
-        return LazyMapNeko.byLazyMap(codeType, type, params.asLazyMap())
+        return LazyMapNeko.byMap(type, params)
     }
 
     /**

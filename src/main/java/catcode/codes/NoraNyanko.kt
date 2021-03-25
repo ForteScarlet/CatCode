@@ -92,7 +92,7 @@ public class NoraNyanko private constructor(private val code: String) : NoraNeko
     /**
      * 转化为可变参的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MapNeko.mutableByCode(codeType, this.toString())
+    override fun mutable(): MutableNeko = MapNoraNeko.mutableByCode(codeType, this.toString())
 
     /**
      * 转化为不可变类型[Neko]
@@ -149,11 +149,6 @@ public class NoraNyanko private constructor(private val code: String) : NoraNeko
     override fun subSequence(startIndex: Int, endIndex: Int): CharSequence = codeText.subSequence(startIndex, endIndex)
 
 
-    /**
-     * 缓存上一次的查询结果。
-     * 线程不安全的。
-     */
-    private var paramBuffer: CatKV<String, String>? = null
 
     /**
      * 获取参数。
@@ -162,11 +157,6 @@ public class NoraNyanko private constructor(private val code: String) : NoraNeko
      * @see CatCodeUtil.getParam
      */
     private fun getParam(key: String): String? {
-        val bufferFirst = paramBuffer?.key
-        val bufferSecond = paramBuffer?.value
-        if (bufferFirst != null && bufferFirst == key) {
-            return bufferSecond
-        }
         val paramFind = "$CAT_PS$key$CAT_KV"
         val phi: Int = codeText.indexOf(paramFind, startIndex)
         if (phi < 0) {
@@ -180,9 +170,7 @@ public class NoraNyanko private constructor(private val code: String) : NoraNeko
         if (startIndex > codeText.lastIndex || startIndex > pei) {
             return null
         }
-        val subParam = codeText.substring(startIndex, pei)
-        paramBuffer = key cTo subParam
-        return subParam
+        return codeText.substring(startIndex, pei)
     }
 
     /**
@@ -215,6 +203,7 @@ public class NoraNyanko private constructor(private val code: String) : NoraNeko
         override fun containsAll(elements: Collection<Map.Entry<String, String>>): Boolean {
             if (empty) return false
 
+            // TODO
             for (element in elements) {
                 if (!contains(element)) return false
             }

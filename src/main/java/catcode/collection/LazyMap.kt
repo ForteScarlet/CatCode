@@ -11,8 +11,50 @@
  */
 
 @file:JvmName("LazyMaps")
+
 package catcode.collection
 
+/**
+ * 一个允许存在懒值的[Map].
+ */
+public interface LazyMap<K, V> : Map<K, V> {
+    fun copy(): LazyMap<K, V>
+}
+
+
+@JvmOverloads
+public fun <K, V> lazyMapOf(map: Map<K, Lazy<V>> = mapOf()): LazyMap<K, V> = LazyMapImpl(map)
+
+
+/**
+ * 可变值的懒值[Map].
+ */
+public interface MutableLazyMap<K, V> : MutableMap<K, V>, LazyMap<K, V> {
+
+    override fun copy(): MutableLazyMap<K, V>
+
+    /**
+     * 添加一个待计算的懒加载值。
+     * @param key Key.
+     * @param initializer 初始化函数.
+     * @return V?
+     */
+    fun put(key: K, initializer: () -> V): V?
+}
+
+
+public fun <K, V> mutableLazyMapOf(
+    map: MutableMap<K, Lazy<V>> = mutableMapOf(),
+    mode: LazyThreadSafetyMode = LazyThreadSafetyMode.PUBLICATION,
+): MutableLazyMap<K, V> = MutableLazyMapImpl(map, mode)
+
+
+
+@JvmOverloads
+public fun <K, V> mutableLazyMap(
+    map: MutableMap<K, Lazy<V>> = mutableMapOf(),
+    mode: LazyThreadSafetyMode = LazyThreadSafetyMode.PUBLICATION,
+): MutableLazyMap<K, V> = MutableLazyMapImpl(map, mode)
 
 
 /**
@@ -23,11 +65,11 @@ package catcode.collection
  * @property map Map<K, Lazy<V>> map instance.
  * @constructor
  */
-public class LazyMap<K, V>
+public class LazyMapImpl<K, V>
 @JvmOverloads
 constructor(
     internal val map: Map<K, Lazy<V>> = mapOf(),
-) : Map<K, V> {
+) : LazyMap<K, V> {
     @Suppress("UNCHECKED_CAST")
     override val entries: Set<Map.Entry<K, V>>
         get() = map.entries.asSequence().map { SimpleEntry(it.key, it.value.value) }.toSet()
@@ -54,7 +96,7 @@ constructor(
 
     override fun isEmpty(): Boolean = map.isEmpty()
 
-    fun copy(): LazyMap<K, V> = LazyMap(map)
+    override fun copy(): LazyMap<K, V> = LazyMapImpl(map.toMap())
 
 
     override fun toString(): String {
@@ -79,15 +121,13 @@ constructor(
 
 
 public fun <K, V> Map<K, V>.toLazyMap(): LazyMap<K, V> {
-    return LazyMap(mapValues { lazyValue(it.value) })
+    return LazyMapImpl(mapValues { lazyValue(it.value) })
 }
 
 
 public fun <K, V> Map<K, V>.toMutableLazyMap(): MutableLazyMap<K, V> {
-    return MutableLazyMap(mapValues { lazyValue(it.value) }.toMutableMap())
+    return MutableLazyMapImpl(mapValues { lazyValue(it.value) }.toMutableMap())
 }
-
-
 
 
 /**
@@ -102,12 +142,12 @@ public fun <K, V> Map<K, V>.toMutableLazyMap(): MutableLazyMap<K, V> {
  * @property map Map<K, Lazy<V>> map instance.
  * @constructor
  */
-public data class MutableLazyMap<K, V>
+public data class MutableLazyMapImpl<K, V>
 @JvmOverloads
 constructor(
     internal val map: MutableMap<K, Lazy<V>> = mutableMapOf(),
     private val mode: LazyThreadSafetyMode = LazyThreadSafetyMode.PUBLICATION,
-) : MutableMap<K, V> {
+) : MutableLazyMap<K, V> {
 
     override val size: Int
         get() = map.size
@@ -145,7 +185,7 @@ constructor(
      * @param initializer 初始化函数.
      * @return V?
      */
-    fun put(key: K, initializer: () -> V): V? {
+    override fun put(key: K, initializer: () -> V): V? {
         return map.put(key, lazy(mode = mode, initializer = initializer))?.value
     }
 
@@ -157,17 +197,8 @@ constructor(
     override fun remove(key: K): V? = map.remove(key)?.value
 
 
-    fun copy(): MutableLazyMap<K, V> = MutableLazyMap(map, mode)
+    override fun copy(): MutableLazyMap<K, V> = MutableLazyMapImpl(map.toMutableMap(), mode)
 }
-
-
-/**
- * 将一个 [MutableLazyMap] 作为一个 [LazyMap].
- * 不会复制其中的什么属性，因此如果原来的 [MutableLazyMap] 发生变动，[LazyMap] 也会变。
- * @receiver MutableLazyMap<K, V>
- * @return LazyMap<K, V>
- */
-public fun <K, V> MutableLazyMap<K, V>.asLazyMap(): LazyMap<K, V> = LazyMap(map)
 
 /**
  * 将一个 [MutableLazyMap] 作为一个 [LazyMap].
@@ -177,7 +208,7 @@ public fun <K, V> MutableLazyMap<K, V>.asLazyMap(): LazyMap<K, V> = LazyMap(map)
  * @receiver MutableLazyMap<K, V>
  * @return LazyMap<K, V>
  */
-public fun <K, V> MutableLazyMap<K, V>.toLazyMap(): LazyMap<K, V> = LazyMap(map.toMap())
+public fun <K, V> MutableLazyMap<K, V>.toLazyMap(): LazyMap<K, V> = this.copy()
 
 /**
  * 将一个 [LazyMap] 转化为一个 [MutableLazyMap].
@@ -187,4 +218,13 @@ public fun <K, V> MutableLazyMap<K, V>.toLazyMap(): LazyMap<K, V> = LazyMap(map.
  * @receiver LazyMap<K, V>
  * @return MutableLazyMap<K, V>
  */
-public fun <K, V> LazyMap<K, V>.toMutableMap(): MutableLazyMap<K, V> = MutableLazyMap(map.toMutableMap())
+public fun <K, V> LazyMap<K, V>.toMutableMap(mode: LazyThreadSafetyMode = LazyThreadSafetyMode.PUBLICATION): MutableLazyMap<K, V> =
+    if (this is LazyMapImpl) {
+        MutableLazyMapImpl(map.toMutableMap(), mode)
+    } else {
+        val newMap = mutableMapOf<K, Lazy<V>>()
+        forEach { (k, v) ->
+            newMap[k] = lazyValue(v)
+        }
+        MutableLazyMapImpl(newMap, mode)
+    }

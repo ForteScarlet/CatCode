@@ -13,7 +13,9 @@
 package catcode
 
 import catcode.codes.MapNeko
+import catcode.codes.MapNoraNeko
 import catcode.collection.MutableLazyMap
+import catcode.collection.mutableLazyMapOf
 
 /**
  * 野猫码构建器。
@@ -157,7 +159,7 @@ public class NoraNekoBuilder(override val codeType: String, override val type: S
      * 构建一个猫猫码, 并以其载体实例[T]返回.
      */
     override fun build(): Neko {
-        return MapNeko.byMap(codeType, type, params.toMap())
+        return MapNoraNeko.byMap(codeType, type, params.toMap())
     }
 
     /**
@@ -194,7 +196,7 @@ public class LazyNoraNekoBuilder(override val codeType: String, override val typ
     LazyWildcatCodeBuilder<Neko> {
 
     /** 当前参数map */
-    private val params: MutableLazyMap<String, String> = MutableLazyMap()
+    private val params: MutableLazyMap<String, String> = mutableLazyMapOf()
 
     /** 当前等待设置的key值 */
     private var key: String? = null
@@ -213,7 +215,7 @@ public class LazyNoraNekoBuilder(override val codeType: String, override val typ
      * 构建一个猫猫码, 并以其载体实例[T]返回.
      */
     override fun build(): Neko {
-        return MapNeko.byMap(codeType, type, params.toMap())
+        return MapNoraNeko.byMap(codeType, type, params.toMap())
     }
 
     /**

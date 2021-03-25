@@ -13,13 +13,12 @@
 @file:Suppress("unused")
 @file:JvmName("NekoCodes")
 @file:JvmMultifileClass
+
 package catcode.codes
 
 import catcode.*
+import catcode.collection.*
 import catcode.collection.LazyMap
-import catcode.collection.MutableLazyMap
-import catcode.collection.toLazyMap
-import catcode.collection.toMutableLazyMap
 
 
 private val MAP_SPLIT_REGEX = Regex(CAT_KV)
@@ -39,14 +38,21 @@ private val MAP_SPLIT_REGEX = Regex(CAT_KV)
  * @since 1.8.0
  */
 open class LazyMapNoraNeko
-protected constructor(override val codeType: String, private val params: LazyMap<String, String>, override var type: String) :
+internal constructor(
+    override val codeType: String,
+    private val params: LazyMap<String, String>,
+    override var type: String,
+) :
     NoraNeko,
     Map<String, String> by params {
-    constructor(codeType: String, type: String) : this(codeType, LazyMap(emptyMap()), type)
+    constructor(codeType: String, type: String) : this(codeType, lazyMapOf(emptyMap()), type)
     constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType, params.toLazyMap(), type)
-    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType, mapOf(*params.toPair()).toLazyMap(), type)
+    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType,
+        mapOf(*params.toPair()).toLazyMap(),
+        type)
+
     constructor(codeType: String, type: String, vararg params: String) : this(codeType, mapOf(*params.map {
-        val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
+        val split = it.split(ignoreCase = false, limit = 2, delimiters = CAT_KV_SPLIT_ARRAY)
         split[0] to split[1]
     }.toTypedArray()).toLazyMap(), type)
 
@@ -93,7 +99,9 @@ protected constructor(override val codeType: String, private val params: LazyMap
      * toString的值记录。因为是不可变类，因此toString是不会变的
      * 在获取的时候才会去实际计算，且仅计算一次。
      */
-    private val _toString: String by lazy { CatCodeUtil.toCat(type, map = this) }
+    private val _toString: String by lazy {
+        NekoAibo.getAibo(codeType).toCat(type, true, map = this)
+    }
 
     /** toString */
     override fun toString(): String = _toString
@@ -102,12 +110,12 @@ protected constructor(override val codeType: String, private val params: LazyMap
     /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MutableMapNoraNeko(codeType, type, this.toMutableMap())
+    override fun mutable(): MutableNeko = MutableMapNoraNeko(codeType, this.toMutableMap(), type)
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = LazyMapNoraNeko(codeType, params, type)
+    override fun immutable(): Neko = LazyMapNoraNeko(codeType, params.copy(), type)
 
     /**
      * 获取 [params] 实例。
@@ -254,15 +262,25 @@ protected constructor(override val codeType: String, private val params: LazyMap
  */
 @Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
 public class LazyMutableMapNoraNeko
-private constructor(codeType: String, protected override val params: MutableLazyMap<String, String>, type: String) :
+private constructor(
+    codeType: String,
+    protected override val params: MutableLazyMap<String, String>,
+    type: String,
+) :
     MapNoraNeko(codeType, params, type),
     MutableNeko,
     MutableMap<String, String> by params {
-    constructor(codeType: String, type: String) : this(codeType, MutableLazyMap(), type)
-    constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType, params.toMutableLazyMap(), type)
-    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType, mutableMapOf(*params.toPair()).toMutableLazyMap(), type)
+    constructor(codeType: String, type: String) : this(codeType, mutableLazyMapOf(), type)
+    constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType,
+        params.toMutableLazyMap(),
+        type)
+
+    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType,
+        mutableMapOf(*params.toPair()).toMutableLazyMap(),
+        type)
+
     constructor(codeType: String, type: String, vararg params: String) : this(codeType, mutableMapOf(*params.map {
-        val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
+        val split = it.split(ignoreCase = false, limit = 2, delimiters = CAT_KV_SPLIT_ARRAY)
         split[0] to split[1]
     }.toTypedArray()).toMutableLazyMap(), type)
 
@@ -275,10 +293,10 @@ private constructor(codeType: String, protected override val params: MutableLazy
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = LazyMapNoraNeko(codeType, type, this)
+    override fun immutable(): Neko = LazyMapNoraNeko(codeType, params, type)
 
     /** toString */
-    override fun toString(): String = CatCodeUtil.toCat(type, map = this)
+    override fun toString(): String = CatCodeUtil.toCat(type, true, map = this)
 
 
     /**

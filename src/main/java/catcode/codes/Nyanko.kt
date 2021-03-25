@@ -40,7 +40,8 @@ import catcode.collection.mapDelegation
  *
  *
  */
-open class Nyanko private constructor(private val code: String) : Neko {
+open class Nyanko
+private constructor(private val code: String) : Neko {
     private val _type: String
     private val _size: Int
 
@@ -85,7 +86,7 @@ open class Nyanko private constructor(private val code: String) : Neko {
     /**
      * 转化为可变参的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MapNeko.mutableByCode(codeType, this.toString())
+    override fun mutable(): MutableNeko = MapNeko.mutableByCode(this.code)
 
     /**
      * 转化为不可变类型[Neko]
@@ -145,23 +146,12 @@ open class Nyanko private constructor(private val code: String) : Neko {
 
 
     /**
-     * 缓存上一次的查询结果
-     * 线程不安全的
-     */
-    private var paramBuffer: CatKV<String, String>? = null
-
-    /**
      * 获取参数
      * 得到的值不是反转义的值。如果需要，再转义
      * 参考于[CatCodeUtil.getParam]
      * @see CatCodeUtil.getParam
      */
     private fun getParam(key: String): String? {
-        val bufferFirst = paramBuffer?.key
-        val bufferSecond = paramBuffer?.value
-        if (bufferFirst != null && bufferFirst == key) {
-            return bufferSecond
-        }
         val paramFind = "$CAT_PS$key$CAT_KV"
         val phi: Int = codeText.indexOf(paramFind, startIndex)
         if (phi < 0) {
@@ -175,22 +165,20 @@ open class Nyanko private constructor(private val code: String) : Neko {
         if (startIndex > codeText.lastIndex || startIndex > pei) {
             return null
         }
-        val subParam = codeText.substring(startIndex, pei)
-        paramBuffer = key cTo subParam
-        return subParam
+        return codeText.substring(startIndex, pei)
     }
 
     /**
      * Returns a read-only [Set] of all key/value pairs in this map.
      */
     override val entries: Set<Map.Entry<String, String>>
-        get() = FastNyankoEntrySet()
+        get() = NyankoEntrySet()
 
 
     /**
      * [Nyanko] 的 set内联类
      */
-    private inner class FastNyankoEntrySet : Set<Map.Entry<String, String>> {
+    private inner class NyankoEntrySet : Set<Map.Entry<String, String>> {
         /** 键值对的长度 */
         override val size: Int get() = _size
 
@@ -234,13 +222,13 @@ open class Nyanko private constructor(private val code: String) : Neko {
      * Returns a read-only [Set] of all keys in this map.
      */
     override val keys: Set<String>
-        get() = FastNyankoKeySet()
+        get() = NyankoKeySet()
 
 
     /**
      * [keys]的实现内部类
      */
-    private inner class FastNyankoKeySet : Set<String> {
+    private inner class NyankoKeySet : Set<String> {
         override val size: Int get() = _size
 
         /**
@@ -270,6 +258,13 @@ open class Nyanko private constructor(private val code: String) : Neko {
             return CatParamKeyIterator(this@Nyanko.code)
         }
 
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is Set<*>) return false
+            if (this.size != other.size) return false
+            return all { k -> other.contains(k) }
+        }
+
     }
 
 
@@ -277,14 +272,14 @@ open class Nyanko private constructor(private val code: String) : Neko {
      * Returns a read-only [Collection] of all values in this map. Note that this collection may contain duplicate values.
      */
     override val values: Collection<String>
-        get() = FastNyankoValues()
+        get() = NyankoValues()
 
 
     /**
      * [values]的实现。
      * 不是任何[List]
      */
-    private inner class FastNyankoValues : Collection<String> {
+    private inner class NyankoValues : Collection<String> {
         /**
          * Returns the size of the collection.
          */
@@ -323,6 +318,28 @@ open class Nyanko private constructor(private val code: String) : Neko {
         override fun iterator(): Iterator<String> {
             return CatParamValueIterator(this@Nyanko.code)
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is Collection<*>) return false
+            if (this.size != other.size) return false
+            val thisIter = iterator()
+            val otIter = other.iterator()
+            for (i in 1 .. size) {
+                if (thisIter.hasNext() && otIter.hasNext()) {
+                    val thisNext = thisIter.next()
+                    val otherNext = otIter.next()
+                    if (thisNext != otherNext) return false
+                } else return false
+            }
+            return true
+        }
+
+
+        override fun hashCode(): Int {
+            return code.hashCode()
+        }
+
     }
 
     override fun hashCode(): Int = this.code.hashCode()
@@ -332,18 +349,26 @@ open class Nyanko private constructor(private val code: String) : Neko {
         if (other !is Neko) return false
 
         return if (other is Nyanko) {
-            this.code == other.code
+            when {
+                this.code == other.code -> true
+                this.size == other.size -> {
+                    // size相同，判断所有的kv
+                    val thisTempMap = this.entries.map { it.key to it.value }.toMap()
+                    return other.entries.all { (k, v) -> thisTempMap[k] == v }
+                }
+                else -> false
+            }
+            // this.code == other.code
         } else {
             val sameType: Boolean = this.codeType == other.codeType && this.type == other.type
             if(!sameType) {
                 false
             } else {
-                keys.forEach {
+                keys.all {
                     val thisValue: String? = this[it]
                     val otherValue: String? = other[it]
-                    if(thisValue != otherValue) return false
+                    thisValue == otherValue
                 }
-                true
             }
         }
     }

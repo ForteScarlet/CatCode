@@ -16,6 +16,7 @@
 package catcode
 
 import catcode.codes.MapNeko
+import catcode.codes.MapNoraNeko
 import catcode.codes.Nyanko
 import catcode.collection.MutableNekoMap
 import catcode.collection.NekoMap
@@ -143,12 +144,18 @@ public interface Neko : NekoMap<String, String>, CharSequence {
     operator fun plus(other: CharSequence): Msgs = Msgs(collection = listOf(this, other))
 
     /**
-     * 转化为可变参的[MutableNeko]。应当返回一个新的实例。
+     * 转化为可变参的[MutableNeko]。应当返回一个新的实例，
+     * 但是不保证两个实例之间的完全隔离的。
+     *
+     * 这类似于一种 `as` 操作，是一种**浅拷贝**。
      */
     fun mutable(): MutableNeko
 
     /**
-     * 转化为不可变类型[Neko]。应当返回一个新的实例。
+     * 转化为不可变类型[Neko]。应当返回一个新的实例，
+     * 但是不保证两个实例之间的完全隔离的。
+     *
+     * 这类似于一种 `as` 操作，是一种**浅拷贝**。
      */
     fun immutable(): Neko
 
@@ -168,21 +175,15 @@ public interface Neko : NekoMap<String, String>, CharSequence {
         fun of(code: String): Neko = Nyanko.byCode(code)
 
         /**
-         * 从猫猫码字符串转到[Neko]
+         * 从猫猫码字符串转到[Neko].
          *
-         * 1.8.0开始默认使用[Nyanko]作为静态工厂方法的[Neko]实例载体。
-         * [Nyanko]是以字符串操作为基础的，因此不需要进行额外的转义。
-         *
-         * @since 1.1-1.11
-         * @since 1.8.0
-         * @param text 猫猫码字符串的正文
-         * @param decode 因为这段猫猫码字符串可能已经转义过了，此处是否指定其转化的时候解码一次。默认为true
+         * @param code 猫猫码字符串的正文
          */
         @Suppress("UNUSED_PARAMETER")
         @JvmStatic
-        @Deprecated("Just use of(code)", ReplaceWith("Neko.of(code)", "com.simplerobot.modules.utils.FastKQCode"))
-        fun of(text: String, decode: Boolean = true): Neko {
-            return of(text)
+        @Deprecated("Just use Neko.of(code)", ReplaceWith("Neko.of(code)", "com.simplerobot.modules.utils.FastKQCode"))
+        fun of(code: String, decode: Boolean = true): Neko {
+            return of(code)
         }
     }
 
@@ -256,7 +257,7 @@ public data class EmptyNeko(override val type: String) : Neko {
     /**
      * 转化为可变参的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MapNeko.mutableByCode(codeType, codeText)
+    override fun mutable(): MutableNeko = MapNeko.mutableByCode(codeText)
 
     /**
      * 转化为不可变类型[Neko]
@@ -297,7 +298,7 @@ public data class EmptyNoraNeko(override val codeType: String, override val type
     /**
      * 转化为可变参的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MapNeko.mutableByCode(codeType, codeText)
+    override fun mutable(): MutableNeko = MapNoraNeko.mutableByCode(codeType, codeText)
 
     /**
      * 转化为不可变类型[Neko]

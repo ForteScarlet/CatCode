@@ -13,6 +13,7 @@
 package catcode
 
 import catcode.codes.MapNeko
+import catcode.codes.MapNoraNeko
 import catcode.codes.Nyanko
 
 /**
@@ -25,6 +26,13 @@ import catcode.codes.Nyanko
  */
 public abstract class NekoAibo
 internal constructor(val codeType: String) {
+
+    companion object Instances {
+        @JvmStatic
+        fun getAibo(codeType: String): NekoAibo = if (codeType == CAT_TYPE) CatCodeUtil else WildcatCodeUtil.getInstance(codeType)
+        @JvmStatic
+        val aibo: NekoAibo get() = getAibo(CAT_TYPE)
+    }
 
     protected open val catCodeHead: String = catHead(codeType)
 
@@ -159,11 +167,11 @@ internal constructor(val codeType: String) {
      * @param type 猫猫码的类型
      * @param params 参数列表
      */
-    open fun toNeko(type: String, params: Map<String, *>): Neko {
+    open fun toNeko(type: String, params: Map<String, String>): Neko {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
-            MapNeko.byMap(codeType, type, params)
+            MapNoraNeko.byMap(codeType, type, params)
         }
     }
 
@@ -173,11 +181,11 @@ internal constructor(val codeType: String) {
      * @param type 猫猫码的类型
      * @param params 参数列表
      */
-    open fun toNeko(type: String, vararg params: CatKV<String, *>): Neko {
+    open fun toNeko(type: String, vararg params: CatKV<String, String>): Neko {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
-            MapNeko.byKV(codeType, type, *params)
+            MapNoraNeko.byKV(codeType, type, *params)
         }
     }
 
