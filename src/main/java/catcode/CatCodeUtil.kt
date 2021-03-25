@@ -14,6 +14,9 @@
 @file:JvmName("Cats")
 package catcode
 
+import kotlin.contracts.contract
+import catcode.WildcatCodeUtil.Companion.getInstance as wildcatCodeUtilGetInstanceFunc
+
 /*
 & -> &amp;
 [ -> &#91;
@@ -109,6 +112,59 @@ object CatEncoder {
 
 public fun String.enCatParam(): String = CatEncoder.encodeParams(this)
 public fun String.enCatText(): String = CatEncoder.encodeText(this)
+
+
+
+
+
+/**
+ * 转变一个[Neko]的[codeType][Neko.codeType]。
+ *
+ * 例如：
+ * ```
+ * [CAT:at,code=123] -> [CQ:at,code=123]
+ * ```
+ *
+ * 即
+ * ```
+ * WildCatCodeUtil.getInstance("CQ")
+ * neko.switchCodeType("CQ", /* ... */)
+ * ```
+ *
+ *
+ *
+ * 如果方法的目标[Neko]不是一个[CodeTypeSwitchAble]实例，
+ * 那么会通过 [aibo] 参数得到一个对应的构建工具类，并通过此工具复制一个Neko对象。
+ *
+ * 其中，[aibo] 中可传入的参数最好不是随时随地实例化的参数，因为他的实例是完全可控的。
+ */
+@JvmOverloads
+@org.jetbrains.annotations.Contract(pure = true)
+public fun Neko.switchCodeType(codeType: String, aibo: (codeType: String) -> NekoAibo = ::wildcatCodeUtilGetInstanceFunc ): Neko {
+    return if (this is CodeTypeSwitchAble<*>) {
+        // It is, switch codeType.
+        this.switchCodeType(codeType)
+    } else {
+        val util = aibo(codeType)
+
+        if (this.isEmpty()) {
+            // is Empty
+            util.toNeko(type)
+        } else {
+            util.getNekoBuilder(type, true).build {
+                apply {
+                    this@switchCodeType.forEach { k, v ->
+                        key(k) { v }
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+
+
 
 
 /**

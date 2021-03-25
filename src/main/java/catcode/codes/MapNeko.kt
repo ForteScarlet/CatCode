@@ -10,7 +10,7 @@
  *
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "DuplicatedCode")
 @file:JvmName("NekoCodes")
 @file:JvmMultifileClass
 

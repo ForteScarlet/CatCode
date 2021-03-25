@@ -63,7 +63,8 @@ private constructor(private val code: String) : Neko {
         // val typeEndIndex = if (firstSplitIndex < 0) _codeText.length else firstSplitIndex
         _type = this.code.substring(startIndex, firstSplitIndex)
         catHead = CAT_HEAD + _type
-        empty = this.code.contains(CAT_PS)
+        empty = !this.code.contains(CAT_PS)
+
         // 计算 key-value的个数, 即计算CAT_KV的个数
         val kvChar: Char = CAT_KV.first()
         _size = this.code.count { it == kvChar }

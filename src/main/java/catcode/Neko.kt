@@ -290,9 +290,11 @@ abstract class BaseMutableNoraNeko : MutableNoraNeko
  * 因此[mutable]所得到的实例为[love.forte.catcode.codes.MutableMapNeko]实例。
  *
  */
-public data class EmptyNeko(override val type: String) : Neko {
+public data class EmptyNeko(override val type: String, override val codeType: String = CAT_TYPE) : Neko, CodeTypeSwitchAble<EmptyNeko> {
 
-    private val codeText = "$CAT_HEAD$type$CAT_END"
+    override fun switchCodeType(codeType: String): EmptyNeko = if (codeType == this.codeType) this else EmptyNeko(type, codeType)
+
+    private val codeText = "${catHead(codeType)}$type$CAT_END"
 
     override fun toString(): String = codeText
 

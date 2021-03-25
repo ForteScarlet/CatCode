@@ -12,10 +12,7 @@
 
 package love.forte.test;
 
-import catcode.CatCodeUtil;
-import catcode.CatSymbolConstant;
-import catcode.Neko;
-import catcode.WildcatCodeUtil;
+import catcode.*;
 
 /**
  * Readme test 1 for create a cat code by Builder.
@@ -30,7 +27,7 @@ public class ReadmeTest1 {
 
         System.out.println(neko);
 
-        Neko switchedNeko = CatSymbolConstant.switchCodeType(neko, "CQ", WildcatCodeUtil::getInstance);
+        Neko switchedNeko = Cats.switchCodeType(neko, "CQ");
 
         System.out.println(switchedNeko.getClass());
 
