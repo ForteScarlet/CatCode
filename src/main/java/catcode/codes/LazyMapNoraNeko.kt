@@ -110,12 +110,26 @@ internal constructor(
     /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MutableMapNoraNeko(codeType, this.toMutableMap(), type)
+    override fun asMutable(): MutableNeko =
+        MutableMapNoraNeko(codeType, this.toMutableMap(), type)
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = LazyMapNoraNeko(codeType, params.copy(), type)
+    override fun asImmutable(): Neko = this
+        // LazyMapNoraNeko(codeType, params.copy(), type)
+
+    /**
+     * 转化为参数可变的[MutableNeko]
+     */
+    override fun toMutable(): MutableNeko =
+        MutableMapNoraNeko(codeType, this.toMutableMap(), type)
+
+    /**
+     * 转化为不可变类型[Neko]
+     */
+    override fun toImmutable(): Neko =
+        LazyMapNoraNeko(codeType, params.copy(), type)
 
     /**
      * 获取 [params] 实例。
@@ -285,15 +299,26 @@ private constructor(
     }.toTypedArray()).toMutableLazyMap(), type)
 
     /**
+     * 作为参数可变的[MutableNeko]
+     */
+    override fun asMutable(): MutableNeko = this
+
+
+    /**
+     * 作为不可变类型[Neko]
+     */
+    override fun asImmutable(): Neko = this
+
+    /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = LazyMutableMapNoraNeko(codeType, params, type)
+    override fun toMutable(): MutableNeko = LazyMutableMapNoraNeko(codeType, params.copy(), type)
 
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = LazyMapNoraNeko(codeType, params, type)
+    override fun toImmutable(): Neko = LazyMapNoraNeko(codeType, params.copy(), type)
 
     /** toString */
     override fun toString(): String = CatCodeUtil.toCat(type, true, map = this)

@@ -116,12 +116,22 @@ internal constructor(
     /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = LazyMutableMapNeko(params.toMutableLazyMap(), type)
+    override fun asMutable(): MutableNeko = LazyMutableMapNeko(params.toMutableLazyMap(), type)
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = LazyMapNeko(params, type)
+    override fun asImmutable(): Neko = this // LazyMapNeko(params, type)
+
+    /**
+     * 转化为参数可变的[MutableNeko]
+     */
+    override fun toMutable(): MutableNeko = LazyMutableMapNeko(params.toMutableLazyMap(), type)
+
+    /**
+     * 转化为不可变类型[Neko]
+     */
+    override fun toImmutable(): Neko = LazyMapNeko(params.copy(), type)
 
     /**
      * 获取 [params] 实例。
@@ -309,15 +319,28 @@ internal constructor(
     /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): LazyMutableMapNeko =
-        LazyMutableMapNeko(params, type)
+    override fun asMutable(): LazyMutableMapNeko = this
+        // LazyMutableMapNeko(params, type)
 
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): LazyMapNeko =
-        LazyMapNeko(params, type)
+    override fun asImmutable(): LazyMapNeko = this
+        // LazyMapNeko(params, type)
+
+    /**
+     * 转化为参数可变的[MutableNeko]
+     */
+    override fun toMutable(): LazyMutableMapNeko = // this
+        LazyMutableMapNeko(params.copy(), type)
+
+
+    /**
+     * 转化为不可变类型[Neko]
+     */
+    override fun toImmutable(): LazyMapNeko = // this
+        LazyMapNeko(params.copy(), type)
 
 
     /** toString */

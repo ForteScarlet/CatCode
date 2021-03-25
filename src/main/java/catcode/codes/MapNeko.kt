@@ -114,12 +114,27 @@ internal constructor(
     /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MutableMapNeko(params.toMutableMap(), type)
+    override fun asMutable(): MutableNeko =
+        MutableMapNeko(params.toMutableMap(), type)
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = MapNeko(params, type)
+    override fun asImmutable(): Neko = this
+        // MapNeko(params, type)
+
+
+    /**
+     * 转化为参数可变的[MutableNeko]
+     */
+    override fun toMutable(): MutableNeko =
+        MutableMapNeko(params.toMutableMap(), type)
+
+    /**
+     * 转化为不可变类型[Neko]
+     */
+    override fun toImmutable(): Neko = // this
+        MapNeko(params.toMap(), type)
 
     /**
      * 获取 [params] 实例。
@@ -297,13 +312,26 @@ internal constructor(
     /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MutableMapNeko(params, type)
+    override fun asMutable(): MutableNeko =
+        MutableMapNeko(params, type)
 
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = MapNeko(params, type)
+    override fun asImmutable(): Neko = this
+        // MapNeko(params, type)
+
+    /**
+     * 转化为参数可变的[MutableNeko]
+     */
+    override fun toMutable(): MutableNeko = MutableMapNeko(params.toMutableMap(), type)
+
+
+    /**
+     * 转化为不可变类型[Neko]
+     */
+    override fun toImmutable(): Neko = MapNeko(params.toMap(), type)
 
     /** toString */
     override fun toString(): String = CatCodeUtil.toCat(type, map = this)

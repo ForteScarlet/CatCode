@@ -86,12 +86,25 @@ private constructor(private val code: String) : Neko {
     /**
      * 转化为可变参的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MapNeko.mutableByCode(this.code)
+    override fun asMutable(): MutableNeko = MapNeko.mutableByCode(this.code)
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = Nyanko(this.code)
+    override fun asImmutable(): Neko = this
+        // Nyanko(this.code)
+
+    /**
+     * 转化为可变参的[MutableNeko]
+     */
+    override fun toMutable(): MutableNeko =
+        MapNeko.mutableByCode(this.code)
+
+    /**
+     * 转化为不可变类型[Neko]
+     */
+    override fun toImmutable(): Neko = // this
+        Nyanko(this.code)
 
     /**
      * 得到一个[Map]委托

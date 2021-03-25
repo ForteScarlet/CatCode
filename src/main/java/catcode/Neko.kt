@@ -144,20 +144,56 @@ public interface Neko : NekoMap<String, String>, CharSequence {
     operator fun plus(other: CharSequence): Msgs = Msgs(collection = listOf(this, other))
 
     /**
-     * 转化为可变参的[MutableNeko]。应当返回一个新的实例，
-     * 但是不保证两个实例之间的完全隔离的。
+     * 转化为可变参的[MutableNeko]。
      *
-     * 这类似于一种 `as` 操作，是一种**浅拷贝**。
+     * 如果当前类是可变类型，会得到当前实例自身，否则会得到新实例。
+     *
      */
-    fun mutable(): MutableNeko
+    fun mutable(): MutableNeko = asMutable()
 
     /**
-     * 转化为不可变类型[Neko]。应当返回一个新的实例，
-     * 但是不保证两个实例之间的完全隔离的。
+     * 转化为不可变类型[Neko]。
      *
-     * 这类似于一种 `as` 操作，是一种**浅拷贝**。
+     * 如果当前类不是可变类型，则会得到新实例，否则会得到当前实例自身。
+     *
      */
-    fun immutable(): Neko
+    fun immutable(): Neko = asImmutable()
+
+    /**
+     * 作为可变参的[MutableNeko]。
+     *
+     * 如果当前类是可变类型，会得到当前实例自身，否则会得到新实例。
+     *
+     * 如果得到新实例，其内容实现为 **浅拷贝**，新实例仍可能影响到旧实例。
+     */
+    fun asMutable(): MutableNeko
+
+    /**
+     * 作为不可变类型[Neko]。
+     *
+     * 如果当前类不是可变类型，则会得到新实例，否则会得到当前实例自身。
+     *
+     * 如果得到新实例，其内容实现为 **浅拷贝**，新实例仍可能影响到旧实例。
+     *
+     */
+    fun asImmutable(): Neko
+
+    /**
+     * 转化为可变参的[MutableNeko]。
+     *
+     * 无论如何都会得到一个新实例。
+     */
+    fun toMutable(): MutableNeko
+
+    /**
+     * 转化为不可变类型[Neko]。
+     *
+     * 无论如何都会得到一个新实例。
+     */
+    fun toImmutable(): Neko
+
+
+
 
 
     companion object Of {
@@ -257,12 +293,22 @@ public data class EmptyNeko(override val type: String) : Neko {
     /**
      * 转化为可变参的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MapNeko.mutableByCode(codeText)
+    override fun asMutable(): MutableNeko = MapNeko.mutableByCode(codeText)
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = copy()
+    override fun asImmutable(): Neko = this
+
+    /**
+     * 转化为可变参的[MutableNeko]
+     */
+    override fun toMutable(): MutableNeko = MapNeko.mutableByCode(codeText)
+
+    /**
+     * 转化为不可变类型[Neko]
+     */
+    override fun toImmutable(): Neko = copy()
 
     override fun toMap(): Map<String, String> = emptyMap()
     override val entries: Set<Map.Entry<String, String>> = emptySet()
@@ -298,12 +344,22 @@ public data class EmptyNoraNeko(override val codeType: String, override val type
     /**
      * 转化为可变参的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MapNoraNeko.mutableByCode(codeType, codeText)
+    override fun asMutable(): MutableNeko = MapNoraNeko.mutableByCode(codeType, codeText)
 
     /**
-     * 转化为不可变类型[Neko]
+     * 得到自身。
      */
-    override fun immutable(): Neko = copy()
+    override fun asImmutable(): Neko = this
+
+    /**
+     * 转化为可变参的[MutableNeko]
+     */
+    override fun toMutable(): MutableNeko = MapNoraNeko.mutableByCode(codeType, codeText)
+
+    /**
+     * 得到自身。
+     */
+    override fun toImmutable(): Neko = copy()
 
     override fun toMap(): Map<String, String> = emptyMap()
     override val entries: Set<Map.Entry<String, String>> = emptySet()

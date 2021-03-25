@@ -36,7 +36,7 @@ private val MAP_SPLIT_REGEX = Regex(CAT_KV)
  * @since 1.8.0
  */
 open class MapNoraNeko
-protected constructor(
+internal constructor(
     override val codeType: String,
     protected open val params: Map<String, String>,
     override var type: String,
@@ -106,12 +106,26 @@ protected constructor(
     /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MutableMapNoraNeko(codeType, type, this.toMutableMap())
+    override fun asMutable(): MutableNeko =
+        MutableMapNoraNeko(codeType, type, this.toMutableMap())
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = MapNoraNeko(codeType, params, type)
+    override fun asImmutable(): Neko = this
+    // MapNoraNeko(codeType, params, type)
+
+    /**
+     * 转化为参数可变的[MutableNeko]
+     */
+    override fun toMutable(): MutableNeko =
+        MutableMapNoraNeko(codeType, params.toMutableMap(), type)
+
+    /**
+     * 转化为不可变类型[Neko]
+     */
+    override fun toImmutable(): Neko =
+        MapNoraNeko(codeType, params.toMap(), type)
 
     /**
      * 获取 [params] 实例。
@@ -259,7 +273,11 @@ protected constructor(
  */
 @Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
 public class MutableMapNoraNeko
-internal constructor(codeType: String, protected override val params: MutableMap<String, String>, type: String) :
+internal constructor(
+    codeType: String,
+    protected override val params: MutableMap<String, String>,
+    type: String,
+) :
     MapNoraNeko(codeType, params, type),
     MutableNeko,
     MutableMap<String, String> by params {
@@ -280,13 +298,28 @@ internal constructor(codeType: String, protected override val params: MutableMap
     /**
      * 转化为参数可变的[MutableNeko]
      */
-    override fun mutable(): MutableNeko = MutableMapNoraNeko(codeType, params, type)
+    override fun asMutable(): MutableNeko = this
+    // MutableMapNoraNeko(codeType, params, type)
 
 
     /**
      * 转化为不可变类型[Neko]
      */
-    override fun immutable(): Neko = MapNoraNeko(codeType, type, this)
+    override fun asImmutable(): Neko = this
+    // MapNoraNeko(codeType, type, this)
+
+    /**
+     * 转化为参数可变的[MutableNeko]
+     */
+    override fun toMutable(): MutableNeko = // this
+        MutableMapNoraNeko(codeType, params.toMutableMap(), type)
+
+
+    /**
+     * 转化为不可变类型[Neko]
+     */
+    override fun toImmutable(): Neko = // this
+        MapNoraNeko(codeType, params.toMap(), type)
 
     /** toString */
     override fun toString(): String = WildcatCodeUtil.getInstance(codeType).toCat(type, map = this)
