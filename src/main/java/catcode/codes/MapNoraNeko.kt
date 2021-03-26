@@ -38,11 +38,12 @@ private val MAP_SPLIT_REGEX = Regex(CAT_KV)
 open class MapNoraNeko
 internal constructor(
     override val codeType: String,
-    protected open val params: Map<String, String>,
+    protected override val params: Map<String, String>,
     override var type: String,
 ) :
+    MapNeko(params, type),
     NoraNeko,
-    Map<String, String> by params {
+    Map<String, String> {
     constructor(codeType: String, type: String) : this(codeType, emptyMap(), type)
     constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType, params.toMap(), type)
     constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType,
@@ -256,6 +257,33 @@ internal constructor(
             MutableMapNoraNeko(codeType, type, *params)
     }
 
+    override fun containsKey(key: String): Boolean {
+        return params.containsKey(key)
+    }
+
+    override fun containsValue(value: String): Boolean {
+        return params.containsValue(value)
+    }
+
+    override val entries: Set<Map.Entry<String, String>>
+        get() = params.entries
+
+    override fun get(key: String): String? {
+        return params.get(key)
+    }
+
+    override fun isEmpty(): Boolean {
+        return params.isEmpty()
+    }
+
+    override val keys: Set<String>
+        get() = params.keys
+    override val size: Int
+        get() = params.size
+    override val values: Collection<String>
+        get() = params.values
+
+
 }
 
 /**
@@ -330,5 +358,10 @@ internal constructor(
      */
     override fun toMap(): MutableMap<String, String> = params
 
+
+    override fun switchCodeType(codeType: String): MapNeko {
+        if (codeType == this.codeType) return this
+        return MutableMapNoraNeko(codeType, params, type)
+    }
 
 }

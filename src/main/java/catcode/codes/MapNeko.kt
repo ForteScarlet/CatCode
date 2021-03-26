@@ -42,6 +42,7 @@ internal constructor(
     // override val codeType: String,
 ) :
     Neko,
+    CodeTypeSwitchAble<MapNeko>,
     Map<String, String> by params {
     // constructor(type: String) : this(emptyMap(), type)
     // constructor(type: String, params: Map<String, String>) : this(params.toMap(), type)
@@ -64,6 +65,14 @@ internal constructor(
 
     // /** internal constructor for mutable kqCode */
     // constructor(mutableKQCode: MutableNeko) : this(mutableKQCode.toMap(), mutableKQCode.type)
+
+    /**
+     * 表示此 [Neko] 实例能够切换其 [Neko.codeType] 并得到一个对应的转化结果值。
+     */
+    override fun switchCodeType(codeType: String): MapNeko {
+        if (codeType == this.codeType) return this
+        return MapNoraNeko(codeType, params, type)
+    }
 
     /**
      * Returns the length of this character sequence.
@@ -308,6 +317,11 @@ internal constructor(
         val split = it.split(ignoreCase = false, limit = 2, delimiters = CAT_KV_SPLIT_ARRAY)
         split[0] to split[1]
     }.toTypedArray()), type)
+
+    override fun switchCodeType(codeType: String): MapNeko {
+        if (codeType == this.codeType) return this
+        return MutableMapNoraNeko(codeType, params, type)
+    }
 
     /**
      * 转化为参数可变的[MutableNeko]

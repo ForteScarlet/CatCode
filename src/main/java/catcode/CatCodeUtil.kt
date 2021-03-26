@@ -159,7 +159,6 @@ public fun Neko.switchCodeType(codeType: String, aibo: (codeType: String) -> Nek
                 }
             }
         }
-
     }
 }
 

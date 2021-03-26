@@ -40,11 +40,12 @@ private val MAP_SPLIT_REGEX = Regex(CAT_KV)
 open class LazyMapNoraNeko
 internal constructor(
     override val codeType: String,
-    private val params: LazyMap<String, String>,
+    protected open val params: LazyMap<String, String>,
     override var type: String,
 ) :
+    LazyMapNeko(params, type),
     NoraNeko,
-    Map<String, String> by params {
+    Map<String, String> {
     constructor(codeType: String, type: String) : this(codeType, lazyMapOf(emptyMap()), type)
     constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType, params.toLazyMap(), type)
     constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType,
@@ -259,6 +260,32 @@ internal constructor(
             MutableMapNoraNeko(codeType, type, *params)
     }
 
+    override fun containsKey(key: String): Boolean {
+        return params.containsKey(key)
+    }
+
+    override fun containsValue(value: String): Boolean {
+        return params.containsValue(value)
+    }
+
+    override val entries: Set<Map.Entry<String, String>>
+        get() = params.entries
+
+    override fun get(key: String): String? {
+        return params.get(key)
+    }
+
+    override fun isEmpty(): Boolean {
+        return params.isEmpty()
+    }
+
+    override val keys: Set<String>
+        get() = params.keys
+    override val size: Int
+        get() = params.size
+    override val values: Collection<String>
+        get() = params.values
+
 }
 
 /**
@@ -276,12 +303,12 @@ internal constructor(
  */
 @Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
 public class LazyMutableMapNoraNeko
-private constructor(
+internal constructor(
     codeType: String,
     protected override val params: MutableLazyMap<String, String>,
     type: String,
 ) :
-    MapNoraNeko(codeType, params, type),
+    LazyMapNoraNeko(codeType, params, type),
     MutableNeko,
     MutableMap<String, String> by params {
     constructor(codeType: String, type: String) : this(codeType, mutableLazyMapOf(), type)
@@ -329,5 +356,10 @@ private constructor(
      */
     override fun toMap(): MutableMap<String, String> = params.copy()
 
+
+    override fun switchCodeType(codeType: String): LazyMapNeko {
+        if (codeType == this.codeType) return this
+        return LazyMutableMapNoraNeko(codeType, params, type)
+    }
 
 }

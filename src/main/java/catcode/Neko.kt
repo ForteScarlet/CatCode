@@ -82,37 +82,37 @@ public interface CodeTypeSwitchAble<N : Neko> {
     fun switchCodeType(codeType: String): N
 }
 
-
-/**
- * 转化一个Neko的codeType。
- *
- * 如果方法的目标[Neko]不是一个[CodeTypeSwitchAble]实例，
- * 那么会通过 [aibo] 参数得到一个对应的构建工具类，并通过此工具复制一个Neko对象。
- *
- * 其中，[aibo] 中可传入的参数最好不是随时随地实例化的参数，因为他的实例是完全可控的。
- */
-public fun Neko.switchCodeType(codeType: String, aibo: (codeType: String) -> NekoAibo): Neko {
-    return if (this is CodeTypeSwitchAble<*>) {
-        // It is, switch codeType.
-        this.switchCodeType(codeType)
-    } else {
-        val util = aibo(codeType)
-
-        if (this.isEmpty()) {
-            // is Empty
-            util.toNeko(type)
-        } else {
-            util.getNekoBuilder(type, true).build {
-                apply {
-                    this@switchCodeType.forEach { k, v ->
-                        key(k) { v }
-                    }
-                }
-            }
-        }
-
-    }
-}
+//
+// /**
+//  * 转化一个Neko的codeType。
+//  *
+//  * 如果方法的目标[Neko]不是一个[CodeTypeSwitchAble]实例，
+//  * 那么会通过 [aibo] 参数得到一个对应的构建工具类，并通过此工具复制一个Neko对象。
+//  *
+//  * 其中，[aibo] 中可传入的参数最好不是随时随地实例化的参数，因为他的实例是完全可控的。
+//  */
+// public fun Neko.switchCodeType(codeType: String, aibo: (codeType: String) -> NekoAibo): Neko {
+//     return if (this is CodeTypeSwitchAble<*>) {
+//         // It is, switch codeType.
+//         this.switchCodeType(codeType)
+//     } else {
+//         val util = aibo(codeType)
+//
+//         if (this.isEmpty()) {
+//             // is Empty
+//             util.toNeko(type)
+//         } else {
+//             util.getNekoBuilder(type, true).build {
+//                 apply {
+//                     this@switchCodeType.forEach { k, v ->
+//                         key(k) { v }
+//                     }
+//                 }
+//             }
+//         }
+//
+//     }
+// }
 
 
 /**

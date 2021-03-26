@@ -22,9 +22,9 @@ import catcode.collection.mapDelegation
  *
  * 基于字符串操作的[Neko]实例。
  *
- * Nyanko，前身为 FastNeko 。
  *
- * Nyanko：にやんこ, 意同 ねこ, 更偏于爱称。而FastNeko基于字符串操作，小巧可爱，也符合爱称。
+ *
+ * Nyanko：にやんこ, 意同 ねこ, 更偏于爱称。[Nyanko]基于字符串操作，小巧可爱，也符合爱称。
  *
  *
  * [Nyanko]没有对应以字符串操作为主的[MutableNeko], 因此他的[mutable]方法将会使用[MutableMapNeko]

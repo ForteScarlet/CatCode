@@ -35,13 +35,14 @@ private val MAP_SPLIT_REGEX = Regex(CAT_KV)
  * @since 1.0-1.11
  * @since 1.8.0
  */
-open class LazyMapNeko
+public open class LazyMapNeko
 internal constructor(
     private val params: LazyMap<String, String>,
     override var type: String,
     // override val codeType: String
     ) :
     Neko,
+    CodeTypeSwitchAble<LazyMapNeko>,
     Map<String, String> by params {
 
     // constructor(type: String) : this(LazyMap(emptyMap()), type)
@@ -64,6 +65,14 @@ internal constructor(
 
     // /** internal constructor for mutable kqCode */
     // constructor(mutableKQCode: MutableNeko) : this(mutableKQCode.toMap(), mutableKQCode.type)
+
+    /**
+     * 表示此 [Neko] 实例能够切换其 [Neko.codeType] 并得到一个对应的转化结果值。
+     */
+    override fun switchCodeType(codeType: String): LazyMapNeko {
+        if (codeType == this.codeType) return this
+        return LazyMapNoraNeko(codeType, params, type)
+    }
 
     /**
      * Returns the length of this character sequence.
@@ -353,5 +362,10 @@ internal constructor(
      */
     override fun toMap(): MutableMap<String, String> = params.toMutableMap()
 
+
+    override fun switchCodeType(codeType: String): LazyMapNeko {
+        if (codeType == this.codeType) return this
+        return LazyMutableMapNoraNeko(codeType, params, type)
+    }
 
 }
