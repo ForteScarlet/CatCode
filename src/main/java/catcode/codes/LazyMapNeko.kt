@@ -180,11 +180,12 @@ internal constructor(
         private inline fun splitCode(code: String, codeType: String = CAT_TYPE): CatKV<String, List<String>> {
             var tempText = code.trim()
             // 不是[CAT:开头，或者不是]结尾都不行
-            if (!tempText.startsWith(catHead(codeType)) || !tempText.endsWith(CAT_END)) {
+            val head = catHead(codeType)
+            if (!tempText.startsWith(head) || !tempText.endsWith(CAT_END)) {
                 throw IllegalArgumentException("not starts with '$CAT_HEAD' or not ends with '$CAT_END'")
             }
             // 是[CAT:开头，]结尾，切割并转化
-            tempText = tempText.substring(4, tempText.lastIndex)
+            tempText = tempText.substring(head.length, tempText.lastIndex)
 
             val split = tempText.split(TEMP_SPLIT_REGEX)
             val type = split[0]

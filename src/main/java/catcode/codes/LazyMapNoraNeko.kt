@@ -173,7 +173,7 @@ internal constructor(
                 throw IllegalArgumentException("not starts with '$CAT_HEAD' or not ends with '$CAT_END'")
             }
             // 是[CAT:开头，]结尾，切割并转化
-            tempText = tempText.substring(4, tempText.lastIndex)
+            tempText = tempText.substring(CAT_HEAD.length, tempText.lastIndex)
 
             val split = tempText.split(TEMP_SPLIT_REGEX)
             val type = split[0]

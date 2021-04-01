@@ -106,6 +106,7 @@ public open class NekoMapDelegation<K, V>(protected val nekoMap: NekoMap<K, V>) 
     override fun containsValue(value: V): Boolean = nekoMap.containsValue(value)
     override fun get(key: K): V? = nekoMap[key]
     override fun isEmpty(): Boolean = nekoMap.isEmpty()
+    override fun toString(): String = "NekoMap(delegate=$nekoMap)"
 }
 
 
