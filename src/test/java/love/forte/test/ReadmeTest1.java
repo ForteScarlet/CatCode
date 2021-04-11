@@ -32,6 +32,8 @@ public class ReadmeTest1 {
         Neko atNeko = util.getNeko(text);
 
         assert atNeko != null;
+        Neko neko2 = Cats.switchCodeType(atNeko, "CQ");
+
 
         System.out.println(atNeko); // [CAT:at,code=123456]
         System.out.println(atNeko.getType()); // at
