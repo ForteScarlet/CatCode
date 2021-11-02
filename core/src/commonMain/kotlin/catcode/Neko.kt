@@ -19,16 +19,29 @@ import catcode.codes.MapNeko
 import catcode.codes.Nyanko
 import catcode.collection.MutableNekoMap
 import catcode.collection.NekoMap
+import kotlin.jvm.JvmName
+import kotlin.jvm.JvmStatic
 
 
-public const val CAT_TYPE = "CAT"
-public const val CAT_HEAD = "[$CAT_TYPE:"
-public const val CAT_END = "]"
+public const val CAT_TYPE: String = "CAT"
+public const val CAT_HEAD: String = "[$CAT_TYPE:"
+public const val CAT_END: String = "]"
+
 /** cat params split. */
-public const val CAT_PS = ","
-/** cat key-value. */
-public const val CAT_KV = "="
+public const val CAT_PS: String = ","
 
+/** cat key-value. */
+public const val CAT_KV: String = "="
+
+/*
+    一只可爱的小猫咪
+
+    A cute kitten
+    A cute kitty
+
+    Kitten!
+
+ */
 
 
 /**
@@ -74,67 +87,45 @@ public fun catHead(codeType: String): String = "[$codeType:"
  */
 public interface Neko : NekoMap<String, String>, CharSequence {
 
-    @JvmDefault
-    val codeType: String
+    public val codeType: String
         get() = CAT_TYPE
 
     /**
      * 获取Code的类型。例如`at`
      */
-    val type: String
+    public val type: String
 
     /**
      * 获取转义前的值。一般普通的[get]方法得到的是反转义后的。
      * 此处为保留原本的值不做转义。
      */
-    fun getNoDecode(key: String): String?
-
-    /**
-     * 与其他字符序列拼接为[Msgs]实例
-     */
-    operator fun plus(other: CharSequence): Msgs = Msgs(collection = listOf(this, other))
+    public fun getNoDecode(key: String): String?
 
     /**
      * 转化为可变参的[MutableNeko]。应当返回一个新的实例。
      */
-    fun mutable(): MutableNeko
+    public fun mutable(): MutableNeko
 
     /**
      * 转化为不可变类型[Neko]。应当返回一个新的实例。
      */
-    fun immutable(): Neko
+    public fun immutable(): Neko
 
 
-    companion object Of {
+    public companion object Of {
 
         /**
          * 得到一个空参的[Neko]实例。
          */
         @JvmStatic
-        fun ofType(type: String): Neko = EmptyNeko(type)
+        public fun ofType(type: String): Neko = EmptyNeko(type)
 
         /**
          * 通过猫猫码字符串得到一个[Neko]实例
          */
         @JvmStatic
-        fun of(code: String): Neko = Nyanko.byCode(code)
+        public fun of(code: String): Neko = Nyanko.byCode(code)
 
-        /**
-         * 从猫猫码字符串转到KQCode
-         *
-         * 1.8.0开始默认使用[Nyanko]作为静态工厂方法的[Neko]实例载体。
-         * [Nyanko]是以字符串操作为基础的，因此不需要进行额外的转义。
-         *
-         * @since 1.1-1.11
-         * @since 1.8.0
-         * @param text 猫猫码字符串的正文
-         * @param decode 因为这段猫猫码字符串可能已经转义过了，此处是否指定其转化的时候解码一次。默认为true
-         */
-        @JvmStatic
-        @Deprecated("just use of(text)", ReplaceWith("FastKQCode(text)", "com.simplerobot.modules.utils.FastKQCode"))
-        fun of(text: String, decode: Boolean = true): Neko {
-            return Nyanko.byCode(text)
-        }
     }
 
 
@@ -144,7 +135,7 @@ public interface Neko : NekoMap<String, String>, CharSequence {
  * 定义一个可变的[Neko]标准接口。
  * - `MutableNeko`实例应当实现[MutableMap]接口，使其可以作为一个 **可变** Map使用。
  */
-interface MutableNeko : Neko, MutableNekoMap<String, String> {
+public interface MutableNeko : Neko, MutableNekoMap<String, String> {
     /**
      * type 也是可变类型
      */
@@ -162,8 +153,7 @@ interface MutableNeko : Neko, MutableNekoMap<String, String> {
  * [NoraNeko] 接口继承自 [Neko] 接口, 并提供一个 [codeType] 属性以指定code类型。
  *
  */
-interface NoraNeko : Neko {
-    @JvmDefault
+public interface NoraNeko : Neko {
     override val codeType: String
 }
 
@@ -179,14 +169,14 @@ interface NoraNeko : Neko {
  * [MutableNoraNeko] 接口继承自 [MutableNeko] 接口, 并提供一个 [codeType] 属性以指定code类型。
  *
  */
-interface MutableNoraNeko : MutableNeko {
+public interface MutableNoraNeko : MutableNeko {
     /**
      * Code type也可变
      */
-    @JvmDefault
     override var codeType: String
 }
-abstract class BaseMutableNoraNeko : MutableNoraNeko
+
+public abstract class BaseMutableNoraNeko : MutableNoraNeko
 
 /**
  * 一个纯空参的[Neko]实例。

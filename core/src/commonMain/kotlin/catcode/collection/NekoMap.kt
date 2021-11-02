@@ -134,6 +134,7 @@ public open class MutableNekoMapDelegation<K, V>(nekoMap: MutableNekoMap<K, V>) 
         get() = mutableNekoMap.keys
     override val values: MutableCollection<V>
         get() = mutableNekoMap.values
+
     override fun clear() {
         mutableNekoMap.clear()
     }

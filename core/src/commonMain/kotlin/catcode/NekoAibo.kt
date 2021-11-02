@@ -14,6 +14,7 @@ package catcode
 
 import catcode.codes.MapNeko
 import catcode.codes.Nyanko
+import kotlin.jvm.JvmOverloads
 
 /**
  *
@@ -32,18 +33,18 @@ internal constructor(protected val codeType: String) {
      *  获取一个String为载体的[模板][CodeTemplate]
      *  @see StringTemplate
      */
-    abstract val stringTemplate: CodeTemplate<String>
+    public abstract val stringTemplate: CodeTemplate<String>
 
     /**
      *  获取[Neko]为载体的[模板][CodeTemplate]
      *  @see NekoTemplate
      */
-    abstract val nekoTemplate: CodeTemplate<Neko>
+    public abstract val nekoTemplate: CodeTemplate<Neko>
 
     /**
      * 构建一个String为载体类型的[构建器][CodeBuilder]
      */
-    abstract fun getStringCodeBuilder(type: String, encode: Boolean = true): CodeBuilder<String>
+    public abstract fun getStringCodeBuilder(type: String, encode: Boolean = true): CodeBuilder<String>
 
 
     /**
@@ -51,20 +52,20 @@ internal constructor(protected val codeType: String) {
      * @param encode 时候对value参数进行转义。
      * @param lazy 构建结果是否为 lazy neko。
      */
-    abstract fun getNekoBuilder(type: String, encode: Boolean): CodeBuilder<Neko>
+    public abstract fun getNekoBuilder(type: String, encode: Boolean): CodeBuilder<Neko>
 
     /**
      * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]
      * @param encode 时候对value参数进行转义。
      * @param lazy 构建结果是否为 lazy neko。
      */
-    abstract fun getLazyNekoBuilder(type: String, encode: Boolean): LazyCodeBuilder<Neko>
+    public abstract fun getLazyNekoBuilder(type: String, encode: Boolean): LazyCodeBuilder<Neko>
 
 
     /**
      * 仅通过一个类型获取一个猫猫码。例如`\[Cat:hi]`
      */
-    fun toCat(type: String): String {
+    public fun toCat(type: String): String {
         return "$catCodeHead$type$CAT_END"
     }
 
@@ -75,7 +76,7 @@ internal constructor(protected val codeType: String) {
      * @since 1.0-1.11
      */
     @JvmOverloads
-    fun toCat(type: String, encode: Boolean = true, vararg kv: CatKV<String, *>): String {
+    public fun toCat(type: String, encode: Boolean = true, vararg kv: CatKV<String, *>): String {
         val pre = "$catCodeHead$type"
         return if (kv.isNotEmpty()) {
             kv.asSequence().filter {
@@ -96,7 +97,7 @@ internal constructor(protected val codeType: String) {
      * @since 1.0-1.11
      */
     @JvmOverloads
-    fun toCat(type: String, encode: Boolean = true, map: Map<String, *>): String {
+    public fun toCat(type: String, encode: Boolean = true, map: Map<String, *>): String {
         val pre = "$catCodeHead$type"
         return if (map.isNotEmpty()) {
             map.asSequence().filter {
@@ -123,7 +124,7 @@ internal constructor(protected val codeType: String) {
      * @since 1.8.0
      */
     @JvmOverloads
-    fun toCat(type: String, encode: Boolean = true, vararg params: String): String {
+    public fun toCat(type: String, encode: Boolean = true, vararg params: String): String {
         // 如果参数为空
         return if (params.isNotEmpty()) {
             if (encode) {
@@ -151,7 +152,7 @@ internal constructor(protected val codeType: String) {
      * 获取无参数的[Neko]
      * @param type 猫猫码的类型
      */
-    open fun toNeko(type: String): Neko = EmptyNeko(type)
+    public open fun toNeko(type: String): Neko = EmptyNeko(type)
 
     /**
      * 根据[Map]类型参数转化为[Neko]实例
@@ -159,7 +160,7 @@ internal constructor(protected val codeType: String) {
      * @param type 猫猫码的类型
      * @param params 参数列表
      */
-    open fun toNeko(type: String, params: Map<String, *>): Neko {
+    public open fun toNeko(type: String, params: Map<String, *>): Neko {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
@@ -173,7 +174,7 @@ internal constructor(protected val codeType: String) {
      * @param type 猫猫码的类型
      * @param params 参数列表
      */
-    open fun toNeko(type: String, vararg params: CatKV<String, *>): Neko {
+    public open fun toNeko(type: String, vararg params: CatKV<String, *>): Neko {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
@@ -188,7 +189,7 @@ internal constructor(protected val codeType: String) {
      * @param paramText 参数列表, 例如："code=123"
      */
     @JvmOverloads
-    open fun toNeko(type: String, encode: Boolean = false, vararg paramText: String): Neko {
+    public open fun toNeko(type: String, encode: Boolean = false, vararg paramText: String): Neko {
         return if (paramText.isEmpty()) {
             toNeko(type)
         } else {
@@ -201,7 +202,7 @@ internal constructor(protected val codeType: String) {
      * 不会有任何转义操作。
      * @since 1.1-1.11
      */
-    fun split(text: String): List<String> = split(text) { this }
+    public fun split(text: String): List<String> = split(text) { this }
 
     /**
      * 将一段字符串根据字符串与猫猫码来进行切割,
@@ -213,7 +214,7 @@ internal constructor(protected val codeType: String) {
      * @param postMap 后置转化函数
      * @since 1.8.0
      */
-    fun <T> split(text: String, postMap: String.() -> T): List<T> {
+    public fun <T> split(text: String, postMap: String.() -> T): List<T> {
         // 准备list
         val list: MutableList<T> = mutableListOf()
 
@@ -263,7 +264,7 @@ internal constructor(protected val codeType: String) {
      * @since 1.1-1.11
      */
     @JvmOverloads
-    fun getCat(text: String, type: String = "", index: Int = 0): String? {
+    public fun getCat(text: String, type: String = "", index: Int = 0): String? {
         if (index < 0) {
             throw IndexOutOfBoundsException("$index")
         }
@@ -298,7 +299,7 @@ internal constructor(protected val codeType: String) {
      * @param index 第几个索引位的猫猫码，默认为0，即第一个
      * @since 1.1-1.11
      */
-    fun getCat(text: String, index: Int = 0): String? = getCat(text = text, type = "", index = index)
+    public fun getCat(text: String, index: Int = 0): String? = getCat(text = text, type = "", index = index)
 
 
     /**
@@ -306,14 +307,14 @@ internal constructor(protected val codeType: String) {
      * @since 1.1-1.11
      */
     @JvmOverloads
-    fun getCats(text: String, type: String = ""): List<String> = getCats(text, type) { it }
+    public fun getCats(text: String, type: String = ""): List<String> = getCats(text, type) { it }
 
     /**
      * 提取字符串中的全部猫猫码字符串
      * @since 1.8.0
      */
     @JvmOverloads
-    fun <T> getCats(text: String, type: String = "", map: (String) -> T): List<T> {
+    public fun <T> getCats(text: String, type: String = "", map: (String) -> T): List<T> {
         var ti: Int
         var e = 0
         val het = catCodeHead + type
@@ -343,7 +344,7 @@ internal constructor(protected val codeType: String) {
      * 默认情况下获取第一个猫猫码的参数
      * @since 1.1-1.11
      */
-    fun getParam(text: String, paramKey: String, index: Int = 0): String? =
+    public fun getParam(text: String, paramKey: String, index: Int = 0): String? =
         getParam(text = text, paramKey = paramKey, type = "", index = index)
 
     /**
@@ -359,7 +360,7 @@ internal constructor(protected val codeType: String) {
      *
      */
     @JvmOverloads
-    fun getParam(text: String, type: String = "", paramKey: String, index: Int = 0): String? {
+    public fun getParam(text: String, type: String = "", paramKey: String, index: Int = 0): String? {
         val catHead = catCodeHead + type
         val catEnd = CAT_END
         val catSpl = CAT_PS
@@ -409,7 +410,7 @@ internal constructor(protected val codeType: String) {
      * @param type 要获取的猫猫码的类型，如果为空字符串则视为所有，默认为所有。
      */
     @JvmOverloads
-    fun getCatIter(text: String, type: String = ""): Iterator<String> = CatTextIterator(text, type)
+    public fun getCatIter(text: String, type: String = ""): Iterator<String> = CatTextIterator(text, type)
 
 
     /**
@@ -417,14 +418,14 @@ internal constructor(protected val codeType: String) {
      * @param code 猫猫码字符串
      * @since 1.8.0
      */
-    fun getCatKeyIter(code: String): Iterator<String> = CatParamKeyIterator(code)
+    public fun getCatKeyIter(code: String): Iterator<String> = CatParamKeyIterator(code)
 
     /**
      * 为一个猫猫码字符串得到他的value迭代器
      * @param code 猫猫码字符串
      * @since 1.8.0
      */
-    fun getCatValueIter(code: String): Iterator<String> = CatParamValueIterator(code)
+    public fun getCatValueIter(code: String): Iterator<String> = CatParamValueIterator(code)
 
 
     /**
@@ -432,20 +433,8 @@ internal constructor(protected val codeType: String) {
      * @param code 猫猫码字符串
      * @since 1.8.0
      */
-    fun getCatKVIter(code: String): Iterator<CatKV<String, String>> = CatParamKVIterator(code)
+    public fun getCatKVIter(code: String): Iterator<CatKV<String, String>> = CatParamKVIterator(code)
 
-
-    /**
-     * @see getCats
-     */
-    @Suppress("DEPRECATION")
-    @Deprecated("param 'decode' not required.")
-    open fun getNekoList(text: String, type: String, decode: Boolean): List<Neko> {
-        val iter = getCatIter(text, type)
-        val list = mutableListOf<Neko>()
-        iter.forEach { list.add(Neko.of(it, decode)) }
-        return list
-    }
 
     /**
      * 以[getCatIter]方法为基础获取字符串中全部的[Neko]对象
@@ -454,7 +443,7 @@ internal constructor(protected val codeType: String) {
      * @param type 要获取的猫猫码的类型，如果为空字符串则视为所有，默认为所有。
      */
     @JvmOverloads
-    open fun getNekoList(text: String, type: String = ""): List<Neko> {
+    public open fun getNekoList(text: String, type: String = ""): List<Neko> {
         val iter: Iterator<String> = getCatIter(text, type)
         val list: MutableList<Neko> = mutableListOf()
         iter.forEach { list.add(Neko.of(it)) }
@@ -469,7 +458,7 @@ internal constructor(protected val codeType: String) {
      * @param index 获取的索引位的猫猫码，默认为0，即第一个
      */
     @JvmOverloads
-    open fun getNeko(text: String, type: String = "", index: Int = 0): Neko? {
+    public open fun getNeko(text: String, type: String = "", index: Int = 0): Neko? {
         val cat: String = getCat(text, type, index) ?: return null
         return Neko.of(cat)
     }
@@ -478,7 +467,7 @@ internal constructor(protected val codeType: String) {
      * 获取指定索引位的猫猫码，并封装为[Neko]实例。
      */
     @Suppress("MemberVisibilityCanBePrivate")
-    open fun getNeko(text: String, index: Int = 0): Neko? = getNeko(text = text, type = "", index = index)
+    public open fun getNeko(text: String, index: Int = 0): Neko? = getNeko(text = text, type = "", index = index)
 
     /**
      * 移除猫猫码，可指定类型
@@ -490,7 +479,7 @@ internal constructor(protected val codeType: String) {
         type: String,
         trim: Boolean = true,
         ignoreEmpty: Boolean = true,
-        delimiter: CharSequence = ""
+        delimiter: CharSequence = "",
     ): String {
         when {
             text.isEmpty() -> {
@@ -586,11 +575,11 @@ internal constructor(protected val codeType: String) {
      * @param delimiter 切割字符串
      */
     @JvmOverloads
-    fun remove(
+    public fun remove(
         text: String,
         trim: Boolean = true,
         ignoreEmpty: Boolean = true,
-        delimiter: CharSequence = ""
+        delimiter: CharSequence = "",
     ): String {
         return removeCode(text = text, type = "", trim, ignoreEmpty, delimiter)
     }
@@ -605,12 +594,12 @@ internal constructor(protected val codeType: String) {
      * @param delimiter 切割字符串
      */
     @JvmOverloads
-    fun removeByType(
+    public fun removeByType(
         text: String,
         type: String,
         trim: Boolean = true,
         ignoreEmpty: Boolean = true,
-        delimiter: CharSequence = ""
+        delimiter: CharSequence = "",
     ): String {
         return removeCode(text, type, trim, ignoreEmpty, delimiter)
     }
@@ -625,7 +614,7 @@ internal constructor(protected val codeType: String) {
     private fun containsFromText(
         text: String,
         type: String,
-        vararg params: String
+        vararg params: String,
     ): Boolean {
         val head = catCodeHead + type
         val end = CAT_END
@@ -674,10 +663,10 @@ internal constructor(protected val codeType: String) {
      *
      * @see contains
      */
-    fun contains(
+    public fun contains(
         text: String,
         type: String,
-        vararg params: String
+        vararg params: String,
     ): Boolean = contains(text, type, true, *params)
 
 
@@ -689,11 +678,11 @@ internal constructor(protected val codeType: String) {
      * @param params 要匹配的参数列表。由于是键值对，因此必须是2的倍数。
      */
     @JvmOverloads
-    fun contains(
+    public fun contains(
         text: String,
         type: String = "",
         encode: Boolean = true,
-        vararg params: String = emptyArray()
+        vararg params: String = emptyArray(),
     ): Boolean {
         val paramArray: Array<String> = if (params.isNotEmpty()) {
             if (params.size % 2 != 0) {
@@ -723,11 +712,11 @@ internal constructor(protected val codeType: String) {
      * @param text 正文文本。
      * @param params 要匹配的参数列表。
      */
-    fun contains(
+    public fun contains(
         text: String,
         type: String = "",
         encode: Boolean = true,
-        vararg params: CatKV<String, String> = emptyArray()
+        vararg params: CatKV<String, String> = emptyArray(),
     ): Boolean {
         val paramArray: Array<String> = if (params.isNotEmpty()) {
             Array(params.size) { i ->

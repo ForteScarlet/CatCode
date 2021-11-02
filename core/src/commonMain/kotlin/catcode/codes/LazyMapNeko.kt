@@ -13,10 +13,15 @@
 @file:Suppress("unused")
 @file:JvmName("NekoCodes")
 @file:JvmMultifileClass
+
 package catcode.codes
 
 import catcode.*
 import catcode.collection.*
+import kotlin.jvm.JvmMultifileClass
+import kotlin.jvm.JvmName
+import kotlin.jvm.JvmOverloads
+import kotlin.jvm.JvmStatic
 
 
 private val MAP_SPLIT_REGEX = Regex(CAT_KV)
@@ -73,7 +78,7 @@ protected constructor(private val params: LazyMap<String, String>, override var 
     /**
      * get value or default.
      */
-    override fun getOrDefault(key: String, defaultValue: String): String = params.getOrDefault(key, defaultValue)
+    override fun getOrDefault(key: String, defaultValue: String): String = params.getOrElse(key) { defaultValue }
 
     /**
      * Returns a new character sequence that is a subsequence of this character sequence,
@@ -116,9 +121,7 @@ protected constructor(private val params: LazyMap<String, String>, override var 
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as LazyMapNeko
+        if (other !is LazyMapNeko) return false
 
         if (params != other.params) return false
         if (type != other.type) return false
@@ -269,7 +272,11 @@ private constructor(private val params: MutableLazyMap<String, String>, type: St
     MutableMap<String, String> by params {
     constructor(type: String) : this(MutableLazyMap(), type)
     constructor(type: String, params: Map<String, String>) : this(params.toMutableLazyMap(), type)
-    constructor(type: String, vararg params: CatKV<String, String>) : this(mutableMapOf(*params.toPair()).toMutableLazyMap(), type)
+    constructor(
+        type: String,
+        vararg params: CatKV<String, String>,
+    ) : this(mutableMapOf(*params.toPair()).toMutableLazyMap(), type)
+
     constructor(type: String, vararg params: String) : this(mutableMapOf(*params.map {
         val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
         split[0] to split[1]

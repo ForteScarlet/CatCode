@@ -16,7 +16,7 @@ package catcode
 /**
  * 基于字符串操作的kq迭代器父类
  */
-internal abstract class BaseCatIterator<T>(protected val code: String): Iterator<T> {
+internal abstract class BaseCatIterator<T>(protected val code: String) : Iterator<T> {
     init {
         if (!code.startsWith(CAT_HEAD) || !code.endsWith(CAT_END)) {
             throw IllegalArgumentException("text '$code' is not a cat code text.")
@@ -95,7 +95,7 @@ internal class CatTextIterator(private val text: String, type: String = "") : It
  * 一串儿猫猫码字符串中的键迭代器
  * @since 1.8.0
  */
-internal class CatParamKeyIterator(code: String): BaseCatIterator<String>(code) {
+internal class CatParamKeyIterator(code: String) : BaseCatIterator<String>(code) {
 
 
     override fun nextIndex(): Int {
@@ -106,17 +106,16 @@ internal class CatParamKeyIterator(code: String): BaseCatIterator<String>(code) 
      * Returns the next element in the iteration.
      */
     override fun next(): String {
-        if(!hasNext()) throw NoSuchElementException()
+        if (!hasNext()) throw NoSuchElementException()
 
         // 下一个逗号所在处
         index = nextIndex()
         // 下一个kv切割符所在
         val nextKv = code.indexOf(CAT_KV, index)
-        return code.substring(index+1, nextKv)
+        return code.substring(index + 1, nextKv)
     }
 
 }
-
 
 
 /**
@@ -124,11 +123,11 @@ internal class CatParamKeyIterator(code: String): BaseCatIterator<String>(code) 
  * 得到的值会进行反转义。
  * @since 1.8.0
  */
-internal class CatParamValueIterator(code: String): BaseCatIterator<String>(code) {
+internal class CatParamValueIterator(code: String) : BaseCatIterator<String>(code) {
 
 
     override fun nextIndex(): Int {
-        return code.indexOf(CAT_KV, if(index == 0) 0 else index + 1)
+        return code.indexOf(CAT_KV, if (index == 0) 0 else index + 1)
     }
 
     /**
@@ -143,21 +142,19 @@ internal class CatParamValueIterator(code: String): BaseCatIterator<String>(code
      * Returns the next element in the iteration.
      */
     override fun next(): String {
-        if(!hasNext()) throw NoSuchElementException()
+        if (!hasNext()) throw NoSuchElementException()
 
         // 下一个逗号所在处
         index = nextIndex()
         // 下一个逗号或结尾符所在处
         var nextSplit = code.indexOf(CAT_PS, index)
-        if(nextSplit < 0){
+        if (nextSplit < 0) {
             nextSplit = code.lastIndex
         }
-        return CatDecoder.decodeParams(code.substring(index+1, nextSplit))
+        return CatDecoder.decodeParams(code.substring(index + 1, nextSplit))
     }
 
 }
-
-
 
 
 /**
@@ -165,11 +162,11 @@ internal class CatParamValueIterator(code: String): BaseCatIterator<String>(code
  * 得到的值会进行反转义。
  * @since 1.8.0
  */
-internal class CatParamKVIterator(code: String): BaseCatIterator<CatKV<String, String>>(code) {
+internal class CatParamKVIterator(code: String) : BaseCatIterator<CatKV<String, String>>(code) {
 
 
     override fun nextIndex(): Int {
-        return code.indexOf(CAT_PS, if(index == 0) 0 else index + 1)
+        return code.indexOf(CAT_PS, if (index == 0) 0 else index + 1)
     }
 
 
@@ -177,13 +174,13 @@ internal class CatParamKVIterator(code: String): BaseCatIterator<CatKV<String, S
      * Returns the next element in the iteration.
      */
     override fun next(): CatKV<String, String> {
-        if(!hasNext()) throw NoSuchElementException()
+        if (!hasNext()) throw NoSuchElementException()
 
         // 下一个逗号所在处
         index = nextIndex()
         // 下下一个逗号或结尾符所在处
         var nextSplit = code.indexOf(CAT_PS, index + 1)
-        if(nextSplit < 0){
+        if (nextSplit < 0) {
             nextSplit = code.lastIndex
         }
         val substr = code.substring(index + 1, nextSplit)
@@ -197,10 +194,10 @@ internal class CatParamKVIterator(code: String): BaseCatIterator<CatKV<String, S
 /**
  * Entry iterator.
  */
-internal class CatParamEntryIterator(code: String): BaseCatIterator<Map.Entry<String, String>>(code) {
+internal class CatParamEntryIterator(code: String) : BaseCatIterator<Map.Entry<String, String>>(code) {
 
     override fun nextIndex(): Int {
-        return code.indexOf(CAT_PS, if(index == 0) 0 else index + 1)
+        return code.indexOf(CAT_PS, if (index == 0) 0 else index + 1)
     }
 
     /**
@@ -215,13 +212,13 @@ internal class CatParamEntryIterator(code: String): BaseCatIterator<Map.Entry<St
      * Returns the next element in the iteration.
      */
     override fun next(): Map.Entry<String, String> {
-        if(!hasNext()) throw NoSuchElementException()
+        if (!hasNext()) throw NoSuchElementException()
 
         // 下一个逗号所在处
         index = nextIndex()
         // 下下一个逗号或结尾符所在处
         var nextSplit = code.indexOf(CAT_PS, index + 1)
-        if(nextSplit < 0){
+        if (nextSplit < 0) {
             nextSplit = code.lastIndex
         }
         val substr = code.substring(index + 1, nextSplit)

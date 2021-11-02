@@ -14,6 +14,8 @@
 @file:JvmName("Cats")
 package catcode
 
+import kotlin.jvm.JvmName
+
 /*
 & -> &amp;
 [ -> &#91;
@@ -31,14 +33,10 @@ internal val CAT_PS_SPLIT_ARRAY: Array<String> = arrayOf(CAT_PS)
 
 /** Cat Decoder */
 @Suppress("MemberVisibilityCanBePrivate")
-object CatDecoder {
-
-    @JvmStatic
-    val instance
-        get() = this
+public object CatDecoder {
 
     /** 非猫猫码文本消息解义 */
-    fun decodeText(str: String): String =
+    public fun decodeText(str: String): String =
         str .replace("&#91;", "[")
             .replace("&#93;", "]")
             .replace("&#09;", "\t")
@@ -47,11 +45,11 @@ object CatDecoder {
             .replace("&amp;", "&")
 
     /** 非猫猫码文本消息解义，如果[str]为null则返回null */
-    fun decodeTextOrNull(str: String?) : String? = str?.let { decodeText(it) }
+    public fun decodeTextOrNull(str: String?) : String? = str?.let { decodeText(it) }
 
 
     /** 猫猫码参数值消息解义 */
-    fun decodeParams(str: String): String =
+    public fun decodeParams(str: String): String =
         str .replace("&#91;", "[")
             .replace("&#93;", "]")
             .replace("&#44;", ",")
@@ -62,7 +60,7 @@ object CatDecoder {
             .replace("&amp;", "&")
 
     /** 猫猫码参数值消息解义，如果[str]为null则返回null */
-    fun decodeParamsOrNull(str: String?): String? = str?.let { decodeParams(it) }
+    public fun decodeParamsOrNull(str: String?): String? = str?.let { decodeParams(it) }
 
 }
 
@@ -73,14 +71,10 @@ public fun String.deCatText(): String = CatDecoder.decodeText(this)
 
 /** Cat Encoder */
 @Suppress("MemberVisibilityCanBePrivate")
-object CatEncoder {
-
-    @JvmStatic
-    val instance
-        get() = this
+public object CatEncoder {
 
     /** 非猫猫码文本消息转义 */
-    fun encodeText(str: String): String =
+    public fun encodeText(str: String): String =
         str.replace("&", "&amp;")
             .replace("[", "&#91;")
             .replace("]", "&#93;")
@@ -89,10 +83,10 @@ object CatEncoder {
             .replace("\n", "&#13;")
 
     /** 非猫猫码文本消息转义。如果[str]为null则返回null */
-    fun encodeTextOrNull(str: String?): String? = str?.let { encodeText(it) }
+    public fun encodeTextOrNull(str: String?): String? = str?.let { encodeText(it) }
 
     /** 猫猫码参数值消息转义 */
-    fun encodeParams(str: String): String =
+    public fun encodeParams(str: String): String =
         str.replace("&", "&amp;")
             .replace("[", "&#91;")
             .replace("]", "&#93;")
@@ -103,7 +97,7 @@ object CatEncoder {
             .replace("\n", "&#13;")
 
     /** 猫猫码参数值消息转义。如果[str]为null则返回null */
-    fun encodeParamsOrNull(str: String?): String? = str?.let { encodeParams(it) }
+    public fun encodeParamsOrNull(str: String?): String? = str?.let { encodeParams(it) }
 
 }
 
@@ -115,9 +109,6 @@ public fun String.enCatText(): String = CatEncoder.encodeText(this)
  * 猫猫码的操作工具类
  */
 public object CatCodeUtil : NekoAibo("CAT") {
-    @JvmStatic
-    val instance
-        get() = this
 
     override val catCodeHead: String = CAT_HEAD
     /**

@@ -13,11 +13,14 @@
 @file:Suppress("unused")
 @file:JvmName("NekoCodes")
 @file:JvmMultifileClass
+
 package catcode.codes
 
 import catcode.*
-
-
+import kotlin.jvm.JvmMultifileClass
+import kotlin.jvm.JvmName
+import kotlin.jvm.JvmOverloads
+import kotlin.jvm.JvmStatic
 
 
 private val MAP_SPLIT_REGEX = Regex(CAT_KV)
@@ -37,12 +40,19 @@ private val MAP_SPLIT_REGEX = Regex(CAT_KV)
  * @since 1.8.0
  */
 open class MapNoraNeko
-protected constructor(override val codeType: String, protected open val params: Map<String, String>, override var type: String) :
+protected constructor(
+    override val codeType: String,
+    protected open val params: Map<String, String>,
+    override var type: String,
+) :
     NoraNeko,
     Map<String, String> by params {
     constructor(codeType: String, type: String) : this(codeType, emptyMap(), type)
     constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType, params.toMap(), type)
-    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType, mapOf(*params.toPair()), type)
+    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType,
+        mapOf(*params.toPair()),
+        type)
+
     constructor(codeType: String, type: String, vararg params: String) : this(codeType, mapOf(*params.map {
         val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
         split[0] to split[1]
@@ -74,7 +84,7 @@ protected constructor(override val codeType: String, protected open val params: 
     /**
      * get value or default.
      */
-    override fun getOrDefault(key: String, defaultValue: String): String = params.getOrDefault(key, defaultValue)
+    override fun getOrDefault(key: String, defaultValue: String): String = params.getOrElse(key) { defaultValue }
 
     /**
      * Returns a new character sequence that is a subsequence of this character sequence,
@@ -115,7 +125,7 @@ protected constructor(override val codeType: String, protected open val params: 
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+        if (other !is MapNoraNeko) return false
 
         other as MapNoraNeko
 
@@ -257,8 +267,14 @@ private constructor(codeType: String, protected override val params: MutableMap<
     MutableNeko,
     MutableMap<String, String> by params {
     constructor(codeType: String, type: String) : this(codeType, mutableMapOf(), type)
-    constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType, params.toMutableMap(), type)
-    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType, mutableMapOf(*params.toPair()), type)
+    constructor(codeType: String, type: String, params: Map<String, String>) : this(codeType,
+        params.toMutableMap(),
+        type)
+
+    constructor(codeType: String, type: String, vararg params: CatKV<String, String>) : this(codeType,
+        mutableMapOf(*params.toPair()),
+        type)
+
     constructor(codeType: String, type: String, vararg params: String) : this(codeType, mutableMapOf(*params.map {
         val split = it.split(delimiters = CAT_KV_SPLIT_ARRAY, false, 2)
         split[0] to split[1]
