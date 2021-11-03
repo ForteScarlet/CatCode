@@ -118,10 +118,10 @@ public object CatCodeUtil : NekoAibo("CAT") {
     override val stringTemplate: CodeTemplate<String> get() = StringTemplate
 
     /**
-     *  获取[Neko]为载体的[模板][CodeTemplate]
+     *  获取[Cat]为载体的[模板][CodeTemplate]
      *  @see NekoTemplate
      */
-    override val nekoTemplate: CodeTemplate<Neko> get() = NekoTemplate
+    override val catTemplate: CodeTemplate<Cat> get() = NekoTemplate
 
     /**
      * 构建一个String为载体类型的[构建器][CodeBuilder]
@@ -129,14 +129,14 @@ public object CatCodeUtil : NekoAibo("CAT") {
     override fun getStringCodeBuilder(type: String, encode: Boolean): CodeBuilder<String> = StringCodeBuilder(type, encode)
 
     /**
-     * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]
+     * 构建一个[Cat]为载体类型的[构建器][CodeBuilder]
      */
-    override fun getNekoBuilder(type: String, encode: Boolean): CodeBuilder<Neko> = NekoBuilder(type)
+    override fun getNekoBuilder(type: String, encode: Boolean): CodeBuilder<Cat> = NekoBuilder(type)
 
     /**
-     * 构建一个[Neko]为载体类型的[懒加载构建器][LazyCodeBuilder]
+     * 构建一个[Cat]为载体类型的[懒加载构建器][LazyCodeBuilder]
      */
-    override fun getLazyNekoBuilder(type: String, encode: Boolean): LazyCodeBuilder<Neko> = LazyNekoBuilder(type)
+    override fun getLazyNekoBuilder(type: String, encode: Boolean): LazyCodeBuilder<Cat> = LazyNekoBuilder(type)
 
 }
 

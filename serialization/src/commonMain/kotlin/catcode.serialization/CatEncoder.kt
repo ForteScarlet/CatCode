@@ -12,7 +12,7 @@ import kotlinx.serialization.modules.SerializersModule
  * @author ForteScarlet
  */
 @OptIn(ExperimentalSerializationApi::class)
-class CatEncoder(override val serializersModule: SerializersModule) : Encoder, CompositeEncoder {
+public class CatEncoder(override val serializersModule: SerializersModule) : Encoder, CompositeEncoder {
     override fun encodeBooleanElement(descriptor: SerialDescriptor, index: Int, value: Boolean) {
         TODO("Not yet implemented")
     }

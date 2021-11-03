@@ -19,63 +19,62 @@ package catcode.collection
  *
  * 这样也可以为`Java`的调用提供更多的限制。
  */
-public interface NekoMap<K, out V> {
+public interface CatMap<K, out V> {
 
     /**
      * 转化为 [Map]。
      */
-    fun toMap(): Map<K, V>
+    public fun toMap(): Map<K, V>
 
     /**
      * 此码中的所有键值对。
      */
-    val entries: Set<Map.Entry<K, V>>
+    public val entries: Set<Map.Entry<K, V>>
 
     /**
      * 此码中的所有键。
      */
-    val keys: Set<K>
+    public val keys: Set<K>
 
     /**
      * 此码中的所有值。
      */
-    val values: Collection<V>
+    public val values: Collection<V>
 
     /**
      * 此码中的键值对参数数量。
      */
-    val size: Int
+    public val size: Int
 
     /**
      * 是否包含某个键。
      */
-    fun containsKey(key: K): Boolean
+    public fun containsKey(key: K): Boolean
 
     /**
      * 是否包含某个值。
      */
-    fun containsValue(value: @UnsafeVariance V): Boolean
+    public fun containsValue(value: @UnsafeVariance V): Boolean
 
     /**
      * 是否没有参数。
      */
-    fun isEmpty(): Boolean
+    public fun isEmpty(): Boolean
 
     /**
      * 获取某个键对应的值。
      */
-    operator fun get(key: K): V?
+    public operator fun get(key: K): V?
 
     /**
      * 获取某个键对应的值。如果不存在则返回一个默认值。
      */
-    @JvmDefault
-    fun getOrDefault(key: K, defaultValue: @UnsafeVariance V): V = get(key) ?: defaultValue
+    public fun getOrDefault(key: K, defaultValue: @UnsafeVariance V): V = get(key) ?: defaultValue
 
     /**
      * foreach entries.
      */
-    fun forEach(action: (K, V) -> Unit) {
+    public fun forEach(action: (K, V) -> Unit) {
         entries.forEach {
             action(it.key, it.value)
         }
@@ -84,49 +83,49 @@ public interface NekoMap<K, out V> {
 
 
 /**
- * save as [MutableNekoMap.put], but is operator fun.
+ * save as [MutableCatMap.put], but is operator fun.
  */
-public operator fun <K, V> MutableNekoMap<K, V>.set(key: K, value: V): V? = put(key, value)
+public operator fun <K, V> MutableCatMap<K, V>.set(key: K, value: V): V? = put(key, value)
 
 
 /**
- * [NekoMap] 委托为 [Map]
+ * [CatMap] 委托为 [Map]
  */
-public open class NekoMapDelegation<K, V>(protected val nekoMap: NekoMap<K, V>) : Map<K, V> {
+public open class CatMapDelegation<K, V>(protected val catMap: CatMap<K, V>) : Map<K, V> {
     override val entries: Set<Map.Entry<K, V>>
-        get() = nekoMap.entries
+        get() = catMap.entries
     override val keys: Set<K>
-        get() = nekoMap.keys
+        get() = catMap.keys
     override val size: Int
-        get() = nekoMap.size
+        get() = catMap.size
     override val values: Collection<V>
-        get() = nekoMap.values
+        get() = catMap.values
 
-    override fun containsKey(key: K): Boolean = nekoMap.containsKey(key)
-    override fun containsValue(value: V): Boolean = nekoMap.containsValue(value)
-    override fun get(key: K): V? = nekoMap[key]
-    override fun isEmpty(): Boolean = nekoMap.isEmpty()
+    override fun containsKey(key: K): Boolean = catMap.containsKey(key)
+    override fun containsValue(value: V): Boolean = catMap.containsValue(value)
+    override fun get(key: K): V? = catMap[key]
+    override fun isEmpty(): Boolean = catMap.isEmpty()
 }
 
 
 /**
- * [NekoMap] 委托为 [Map]
+ * [CatMap] 委托为 [Map]
  */
-public fun <K, V> nekoToMap(nekoMap: NekoMap<K, V>): Map<K, V> = NekoMapDelegation(nekoMap)
+public fun <K, V> catToMap(catMap: CatMap<K, V>): Map<K, V> = CatMapDelegation(catMap)
 
 /**
- * [NekoMap] 委托为 [Map]
+ * [CatMap] 委托为 [Map]
  */
-public fun <K, V> NekoMap<K, V>.mapDelegation(): Map<K, V> = nekoToMap(this)
+public fun <K, V> CatMap<K, V>.mapDelegation(): Map<K, V> = catToMap(this)
 
 
 /**
- * [NekoMap] 委托为 [Map]
+ * [CatMap] 委托为 [Map]
  */
-public open class MutableNekoMapDelegation<K, V>(nekoMap: MutableNekoMap<K, V>) : NekoMapDelegation<K, V>(nekoMap),
+public open class MutableCatMapDelegation<K, V>(catMap: MutableCatMap<K, V>) : CatMapDelegation<K, V>(catMap),
     MutableMap<K, V> {
 
-    private val mutableNekoMap get() = (nekoMap as MutableNekoMap)
+    private val mutableNekoMap get() = (catMap as MutableCatMap)
 
     override val entries: MutableSet<MutableMap.MutableEntry<K, V>>
         get() = mutableNekoMap.entries
@@ -159,7 +158,7 @@ public open class MutableNekoMapDelegation<K, V>(nekoMap: MutableNekoMap<K, V>) 
  *
  * 这样也可以为`Java`的调用提供更多的限制。
  */
-public interface MutableNekoMap<K, V> : NekoMap<K, V> {
+public interface MutableCatMap<K, V> : CatMap<K, V> {
     /**
      * 转化为[MutableMap]。
      */
@@ -170,26 +169,28 @@ public interface MutableNekoMap<K, V> : NekoMap<K, V> {
      *
      * @return 如果存在旧值，返回旧值。
      */
-    fun put(key: K, value: V): V?
+    public fun put(key: K, value: V): V?
 
     /**
      * 移除一个可能存在的键对应的值。
      *
      * @return 被移除的值。可能不存在。
      */
-    fun remove(key: K): V?
+    public fun remove(key: K): V?
 
     /**
      * 存入多个键值对。
      */
-    fun putAll(from: NekoMap<out K, V>) {
-        putAll(from.toMap())
+    public fun putAll(from: CatMap<out K, V>) {
+        from.forEach { k, v ->
+            put(k, v)
+        }
     }
 
     /**
      * 存入多个键值对。
      */
-    fun putAll(from: Map<out K, V>) {
+    public fun putAll(from: Map<out K, V>) {
         from.forEach { (k: K, v: V) ->
             put(k, v)
         }
@@ -214,6 +215,6 @@ public interface MutableNekoMap<K, V> : NekoMap<K, V> {
     /**
      * 清除所有的键值对。
      */
-    fun clear()
+    public fun clear()
 
 }

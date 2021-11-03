@@ -167,7 +167,7 @@ interface CodeTemplate<T> {
 
 /**
  * 基于 [NekoTemplate] 的模板实现, 以`string`作为猫猫码载体。
- * 默认内置于[CatCodeUtil.nekoTemplate]
+ * 默认内置于[CatCodeUtil.catTemplate]
  */
 @Suppress("OverridingDeprecatedMember")
 object StringTemplate: CodeTemplate<String> {
@@ -366,45 +366,45 @@ object StringTemplate: CodeTemplate<String> {
 
 
 /**
- * 基于 [NekoTemplate] 的模板实现, 以[Neko]作为猫猫码载体。
- * 默认内置于[CatCodeUtil.nekoTemplate]
+ * 基于 [NekoTemplate] 的模板实现, 以[Cat]作为猫猫码载体。
+ * 默认内置于[CatCodeUtil.catTemplate]
  */
 @Suppress("OverridingDeprecatedMember")
-object NekoTemplate: CodeTemplate<Neko> {
+object NekoTemplate: CodeTemplate<Cat> {
     @JvmStatic
     val instance get() = this
     /**
      * at别人
      */
-    override fun at(code: String): Neko = Nyanko.byCode(StringTemplate.at(code))
+    override fun at(code: String): Cat = Nyanko.byCode(StringTemplate.at(code))
 
 
     /**
      * at所有人
      */
-    override fun atAll(): Neko = NekoAtAll
+    override fun atAll(): Cat = NekoAtAll
 
     /**
      * face
      */
-    override fun face(id: String): Neko = Nyanko.byCode(StringTemplate.face(id))
+    override fun face(id: String): Cat = Nyanko.byCode(StringTemplate.face(id))
 
     /**
      * big face
      */
-    override fun bface(id: String): Neko = Nyanko.byCode(StringTemplate.bface(id))
+    override fun bface(id: String): Cat = Nyanko.byCode(StringTemplate.bface(id))
 
     /**
      * small face
      */
-    override fun sface(id: String): Neko = Nyanko.byCode(StringTemplate.sface(id))
+    override fun sface(id: String): Cat = Nyanko.byCode(StringTemplate.sface(id))
 
     /**
      * image
      * @param file id
      * @param flash true=闪图
      */
-    override fun image(file: String, flash: Boolean): Neko =
+    override fun image(file: String, flash: Boolean): Cat =
         Nyanko.byCode(StringTemplate.image(file, flash))
 
 
@@ -415,7 +415,7 @@ object NekoTemplate: CodeTemplate<Neko> {
      * {2}为是否为变声，若该参数为true则显示变声标记。该参数可被忽略。
      * 举例：[CAT:record,file=1.silk，magic=true]（发送data\record\1.silk，并标记为变声）
      */
-    override fun record(file: String, magic: Boolean): Neko =
+    override fun record(file: String, magic: Boolean): Cat =
         Nyanko.byCode(StringTemplate.record(file, magic))
 
 //    /** rps */
@@ -429,7 +429,7 @@ object NekoTemplate: CodeTemplate<Neko> {
      * 2 - 猜拳结果为剪刀
      * 3 - 猜拳结果为布
      */
-    override fun rps(): Neko = NekoRps
+    override fun rps(): Cat = NekoRps
 
 
     /**
@@ -440,7 +440,7 @@ object NekoTemplate: CodeTemplate<Neko> {
      * 2 - 猜拳结果为剪刀
      * 3 - 猜拳结果为布
      */
-    override fun rps(type: String): Neko =
+    override fun rps(type: String): Cat =
         Nyanko.byCode(StringTemplate.rps(type))
 
 //    /** dice */
@@ -451,7 +451,7 @@ object NekoTemplate: CodeTemplate<Neko> {
      * [CAT:dice,type={1}] - 发送掷骰子魔法表情
      * {1}对应掷出的点数，暂不支持发送时自定义。该参数可被忽略。
      */
-    override fun dice(): Neko = NekoDice
+    override fun dice(): Cat = NekoDice
 
 
     /**
@@ -462,7 +462,7 @@ object NekoTemplate: CodeTemplate<Neko> {
      * @see dice
      *
      */
-    override fun dice(type: String): Neko =
+    override fun dice(type: String): Cat =
         Nyanko.byCode(StringTemplate.dice(type))
 
 
@@ -471,7 +471,7 @@ object NekoTemplate: CodeTemplate<Neko> {
     /**
      * 戳一戳（原窗口抖动，仅支持好友消息使用）
      */
-    override fun shake(): Neko = NekoShake
+    override fun shake(): Cat = NekoShake
 
 
     /**
@@ -485,7 +485,7 @@ object NekoTemplate: CodeTemplate<Neko> {
      * [CAT:music,type=qq,id=422594]（发送一首QQ音乐的“Time after time”歌曲到群内）
      * [CAT:music,type=163,id=28406557]（发送一首网易云音乐的“桜咲く”歌曲到群内）
      */
-    override fun music(type: String, id: String, style: String?): Neko =
+    override fun music(type: String, id: String, style: String?): Cat =
         Nyanko.byCode(StringTemplate.music(type, id, style))
 
     /**
@@ -498,7 +498,7 @@ object NekoTemplate: CodeTemplate<Neko> {
      * @param image  {5}为音乐的封面图片链接。若参数为空或被忽略，则显示默认图片。
      *
      */
-    override fun customMusic(url: String, audio: String, title: String, content: String?, image: String?): Neko =
+    override fun customMusic(url: String, audio: String, title: String, content: String?, image: String?): Cat =
         Nyanko.byCode(StringTemplate.customMusic(url, audio, title, content, image))
 
     /**
@@ -509,7 +509,7 @@ object NekoTemplate: CodeTemplate<Neko> {
      * {4}为分享的图片链接。若参数为空或被忽略，则显示默认图片。
      * 注意：链接分享只能作为单独的一条消息发送
      */
-    override fun share(url: String, title: String, content: String?, image: String?): Neko =
+    override fun share(url: String, title: String, content: String?, image: String?): Cat =
         Nyanko.byCode(StringTemplate.share(url, title, content, image))
 
     // /**

@@ -36,10 +36,10 @@ internal constructor(protected val codeType: String) {
     public abstract val stringTemplate: CodeTemplate<String>
 
     /**
-     *  获取[Neko]为载体的[模板][CodeTemplate]
+     *  获取[Cat]为载体的[模板][CodeTemplate]
      *  @see NekoTemplate
      */
-    public abstract val nekoTemplate: CodeTemplate<Neko>
+    public abstract val catTemplate: CodeTemplate<Cat>
 
     /**
      * 构建一个String为载体类型的[构建器][CodeBuilder]
@@ -48,18 +48,18 @@ internal constructor(protected val codeType: String) {
 
 
     /**
-     * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]
+     * 构建一个[Cat]为载体类型的[构建器][CodeBuilder]
      * @param encode 时候对value参数进行转义。
      * @param lazy 构建结果是否为 lazy neko。
      */
-    public abstract fun getNekoBuilder(type: String, encode: Boolean): CodeBuilder<Neko>
+    public abstract fun getNekoBuilder(type: String, encode: Boolean): CodeBuilder<Cat>
 
     /**
-     * 构建一个[Neko]为载体类型的[构建器][CodeBuilder]
+     * 构建一个[Cat]为载体类型的[构建器][CodeBuilder]
      * @param encode 时候对value参数进行转义。
      * @param lazy 构建结果是否为 lazy neko。
      */
-    public abstract fun getLazyNekoBuilder(type: String, encode: Boolean): LazyCodeBuilder<Neko>
+    public abstract fun getLazyNekoBuilder(type: String, encode: Boolean): LazyCodeBuilder<Cat>
 
 
     /**
@@ -149,18 +149,18 @@ internal constructor(protected val codeType: String) {
     }
 
     /**
-     * 获取无参数的[Neko]
+     * 获取无参数的[Cat]
      * @param type 猫猫码的类型
      */
-    public open fun toNeko(type: String): Neko = EmptyNeko(type)
+    public open fun toNeko(type: String): Cat = EmptyCat(type)
 
     /**
-     * 根据[Map]类型参数转化为[Neko]实例
+     * 根据[Map]类型参数转化为[Cat]实例
      *
      * @param type 猫猫码的类型
      * @param params 参数列表
      */
-    public open fun toNeko(type: String, params: Map<String, *>): Neko {
+    public open fun toNeko(type: String, params: Map<String, *>): Cat {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
@@ -170,11 +170,11 @@ internal constructor(protected val codeType: String) {
 
 
     /**
-     * 根据参数转化为[Neko]实例
+     * 根据参数转化为[Cat]实例
      * @param type 猫猫码的类型
      * @param params 参数列表
      */
-    public open fun toNeko(type: String, vararg params: CatKV<String, *>): Neko {
+    public open fun toNeko(type: String, vararg params: CatKV<String, *>): Cat {
         return if (params.isEmpty()) {
             toNeko(type)
         } else {
@@ -184,12 +184,12 @@ internal constructor(protected val codeType: String) {
 
 
     /**
-     * 根据参数转化为[Neko]实例
+     * 根据参数转化为[Cat]实例
      * @param type 猫猫码的类型
      * @param paramText 参数列表, 例如："code=123"
      */
     @JvmOverloads
-    public open fun toNeko(type: String, encode: Boolean = false, vararg paramText: String): Neko {
+    public open fun toNeko(type: String, encode: Boolean = false, vararg paramText: String): Cat {
         return if (paramText.isEmpty()) {
             toNeko(type)
         } else {
@@ -437,37 +437,37 @@ internal constructor(protected val codeType: String) {
 
 
     /**
-     * 以[getCatIter]方法为基础获取字符串中全部的[Neko]对象
+     * 以[getCatIter]方法为基础获取字符串中全部的[Cat]对象
      * @since 1.1-1.11
      * @param text 存在猫猫码正文的文本
      * @param type 要获取的猫猫码的类型，如果为空字符串则视为所有，默认为所有。
      */
     @JvmOverloads
-    public open fun getNekoList(text: String, type: String = ""): List<Neko> {
+    public open fun getNekoList(text: String, type: String = ""): List<Cat> {
         val iter: Iterator<String> = getCatIter(text, type)
-        val list: MutableList<Neko> = mutableListOf()
-        iter.forEach { list.add(Neko.of(it)) }
+        val list: MutableList<Cat> = mutableListOf()
+        iter.forEach { list.add(Cat.of(it)) }
         return list
     }
 
 
     /**
-     * 提取出文本中的猫猫码，并封装为[Neko]实例。
+     * 提取出文本中的猫猫码，并封装为[Cat]实例。
      * @param text 存在猫猫码的正文
      * @param type 要获取的猫猫码的类型，默认为所有类型
      * @param index 获取的索引位的猫猫码，默认为0，即第一个
      */
     @JvmOverloads
-    public open fun getNeko(text: String, type: String = "", index: Int = 0): Neko? {
+    public open fun getNeko(text: String, type: String = "", index: Int = 0): Cat? {
         val cat: String = getCat(text, type, index) ?: return null
-        return Neko.of(cat)
+        return Cat.of(cat)
     }
 
     /**
-     * 获取指定索引位的猫猫码，并封装为[Neko]实例。
+     * 获取指定索引位的猫猫码，并封装为[Cat]实例。
      */
     @Suppress("MemberVisibilityCanBePrivate")
-    public open fun getNeko(text: String, index: Int = 0): Neko? = getNeko(text = text, type = "", index = index)
+    public open fun getNeko(text: String, index: Int = 0): Cat? = getNeko(text = text, type = "", index = index)
 
     /**
      * 移除猫猫码，可指定类型
