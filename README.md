@@ -27,9 +27,6 @@
 </div>   
 
 
-
-
-
 猫猫码是一个具有特定格式的字符串格式特殊码，规则为`[CAT:xxx,param=value,param=value,...]`的格式，其中：
 
 - 以`[`开头，`]`结尾。
@@ -38,6 +35,10 @@
 - 参数为多个key不重复的键值对，一对参数使用`=`连接键与值，多对参数使用`,`分割。
 - 可以没有参数。
 - 区分大小写。
+
+## 🎉 CatCode2!
+
+[**CatCode2**](https://github.com/ForteScarlet/CatCode2) 现已公开！立刻前往 [👉**CatCode2**](https://github.com/ForteScarlet/CatCode2) 预览、体验、点赞与贡献！
 
 ## 应用
 
